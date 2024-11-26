@@ -1,105 +1,102 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
-body {
-    margin: 0;
-    font-family: -apple-system, sans-serif;
-    color: #9c9c9c;
-    background-color: #000000;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-h1 {
-    font-size: 40px;
-    margin: 0 0 10px;
-}
-
-p {
-    font-size: 22px;
-}
-
-.hero {
-    padding: 40px;
-    text-align: center;
-}
-
-.hero-sequence {
-    height: 430vh;
-    
-}
-
-.sticky-element {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    min-height: 1033px;
-    overflow: hidden;
-    display: grid;
-    place-items: center;
-    border: none;
-}
-
-.sequence-element {
-    width: 1920px;
-    height: 1080px;
-    border: none;
-}
-
-footer {
-    background: #000000;
-    font-weight: 700;
-    font-size: 40px;
-    height: 400px;
-    display: grid;
-    place-items: center;
-}
-
-.section {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px; /* Adjust font size as needed */
-            color: #333; /* Set your desired text color */
-            /*border-bottom: 1px solid #ccc; /* Add a border between sections */
-            scroll-snap-align: start; /* Enable scroll snapping */
-        }
-
-        .section:nth-child(1) {
-            background-image: linear-gradient(rgb(44, 44, 44),black);
-            
-            border: none;
-        }
-
-        .section:nth-child(2) {
-            background-color: #000000; 
-            border: none;
-        }
-
-        .section:nth-child(3) {
-            background-color: #000000; 
-            border: none;
-        }
-
-        .section:nth-child(4) {
-            background-image: linear-gradient(black,rgb(44, 44, 44));
-            border: none; 
-        }
+    @font-face {
+        font-family: 'CrashDemons';
+        src: url('./font/CrashDemons.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    body {
+        margin: 0;
+        font-family: 'CrashDemons';
+        color: #9c9c9c;
+        background-color: #000000;
+        font-size: 16px;
+        font-weight: normal;
+        letter-spacing: 0.5px;
+        scroll-snap-type: y mandatory; /* Enable scroll snapping */
+        overflow-y: scroll; /* Ensure scroll is enabled */
+        height: 100vh; /* Make sure body takes the full viewport height */
+    }
+    h1 {
+        font-size: 40px;
+        margin: 0 0 10px;
+    }
+    p {
+        font-size: 22px;
+    }
+    .hero {
+        padding: 40px;
+        text-align: center;
+    }
+    .hero-sequence {
+        height: 430vh;
+        scroll-snap-type: y mandatory; /* Optional: Add if you want the sequence to snap too */
+    }
+    .sticky-element {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        min-height: 1033px;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        border: none;
+    }
+    .sequence-element {
+        width: 1920px;
+        height: 1080px;
+        border: none;
+    }
+    footer {
+        background-image: linear-gradient(rgb(44, 44, 44), rgb(129, 80, 80));
+        font-weight: normal;
+        font-size: 20px;
+        height: 250px;
+        display: grid;
+        place-items: center;
+        color: #ffffff;
+    }
+    .section {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #333;
+        scroll-snap-align: start; /* Align each section at the top */
+    }
+    .section:nth-child(1) {
+        background-image: linear-gradient(rgb(44, 44, 44), black);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        border: none;
+        color: #ffffff;
+    }
+    .section:nth-child(2) {
+        background-color: #000000;
+        border: none;
+    }
+    .section:nth-child(3) {
+        background-color: #000000;
+        border: none;
+    }
+    .section:nth-child(4) {
+        background-image: linear-gradient(black, rgb(44, 44, 44));
+        border: none;
+    }
 </style>
-
-<title>Image Sequence Animation</title>
-
-<div class="hero">
-    <h1>Image Sequence Animation</h1>
-    <p>Scroll down to admire the magic.</p>
+<title>CHALKE_PORTFOLIO</title>
+<div class="section" id="section1">
+    <div class="hero">
+        <h1>Torque : Lore</h1>
+    </div>
 </div>
-
-<div class="section" id="section1">Section 1</div>
-    
-
 <div class="hero-sequence">
     <div class="sticky-element">
         <div class="sequence-element">
@@ -107,53 +104,57 @@ footer {
         </div>
     </div>
 </div>
-
 <div class="section" id="section2">Section 2</div>
-<div class="sketchfab-embed-wrapper"> <iframe title="among_us" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share width="1920" height="1080" src="https://sketchfab.com/models/55c51137f4d34786bec3ba31b28bd5db/embed"> </iframe> <p style="font-size: 13px; font-weight: normal; margin: 5px; color: #4A4A4A;"> <a href="https://sketchfab.com/3d-models/among-us-55c51137f4d34786bec3ba31b28bd5db?utm_medium=embed&utm_campaign=share-popup&utm_content=55c51137f4d34786bec3ba31b28bd5db" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> among_us </a> by <a href="https://sketchfab.com/bhaveshchalke4513v2?utm_medium=embed&utm_campaign=share-popup&utm_content=55c51137f4d34786bec3ba31b28bd5db" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> bhaveshchalke4513v2 </a> on <a href="https://sketchfab.com?utm_medium=embed&utm_campaign=share-popup&utm_content=55c51137f4d34786bec3ba31b28bd5db" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;">Sketchfab</a></p></div>    
+<!-- <div class="sketchfab-embed-wrapper"> <iframe title="among_us" frameborder="0" allowfullscreen mozallowfullscreen="true"
+        webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking
+        execution-while-out-of-viewport execution-while-not-rendered web-share width="1920" height="1080"
+        src="https://sketchfab.com/models/55c51137f4d34786bec3ba31b28bd5db/embed"> </iframe>
+    <p style="font-size: 13px; font-weight: normal; margin: 5px; color: #4A4A4A;"> <a
+            href="https://sketchfab.com/3d-models/among-us-55c51137f4d34786bec3ba31b28bd5db?utm_medium=embed&utm_campaign=share-popup&utm_content=55c51137f4d34786bec3ba31b28bd5db"
+            target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> among_us </a> by <a
+            href="https://sketchfab.com/bhaveshchalke4513v2?utm_medium=embed&utm_campaign=share-popup&utm_content=55c51137f4d34786bec3ba31b28bd5db"
+            target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> bhaveshchalke4513v2 </a> on <a
+            href="https://sketchfab.com?utm_medium=embed&utm_campaign=share-popup&utm_content=55c51137f4d34786bec3ba31b28bd5db"
+            target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;">Sketchfab</a></p>
+</div> -->
 <div class="section" id="section4">Section 4</div>
-
 <footer>
-    You are awesome!
+    ""  Never change to be accepted by others.  ""
+
+    <p>  Stay weird  </p>
 </footer>
-
 <script>
-const canvas = document.querySelector('canvas')
-const ctx = canvas.getContext('2d')
-const heroSequence = document.querySelector('.hero-sequence')
-const images = [];
-const frameCount = 120
+    const sequenceName = "porsche";
+    const canvas = document.querySelector('canvas')
+    const ctx = canvas.getContext('2d')
+    const heroSequence = document.querySelector('.hero-sequence')
+    const images = [];
+    const frameCount = 120;
+    const prepareImages = () => {
+        for (let i = 1; i <= frameCount; i++) {
+            const image = new Image();
+            const paddedIndex = i.toString().padStart(4, '0'); // Ensure image numbers are padded to 4 digits
+            image.src = `./test_images/${sequenceName}${paddedIndex}.webp`;
+            images.push(image);
 
-const prepareImages = () => {
-    for (var i = 1; i < frameCount; i++) {
-      const image = new Image()
-      const paddedIndex = i.toString().padStart(4, '0');
-      image.src = `./test_images/porsche${paddedIndex}.webp`
-      images.push(image)
-
-      if (i === 0) {
-        images[i].onload = () => drawImage(0)
-      }
+            // Load the first image
+            if (i === 1) {
+                images[i - 1].onload = () => drawImage(0);
+            }
+        }
     }
-}
-
-
-canvas.width = window.innerWidth; // Set canvas width to window width
-canvas.height = window.innerHeight; // Set canvas height to window height
-
-
-const drawImage = frameIndex => {
-    ctx.drawImage(images[frameIndex], 0, 0)
-}
-
-prepareImages()
-
-window.addEventListener('scroll', () => {
-    const scrollTop = document.documentElement.scrollTop - heroSequence.offsetTop
-    const maxScrollTop = heroSequence.scrollHeight - window.innerHeight
-    const scrollFraction = scrollTop / maxScrollTop
-    const frameIndex = Math.max(0, Math.min(frameCount - 1, Math.ceil(scrollFraction * frameCount)))
-
-    images[frameIndex].onload = () => drawImage(frameIndex)
-    requestAnimationFrame(() => drawImage(frameIndex))
-})
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const drawImage = (frameIndex) => {
+        ctx.drawImage(images[frameIndex], 0, 0);
+    }
+    prepareImages();
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop - heroSequence.offsetTop;
+        const maxScrollTop = heroSequence.scrollHeight - window.innerHeight;
+        const scrollFraction = scrollTop / maxScrollTop;
+        const frameIndex = Math.max(0, Math.min(frameCount - 1, Math.ceil(scrollFraction * frameCount)));
+        images[frameIndex].onload = () => drawImage(frameIndex);
+        requestAnimationFrame(() => drawImage(frameIndex));
+    });
 </script>
