@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    @layer base, rhythm, layout, components, default, overwrites;
+
+    html {
+        scroll-snap-type: y mandatory;
+        timeline-scope: --section, --main, --site-header;
+        color: aliceblue;
+    }
+
+    body,
+    .content {
+        background-color: var(--color-background, black);
+    }
+
+    main {
+        view-timeline: --main;
+    }
+
+    .section {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+
+        view-timeline: --section;
+
+        height: 100dvh;
+    }
+
+    .content {
+        overflow: hidden;
+        position: fixed;
+        inset: 0;
+
+        --contrast: 4;
+        --blur: 0.5rem;
+
+        animation: blink ease-in-out both;
+        animation-timeline: --section;
+    }
+
+    @keyframes blink {
+
+        0%,
+        100% {
+            filter: blur(var(--blur)) contrast(var(--contrast));
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        50% {
+            filter: blur(0) contrast(1);
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    .indicator::before {
+        animation: indicate linear both;
+        animation-timeline: --main;
+        animation-range: contain;
+    }
+
+    @keyframes indicate {
+        0% {
+            --color-indicator: var(--color-primary);
+            transform: translateY(0);
+        }
+
+        25% {
+            --color-indicator: var(--color-yellow);
+        }
+
+        50% {
+            --color-indicator: var(--color-secondary);
+        }
+
+        75% {
+            --color-indicator: var(--color-red);
+        }
+
+        100% {
+            --color-indicator: var(--color-purple);
+            transform: translateY(calc(var(--indicator-total-height) - var(--indicator-size)));
+        }
+    }
+
+    /* Remove gradient indicator on scroll-to-end (visible on small screens */
+
+    .site-header label:last-of-type {
+        view-timeline: --site-header inline;
+    }
+
+    .site-header::after {
+        animation: fade-scroll ease-in-out both;
+        animation-timeline: --site-header;
+        animation-range: entry-crossing;
+    }
+
+    @keyframes fade-scroll {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+    body:has([value="horizontal-scroll"]:checked) .content {
+        animation: horizontal-scroll ease-in-out both;
+        animation-timeline: --section;
+    }
+
+    body:has([value="backwards-scroll"]:checked) .content {
+        animation: backwards-scroll ease-in-out both;
+        animation-timeline: --section;
+    }
+
+    body:has([value="zoom-scroll"]:checked) .content {
+        animation: zoom-scroll ease-in-out both;
+        animation-timeline: --section;
+    }
+
+    /* Alternative animations */
+    /* Very cool, try it */
+    @keyframes horizontal-scroll {
+        0% {
+            transform: translate3d(100%, 0%, 0);
+        }
+
+        50% {
+            transform: none;
+        }
+
+        100% {
+            transform: translate3d(-100%, 0%, 0);
+        }
+    }
+
+    /* Befuddling, try it */
+    @keyframes backwards-scroll {
+        0% {
+            transform: translate3d(0%, -100%, 0);
+        }
+
+        50% {
+            transform: none;
+        }
+
+        100% {
+            transform: translate3d(0%, 100%, 0);
+        }
+    }
+
+    /* WIP */
+    @keyframes zoom-scroll {
+        0% {
+            filter: blur(5rem);
+            transform: scale(0);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        50% {
+            filter: blur(0);
+            transform: none;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        100% {
+            filter: blur(3rem);
+            transform: scale(1.5);
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+</style>
+<title>CHALKE_PORTFOLIO</title>
+<main>
+    <section id="snapping" class="section">
+        <div class="content">
+            <h2><strong>First</strong>, we set up the <em>snapping</em> points</h2>
+
+            <div class="text">
+                <img src="https://assets.codepen.io/197359/flower-white.png" alt="">
+            </div>
+        </div>
+    </section>
+    <section id="scrolling" class="section">
+        <div class="content">
+            <div class="hero-sequence">
+                <div class="sticky-element">
+                    <div class="sequence-element">
+                        <canvas width="1920" height="1080"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="layout" class="section">
+        <div class="content">
+            <h2><strong>Then</strong>, we position a <em>fixed</em> layout</h2>
+
+            <div class="text">
+                <img src="https://assets.codepen.io/197359/flower-blue.png" alt="">
+            </div>
+        </div>
+    </section>
+    <section id="transition" class="section">
+        <div class="content">
+            <h2><strong>Finally</strong>, we create the <em>transition</em> effects</h2>
+
+            <div class="text">
+                <img src="https://assets.codepen.io/197359/flower-red.png" alt="">
+            </div>
+        </div>
+    </section>
+    <section id="caveats" class="section">
+        <div class="content">
+            <h2><strong>Caveats</strong></h2>
+
+            <div class="text">
+                <img src="https://assets.codepen.io/197359/flower-purple.png" alt="">
+            </div>
+        </div>
+    </section>
+
+</main>
+<footer>
+    "" Never change to be accepted by others. ""
+
+    <p> Stay weird </p>
+</footer>
+<script>
+    const sequenceName = "porsche";
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+    const images = [];
+    const frameCount = 120;
+
+    let currentFrameIndex = 0;
+
+    // Log to debug
+    const log = (...args) => console.log(...args);
+
+    const preloadImages = async () => {
+        return new Promise((resolve, reject) => {
+            let loadedImages = 0;
+            for (let i = 1; i <= frameCount; i++) {
+                const image = new Image();
+                const paddedIndex = i.toString().padStart(4, '0'); // Zero-padded index
+                image.src = `./test_images/${sequenceName}${paddedIndex}.webp`;
+
+                image.onload = () => {
+                    loadedImages++;
+                    log(`Image ${i} loaded`);
+                    if (loadedImages === frameCount) {
+                        resolve(); // All images are loaded
+                    }
+                };
+
+                image.onerror = () => {
+                    log(`Failed to load image ${image.src}`);
+                    reject(`Error loading image: ${image.src}`);
+                };
+
+                images.push(image);
+            }
+        });
+    };
+
+    const drawImage = (frameIndex) => {
+        log(`Drawing frame ${frameIndex}`);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const img = images[frameIndex];
+        if (img) {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        } else {
+            log(`Image at index ${frameIndex} is undefined`);
+        }
+    };
+
+    const handleScroll = () => {
+        const scrollTop = document.documentElement.scrollTop;
+        const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollFraction = Math.max(0, Math.min(1, scrollTop / maxScrollTop));
+        const frameIndex = Math.floor(scrollFraction * (frameCount - 1));
+
+        if (frameIndex !== currentFrameIndex) {
+            currentFrameIndex = frameIndex;
+            drawImage(frameIndex);
+        }
+    };
+
+    const init = async () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        try {
+            await preloadImages();
+            log("All images preloaded");
+            drawImage(0); // Draw the first frame
+            window.addEventListener('scroll', handleScroll);
+        } catch (err) {
+            log("Error during initialization:", err);
+        }
+    };
+
+    init();
+</script>
+
