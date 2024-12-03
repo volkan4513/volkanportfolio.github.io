@@ -30,16 +30,17 @@
     controls.maxDistance = 20;
     controls.minPolarAngle = Math.PI / 6;
     controls.maxPolarAngle = Math.PI / 2.5;
+    controls.enablePan = false; // Disable panning by default
 
     // Load HDRI environment
-    const rgbeLoader = new RGBELoader();
-    let hdrTexture;
-    rgbeLoader.load('models/goegap_road_2k.hdr', (texture) => {
-      texture.mapping = THREE.EquirectangularReflectionMapping;
-      scene.environment = texture;
-      scene.background = texture; // Optional
-      hdrTexture = texture;
-    });
+    // const rgbeLoader = new RGBELoader();
+    // let hdrTexture;
+    // rgbeLoader.load('models/goegap_road_2k.hdr', (texture) => {
+    //   texture.mapping = THREE.EquirectangularReflectionMapping;
+    //   scene.environment = texture;
+    //   scene.background = texture; // Optional
+    //   hdrTexture = texture;
+    // });
 
     // Add a simple light
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
@@ -48,25 +49,27 @@
 
     // Load a 3D Model using GLTFLoader
     const loader = new GLTFLoader();
-    loader.load('models/low_poly_porsche_964_wide_body.glb', function (gltf) {
-      scene.add(gltf.scene);
-      gltf.scene.scale.set(0.5, 0.5, 0.5); // Scale the model if necessary
+    let model; // To reference the loaded model
+    loader.load('models/brutalist_interior4.glb', function (gltf) {
+      model = gltf.scene;
+      scene.add(model);
+      model.scale.set(2, 2, 2); // Scale the model if necessary
     }, undefined, function (error) {
       console.error(error);
     });
 
     // Camera positioning
-    camera.position.set(5, 5, 5);
+    camera.position.set(10, -20, 10); // Increases the camera's height to 10 units above the origin
     controls.update();
 
     // Animation loop
+    let isRotating = false; // Scene rotation toggle
     function animate() {
       requestAnimationFrame(animate);
 
       // Optional: Rotate model
-      if (scene.children.length > 0) {
-        const model = scene.children[scene.children.length - 1];
-        model.rotation.y += 0.0005;
+      if (isRotating && model) {
+        model.rotation.y += 0.005;
       }
 
       controls.update();
@@ -79,7 +82,9 @@
     const settings = {
       exposure: 1,
       toneMapping: 'ACESFilmic',
-      hdrVisible: true,
+      //hdrVisible: false,
+      enablePan: false, // Panning toggle
+      rotateScene: false, // Scene rotation toggle
     };
 
     const toneMappingTypes = {
@@ -98,8 +103,17 @@
       renderer.toneMapping = toneMappingTypes[value];
     });
 
-    gui.add(settings, 'hdrVisible').name('HDR Background').onChange((value) => {
-      scene.background = value ? hdrTexture : null;
+    // gui.add(settings, 'hdrVisible').name('HDR Background').onChange((value) => {
+    //   scene.background = value ? hdrTexture : null;
+    // });
+
+    gui.add(settings, 'enablePan').name('Enable Panning').onChange((value) => {
+      controls.enablePan = value;
+    });
+
+    // Add the scene rotation toggle
+    gui.add(settings, 'rotateScene').name('Rotate Scene').onChange((value) => {
+      isRotating = value;
     });
 
     // Handle window resizing
