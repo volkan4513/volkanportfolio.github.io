@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>three.js - GLTF loader</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <script type="module">
+        // Import three.js and other necessary modules from the CDN
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
+        import { RGBELoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/RGBELoader.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+        import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
+
+        let camera, scene, renderer;
+
+        init();
+        render();
+
+        function init() {
+            const container = document.createElement('div');
+            document.body.appendChild(container);
+
+            // Set up the camera
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 20);
+            camera.position.set(-1.8, 0.6, 2.7);
+
+            // Set up the scene
+            scene = new THREE.Scene();
+
+            // Load the HDR texture using RGBELoader
+            new RGBELoader()
+                .setPath('textures/equirectangular/')
+                .load('royal_esplanade_1k.hdr', function (texture) {
+                    texture.mapping = THREE.EquirectangularReflectionMapping;
+                    scene.background = texture;
+                    scene.environment = texture;
+
+                    render();
+
+                    // Load the 3D model using GLTFLoader
+                    const loader = new GLTFLoader().setPath('models/gltf/DamagedHelmet/glTF/');
+                    loader.load('DamagedHelmet.gltf', function (gltf) {
+                        scene.add(gltf.scene);
+                        render();
+                    });
+                });
+
+            // Initialize WebGLRenderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            container.appendChild(renderer.domElement);
+
+            // Initialize controls
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.addEventListener('change', render); // use if there is no animation loop
+            controls.minDistance = 2;
+            controls.maxDistance = 10;
+            controls.target.set(0, 0, -0.2);
+            controls.update();
+
+            // Handle window resizing
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        // Handle resizing the window
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            render();
+        }
+
+        // Render the scene
+        function render() {
+            renderer.render(scene, camera);
+        }
+    </script>
+
+</body>
+</html>

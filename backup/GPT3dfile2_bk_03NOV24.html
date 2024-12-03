@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Model Viewer</title>
+  <!-- Include dat.GUI from a reliable CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.min.js"></script>
+  <script type="module">
+    import * as THREE from 'https://cdn.skypack.dev/three@0.128.0';
+    import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/controls/OrbitControls.js';
+    import { RGBELoader } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/loaders/RGBELoader.js';
+
+    // Scene Setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; // Tone mapping
+    renderer.toneMappingExposure = 1; // Default exposure
+    renderer.outputEncoding = THREE.sRGBEncoding; // Ensure proper color output
+    document.body.appendChild(renderer.domElement);
+
+    // OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 5;
+    controls.maxDistance = 20;
+    controls.minPolarAngle = Math.PI / 6;
+    controls.maxPolarAngle = Math.PI / 2.5;
+    controls.enablePan = false; // Disable panning by default
+
+    // Load HDRI environment
+    // const rgbeLoader = new RGBELoader();
+    // let hdrTexture;
+    // rgbeLoader.load('models/goegap_road_2k.hdr', (texture) => {
+    //   texture.mapping = THREE.EquirectangularReflectionMapping;
+    //   scene.environment = texture;
+    //   scene.background = texture; // Optional
+    //   hdrTexture = texture;
+    // });
+
+    // Add a simple light
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight.position.set(5, 5, 5).normalize();
+    scene.add(directionalLight);
+
+    // Load a 3D Model using GLTFLoader
+    const loader = new GLTFLoader();
+    let model; // To reference the loaded model
+    loader.load('models/brutalist_interior4.glb', function (gltf) {
+      model = gltf.scene;
+      scene.add(model);
+      model.scale.set(2, 2, 2); // Scale the model if necessary
+    }, undefined, function (error) {
+      console.error(error);
+    });
+
+    // Camera positioning
+    camera.position.set(10, -20, 10); // Increases the camera's height to 10 units above the origin
+    controls.update();
+
+    // Animation loop
+    let isRotating = false; // Scene rotation toggle
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Optional: Rotate model
+      if (isRotating && model) {
+        model.rotation.y += 0.005;
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // GUI Controls
+    const gui = new dat.GUI();
+    const settings = {
+      exposure: 1,
+      toneMapping: 'ACESFilmic',
+      //hdrVisible: false,
+      enablePan: false, // Panning toggle
+      rotateScene: false, // Scene rotation toggle
+    };
+
+    const toneMappingTypes = {
+      None: THREE.NoToneMapping,
+      Linear: THREE.LinearToneMapping,
+      Reinhard: THREE.ReinhardToneMapping,
+      Cineon: THREE.CineonToneMapping,
+      ACESFilmic: THREE.ACESFilmicToneMapping,
+    };
+
+    gui.add(settings, 'exposure', 0.1, 5, 0.1).name('Exposure').onChange((value) => {
+      renderer.toneMappingExposure = value;
+    });
+
+    gui.add(settings, 'toneMapping', Object.keys(toneMappingTypes)).name('Tone Mapping').onChange((value) => {
+      renderer.toneMapping = toneMappingTypes[value];
+    });
+
+    // gui.add(settings, 'hdrVisible').name('HDR Background').onChange((value) => {
+    //   scene.background = value ? hdrTexture : null;
+    // });
+
+    gui.add(settings, 'enablePan').name('Enable Panning').onChange((value) => {
+      controls.enablePan = value;
+    });
+
+    // Add the scene rotation toggle
+    gui.add(settings, 'rotateScene').name('Rotate Scene').onChange((value) => {
+      isRotating = value;
+    });
+
+    // Handle window resizing
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+  </script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+</body>
+</html>

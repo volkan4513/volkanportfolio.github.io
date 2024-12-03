@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    @font-face {
+        font-family: 'CrashDemons';
+        src: url('./font/CrashDemons.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'CrashDemons';
+        color: #ffffff;
+        background-color: #000000;
+        font-size: 16px;
+        font-weight: normal;
+        letter-spacing: 0.5px;
+        scroll-snap-type: y mandatory;
+        /* Enable scroll snapping */
+        overflow-y: scroll;
+        /* Ensure scroll is enabled */
+        height: 100vh;
+        /* Make sure body takes the full viewport height */
+    }
+
+    h1 {
+        font-size: 40px;
+        margin: 0 0 10px;
+    }
+
+    p {
+        font-size: 22px;
+    }
+
+    .hero {
+        padding: 40px;
+        text-align: center;
+    }
+
+    .hero-sequence {
+        height: 430vh;
+        scroll-snap-type: y mandatory;
+        /* Optional: Add if you want the sequence to snap too */
+    }
+
+    .sticky-element {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        min-height: 1033px;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        border: none;
+    }
+
+    .sequence-element {
+        width: 1920px;
+        height: 1080px;
+        border: none;
+    }
+
+    footer {
+        background-image: linear-gradient(rgb(44, 44, 44), rgb(129, 80, 80));
+        font-weight: normal;
+        font-size: 20px;
+        height: 250px;
+        display: grid;
+        place-items: center;
+        color: #ffffff;
+    }
+
+    .section {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #333;
+        scroll-snap-align: start;
+        /* Align each section at the top */
+    }
+
+    .section:nth-child(1) {
+        /* Gradient from dark gray to black */
+        background-image: linear-gradient(to bottom, rgb(44, 44, 44), black);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: #ffffff;
+    }
+
+    .section:nth-child(2),
+    .section:nth-child(3) {
+        background-color: #000000;
+        /* Solid black background */
+    }
+
+    .section:nth-child(4) {
+        /* Gradient from black to dark gray */
+        background-image: linear-gradient(black, rgb(44, 44, 44));
+    }
+
+
+    #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        transition: opacity 1.5s ease;
+        /* Add transition for fade effect */
+        opacity: 1;
+        /* Initial opacity */
+    }
+
+    #loading-screen.hidden {
+        opacity: 0;
+        /* Fade out */
+        pointer-events: none;
+        /* Prevent interactions during fade-out */
+    }
+
+    #loading-progress {
+        font-size: 50px;
+        color: white;
+        font-family: 'CrashDemons', sans-serif;
+    }
+
+    #invert-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        /* Allow interaction with underlying elements */
+        mix-blend-mode: difference;
+        /* Ensure it inverts colors */
+        background: white;
+        /* Base color for inversion effect */
+        z-index: 9999;
+        /* Bring the effect layer to the front */
+        clip-path: circle(0px at 0px 0px);
+        /* Initial invisible circle */
+        transition: clip-path 0.05s;
+        /* Smooth updates */
+    }
+</style>
+<title>CHALKE_PORTFOLIO</title>
+<div id="invert-overlay"></div>
+<div class="section" id="section1">
+    <div class="hero">
+        <h1>Torque : Lore</h1>
+    </div>
+</div>
+<div class="hero-sequence">
+    <div class="sticky-element">
+        <div class="sequence-element">
+            <canvas width="1920" height="1080"></canvas>
+        </div>
+    </div>
+</div>
+<div class="section" id="section2">Section 2</div>
+<div class="section" id="section4">Section 4</div>
+<footer>
+    "" Never change to be accepted by others. ""
+    <p> Stay weird </p>
+</footer>
+<script>
+    const sequenceName = "fordgt120";
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+    const heroSequence = document.querySelector('.hero-sequence');
+    const images = [];
+    const frameCount = 304;
+
+    const prepareImages = () => {
+        for (let i = 1; i <= frameCount; i++) {
+            const image = new Image();
+            const paddedIndex = i.toString().padStart(3, '0'); // Ensure image numbers are padded to 4 digits
+            image.src = `./test_images3/${sequenceName}${paddedIndex}.webp`;
+            images.push(image);
+
+            if (i === 1) {
+                images[i - 1].onload = () => drawImage(0);
+            }
+        }
+    };
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const drawImage = (frameIndex) => ctx.drawImage(images[frameIndex], 0, 0);
+
+    prepareImages();
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop - heroSequence.offsetTop;
+        const maxScrollTop = heroSequence.scrollHeight - window.innerHeight;
+        const scrollFraction = scrollTop / maxScrollTop;
+        const frameIndex = Math.max(0, Math.min(frameCount - 1, Math.ceil(scrollFraction * frameCount)));
+        images[frameIndex].onload = () => drawImage(frameIndex);
+        requestAnimationFrame(() => drawImage(frameIndex));
+    });
+
+    function showLoadingScreen() {
+        const loadingScreen = document.createElement('div');
+        loadingScreen.id = 'loading-screen';
+        const progressText = document.createElement('div');
+        progressText.id = 'loading-progress';
+        progressText.textContent = '0';
+        loadingScreen.appendChild(progressText);
+        document.body.appendChild(loadingScreen);
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            if (progress <= 100) {
+                progressText.textContent = progress;
+                progress++;
+            } else {
+                clearInterval(interval);
+                hideLoadingScreen();
+            }
+        }, 10);
+    }
+
+    function hideLoadingScreen() {
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+            loadingScreen.addEventListener('transitionend', () => {
+                loadingScreen.remove();
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', showLoadingScreen);
+
+    const invertOverlay = document.getElementById('invert-overlay');
+    document.addEventListener('mousemove', (event) => {
+        const circleSize = 100; // Diameter of the inverted area
+        invertOverlay.style.clipPath = `circle(${circleSize / 2}px at ${event.clientX}px ${event.clientY}px)`;
+    });
+</script>
