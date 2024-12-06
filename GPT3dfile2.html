@@ -32,14 +32,14 @@
     controls.enablePan = false;
 
     // Load HDRI environment
-    const rgbeLoader = new RGBELoader();
-    let hdrTexture;
-    rgbeLoader.load('models/goegap_road_2k.hdr', (texture) => {
-      texture.mapping = THREE.EquirectangularReflectionMapping;
-      scene.environment = texture;
-      scene.background = texture;
-      hdrTexture = texture;
-    });
+    // const rgbeLoader = new RGBELoader();
+    // let hdrTexture;
+    // rgbeLoader.load('models/goegap_road_2k.hdr', (texture) => {
+    //   texture.mapping = THREE.EquirectangularReflectionMapping;
+    //   scene.environment = texture;
+    //   scene.background = texture;
+    //   hdrTexture = texture;
+    // });
 
     // Add Ambient Light
     const ambientLight = new THREE.AmbientLight(0xffffff, 1); // White light with full intensity
@@ -48,7 +48,7 @@
     // Load a 3D Model using GLTFLoader
     const loader = new GLTFLoader();
     let model;
-    loader.load('models/brutalist_interior6_with_car.glb', function (gltf) {
+    loader.load('models/brutalist_interior7_with_car.glb', function (gltf) {
       model = gltf.scene;
       scene.add(model);
       model.scale.set(2, 2, 2);
@@ -80,7 +80,7 @@
     const settings = {
       exposure: 1,
       toneMapping: 'ACESFilmic',
-      hdrVisible: false,
+      // hdrVisible: false,
       enablePan: false,
       rotateScene: false,
     };
@@ -101,9 +101,9 @@
       renderer.toneMapping = toneMappingTypes[value];
     });
 
-    gui.add(settings, 'hdrVisible').name('HDR Background').onChange((value) => {
-      scene.background = value ? hdrTexture : null;
-    });
+    // gui.add(settings, 'hdrVisible').name('HDR Background').onChange((value) => {
+    //   scene.background = value ? hdrTexture : null;
+    // });
 
     gui.add(settings, 'enablePan').name('Enable Panning').onChange((value) => {
       controls.enablePan = value;
