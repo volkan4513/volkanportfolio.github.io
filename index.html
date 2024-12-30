@@ -172,7 +172,7 @@
 <!-- Third Section -->
 <div class="section" id="section2">
     <div class="hero">
-        <h4 style="color: #ffffff;">A Game?</h4>
+        <h4 style="color: #ffffff;">A parkour game, Wanna give a try?</h4>
         <iframe src="./test_html_build_1/" style="width: 180vh; height: 85vh; border: 5px solid rgb(59, 49, 71); border-radius: 15px;"> </iframe>
     </div>
 </div>
@@ -305,8 +305,28 @@
     document.addEventListener('DOMContentLoaded', showLoadingScreen);
 
     const invertOverlay = document.getElementById('invert-overlay');
-    document.addEventListener('mousemove', (event) => {
-        const circleSize = 100;
-        invertOverlay.style.clipPath = `circle(${circleSize / 2}px at ${event.clientX}px ${event.clientY}px)`;
-    });
+
+// Listen for mouse movements
+document.addEventListener('mousemove', (event) => {
+    const circleSize = 100;
+    const scrollY = window.scrollY; // Get the vertical scroll position
+    const section2Top = document.getElementById('section2').offsetTop; // Top of Section 2
+    const section3Top = document.querySelectorAll('.section')[2].offsetTop; // Top of Section 3
+    const section3Bottom = section3Top + document.querySelectorAll('.section')[2].offsetHeight; // Bottom of Section 3
+
+    const inSection2Or3 = scrollY >= section2Top && scrollY < section3Bottom;
+
+    // Toggle cursor and invert overlay
+    if (inSection2Or3) {
+        // Hide overlay and show default cursor
+        invertOverlay.style.clipPath = 'circle(0px at 0px 0px)'; // Hide the effect
+        document.body.style.cursor = 'default'; // Default cursor
+    } else {
+        // Show overlay and hide cursor
+        invertOverlay.style.clipPath = `circle(${circleSize / 2}px at ${event.clientX}px ${event.clientY}px)`; // Apply effect
+        document.body.style.cursor = 'none'; // Hide the cursor
+    }
+});
+
+
 </script>
