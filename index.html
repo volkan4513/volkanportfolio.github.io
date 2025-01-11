@@ -4,329 +4,120 @@
 <title>CHALKE_PORTFOLIO</title>
 
 <style>
-    @font-face {
-        font-family: 'CrashDemons';
-        src: url('./font/CrashDemons.otf') format('opentype');
-        font-weight: normal;
-        font-style: normal;
-    }
-
-    body {
-        margin: 0;
-        font-family: 'CrashDemons';
-        color: #ffffff;
-        background-color: #000000;
-        font-size: 16px;
-        font-weight: normal;
-        letter-spacing: 0.5px;
-        scroll-snap-type: y mandatory;
-        overflow-y: scroll;
-        height: 100vh;
-    }
-
-    h1 {
-        font-size: 40px;
-        margin: 0 0 10px;
-    }
-
-    p {
-        font-size: 22px;
-    }
-
-    .hero {
-        padding: 40px;
-        text-align: center;
-    }
-
-    .hero-sequence {
-        height: 450vh; /* Ensuring enough space for scrolling images */
-        scroll-snap-type: y mandatory;
-    }
-
-    .sticky-element {
-        position: sticky;
-        top: 0;
-        height: 100vh; /* Stick to full height */
-        overflow: hidden;
-        display: grid;
-        place-items: center;
-        border: none;
-    }
-
-    .sequence-element {
-        width: 100vw; /* Ensure it takes full viewport width */
-        height: 100vh; /* Ensure it takes full viewport height */
-        border: none;
-    }
-
-    footer {
-        background-image: linear-gradient(rgb(0, 0, 0), rgb(59, 49, 71));
-        font-weight: normal;
-        font-size: 20px;
-        height: 250px;
-        display: grid;
-        place-items: center;
-        color: #ffffff;
-    }
-
-    .section {
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        color: #333;
-        scroll-snap-align: start;
-    }
-
-    .section:nth-child(1) {
-        background-color: #000000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        color: #ffffff;
-        
-    }
-
-    .section:nth-child(2),
-    .section:nth-child(3) {
-        background-color: #000000;
-    }
-    
-    
-
-    .section:nth-child(4) {
-        background-color: #000000;
-    }
-
-    #loading-screen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        transition: opacity 1.5s ease;
-        opacity: 1;
-    }
-
-    #loading-screen.hidden {
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    #loading-progress {
-        font-size: 50px;
-        color: white;
-        font-family: 'CrashDemons', sans-serif;
-    }
-
-    #invert-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        mix-blend-mode: difference;
-        background: white;
-        z-index: 9999;
-        clip-path: circle(0px at 0px 0px);
-        transition: clip-path 0.05s;
-    }
-    
+    @font-face { font-family: 'CrashDemons'; src: url('./font/CrashDemons.otf'); }
+    body { margin: 0; font-family: 'CrashDemons'; color: #fff; background: #000; font-size: 25px; scroll-snap-type: y mandatory; height: 100vh; overflow-y: scroll; }
+    h1 { font-size: 40px; margin-bottom: 10px; }
+    p { font-size: 22px; }
+    .hero { padding: 40px; text-align: center; }
+    .hero-sequence { height: 450vh; scroll-snap-type: y mandatory; }
+    .sticky-element { position: sticky; top: 0; height: 100vh; display: grid; place-items: center; }
+    .sequence-element canvas { display: block; width: 100%; height: 100%; }
+    footer { background: linear-gradient(rgb(0, 0, 0), rgb(59, 49, 71)); color: #fff; height: 250px; display: grid; place-items: center; font-size: 20px; }
+    .section { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; color: #ffffff; scroll-snap-align: start; }
+    #scrollText { position: absolute; bottom: 20px; font-size: 22px; color: #fff; background: rgba(0, 0, 0, 0.5); padding: 10px 20px; border-radius: 10px; animation: scaleText 3s infinite; }
+    @keyframes scaleText { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+    #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 1; transition: opacity 1.5s; }
+    #loading-screen.hidden { opacity: 0; pointer-events: none; }
+    #invert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: difference; background: white; z-index: 9999; transition: clip-path 0.05s; clip-path: circle(0px at 0px 0px); }
+    .scrollToTopBtn { position: fixed; bottom: 20px; right: 20px; background: #fff; color: #000; font-size: 18px; padding: 15px; cursor: pointer; opacity: 0.5; transition: opacity 0.3s ease; }
+    .scrollToTopBtn:hover { opacity: 1; }
+    .scrollToTopBtn.hidden { opacity: 0; pointer-events: none; }
 </style>
 
 <div id="invert-overlay"></div>
 
-<!-- First Section -->
-<div class="section" id="section1">
-    <div class="hero">
-        <h1 style="color: #ffffff;">Torque : Lore</h1>
-    </div>
+<div class="section">
+    <div class="hero"><h1>Torque : Lore</h1></div>
+    <p id="scrollText">Scroll Down</p>
 </div>
 
-<!-- First Image Sequence -->
 <div class="hero-sequence">
     <div class="sticky-element">
-        <div class="sequence-element">
-            <canvas width="1920" height="1080"></canvas>
-        </div>
+        <div class="sequence-element"><canvas id="canvas1"></canvas></div>
     </div>
 </div>
 
-<!-- Second Section -->
-<div class="section" id="section2">
+<div class="section">
     <div class="hero">
-        <h4 style="color: #ffffff;">3d file yeaaaaah!</h4>
-        <iframe src="./GPT3dfile2.html" style="width: 180vh; height: 85vh; border: 5px solid rgb(59, 49, 71); border-radius: 15px;"> </iframe>
+        <h4>3d file yeaaaaah!</h4>
+        <iframe src="./GPT3dfile2.html" style="width: 95vw; height: 85vh; border: 0px solid rgb(59, 49, 71); border-radius: 15px;"></iframe>
     </div>
 </div>
 
-<!-- Third Section -->
-<div class="section" id="section2">
+<div class="section">
     <div class="hero">
-        <h4 style="color: #ffffff;">A parkour game, Wanna give a try?</h4>
-        <iframe src="./test_html_build_1/" style="width: 180vh; height: 85vh; border: 5px solid rgb(59, 49, 71); border-radius: 15px;"> </iframe>
+        <h4>A parkour game, Wanna give a try?</h4>
+        <iframe src="./test_html_build_1/" style="width: 95vw; height: 85vh; border: 1px solid rgb(27, 27, 27); border-radius: 15px; background-color: #272727;"></iframe>
     </div>
 </div>
 
-
-<!-- Second Image Sequence -->
 <div class="hero-sequence">
     <div class="sticky-element">
-        <div class="sequence-element">
-            <canvas width="1920" height="1080"></canvas>
-        </div>
+        <div class="sequence-element"><canvas id="canvas2"></canvas></div>
     </div>
 </div>
 
-<!-- Footer -->
-<footer>
-    "" Never change to be accepted by others. ""
-    <p> Stay weird </p>
-</footer>
+<button id="scrollToTopBtn" class="scrollToTopBtn">Scroll to Top</button>
+
+<footer>"" Never change to be accepted by others. ""<p>Stay weird</p></footer>
 
 <script>
-    const sequenceName1 = "GT400";
-    const sequenceName2 = "ff0"; // Second sequence name
-    const canvas1 = document.querySelectorAll('canvas')[0]; // First canvas
-    const canvas2 = document.querySelectorAll('canvas')[1]; // Second canvas
-    const ctx1 = canvas1.getContext('2d');
-    const ctx2 = canvas2.getContext('2d');
-    
-    const images1 = [];
-    const images2 = [];
-    const frameCount1 = 120; // First sequence frame count
-    const frameCount2 = 60; // Second sequence frame count
-
-    // Preload first image sequence
-    const prepareImages1 = () => {
-        for (let i = 1; i <= frameCount1; i++) {
-            const image = new Image();
-            const paddedIndex = i.toString().padStart(3, '0');
-            image.src = `./all_images/gt40_blender_images/${sequenceName1}${paddedIndex}.webp`;
-            images1.push(image);
-            if (i === 1) {
-                images1[i - 1].onload = () => drawImage1(0);
-            }
+    const sequenceNames = ["GT400", "zz0"];
+    const canvases = [document.getElementById('canvas1'), document.getElementById('canvas2')];
+    const contexts = canvases.map(canvas => canvas.getContext('2d'));
+    const frameCounts = [120, 60];
+    const images = [[], []];
+    const setCanvasSize = canvas => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    canvases.forEach(setCanvasSize);
+    const prepareImages = seqIndex => {
+        for (let i = 1; i <= frameCounts[seqIndex]; i++) {
+            const img = new Image();
+            img.src = `./all_images/${seqIndex === 0 ? 'gt40_blender_images' : 'bigsequence2_filter'}/${sequenceNames[seqIndex]}${i.toString().padStart(3, '0')}.webp`;
+            images[seqIndex].push(img);
+            if (i === 1) img.onload = () => drawImage(seqIndex, 0);
         }
     };
-
-    // Preload second image sequence
-    const prepareImages2 = () => {
-        for (let i = 1; i <= frameCount2; i++) {
-            const image = new Image();
-            const paddedIndex = i.toString().padStart(3, '0');
-            image.src = `./all_images/bigsequence1/${sequenceName2}${paddedIndex}.webp`; // Different folder
-            images2.push(image);
-            if (i === 1) {
-                images2[i - 1].onload = () => drawImage2(0);
-            }
-        }
+    const drawImageToFit = (ctx, img, canvas) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const aspectRatio = img.width / img.height;
+        const [newWidth, newHeight] = canvas.width / aspectRatio > canvas.height ? [canvas.height * aspectRatio, canvas.height] : [canvas.width, canvas.width / aspectRatio];
+        const offsetX = (canvas.width - newWidth) / 2;
+        const offsetY = (canvas.height - newHeight) / 2;
+        ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
     };
-
-    canvas1.width = window.innerWidth;
-    canvas1.height = window.innerHeight;
-    canvas2.width = window.innerWidth;
-    canvas2.height = window.innerHeight;
-
-    // Draw first image sequence frame
-    const drawImage1 = (frameIndex) => ctx1.drawImage(images1[frameIndex], 0, 0);
-
-    // Draw second image sequence frame
-    const drawImage2 = (frameIndex) => ctx2.drawImage(images2[frameIndex], 0, 0);
-
-    prepareImages1();
-    prepareImages2();
-
+    const drawImage = (seqIndex, frameIndex) => drawImageToFit(contexts[seqIndex], images[seqIndex][frameIndex], canvases[seqIndex]);
+    sequenceNames.forEach((_, i) => prepareImages(i));
     window.addEventListener('scroll', () => {
         const scrollTop = document.documentElement.scrollTop;
-
-        // First sequence (handles scrolling for the first canvas)
-        const scrollTop1 = scrollTop - document.querySelector('.hero-sequence').offsetTop;
-        const maxScrollTop1 = document.querySelector('.hero-sequence').scrollHeight - window.innerHeight;
-        const scrollFraction1 = scrollTop1 / maxScrollTop1;
-        const frameIndex1 = Math.max(0, Math.min(frameCount1 - 1, Math.ceil(scrollFraction1 * frameCount1)));
-        images1[frameIndex1].onload = () => drawImage1(frameIndex1);
-
-        // Second sequence (handles scrolling for the second canvas)
-        const scrollTop2 = scrollTop - document.querySelectorAll('.hero-sequence')[1].offsetTop;
-        const maxScrollTop2 = document.querySelectorAll('.hero-sequence')[1].scrollHeight - window.innerHeight;
-        const scrollFraction2 = scrollTop2 / maxScrollTop2;
-        const frameIndex2 = Math.max(0, Math.min(frameCount2 - 1, Math.ceil(scrollFraction2 * frameCount2)));
-        images2[frameIndex2].onload = () => drawImage2(frameIndex2);
-
-        // Smooth scrolling with image update
-        requestAnimationFrame(() => {
-            drawImage1(frameIndex1);
-            drawImage2(frameIndex2);
+        document.querySelectorAll('.hero-sequence').forEach((seq, i) => {
+            const offsetTop = seq.offsetTop;
+            const maxScroll = seq.scrollHeight - window.innerHeight;
+            const frameIndex = Math.max(0, Math.min(frameCounts[i] - 1, Math.ceil(((scrollTop - offsetTop) / maxScroll) * frameCounts[i])));
+            requestAnimationFrame(() => drawImage(i, frameIndex));
         });
     });
-
-    // Show loading screen while images load
-    function showLoadingScreen() {
+    window.addEventListener('resize', () => canvases.forEach(setCanvasSize));
+    document.addEventListener('DOMContentLoaded', () => {
         const loadingScreen = document.createElement('div');
         loadingScreen.id = 'loading-screen';
         const progressText = document.createElement('div');
         progressText.id = 'loading-progress';
-        progressText.textContent = '0';
         loadingScreen.appendChild(progressText);
         document.body.appendChild(loadingScreen);
-
         let progress = 0;
-        const interval = setInterval(() => {
-            if (progress <= 100) {
-                progressText.textContent = progress;
-                progress++;
-            } else {
-                clearInterval(interval);
-                hideLoadingScreen();
-            }
-        }, 10);
-    }
-
-    function hideLoadingScreen() {
-        const loadingScreen = document.getElementById('loading-screen');
-        if (loadingScreen) {
-            loadingScreen.classList.add('hidden');
-            loadingScreen.addEventListener('transitionend', () => {
-                loadingScreen.remove();
-            });
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', showLoadingScreen);
-
-    const invertOverlay = document.getElementById('invert-overlay');
-
-// Listen for mouse movements
-document.addEventListener('mousemove', (event) => {
-    const circleSize = 100;
-    const scrollY = window.scrollY; // Get the vertical scroll position
-    const section2Top = document.getElementById('section2').offsetTop; // Top of Section 2
-    const section3Top = document.querySelectorAll('.section')[2].offsetTop; // Top of Section 3
-    const section3Bottom = section3Top + document.querySelectorAll('.section')[2].offsetHeight; // Bottom of Section 3
-
-    const inSection2Or3 = scrollY >= section2Top && scrollY < section3Bottom;
-
-    // Toggle cursor and invert overlay
-    if (inSection2Or3) {
-        // Hide overlay and show default cursor
-        invertOverlay.style.clipPath = 'circle(0px at 0px 0px)'; // Hide the effect
-        document.body.style.cursor = 'default'; // Default cursor
-    } else {
-        // Show overlay and hide cursor
-        invertOverlay.style.clipPath = `circle(${circleSize / 2}px at ${event.clientX}px ${event.clientY}px)`; // Apply effect
-        document.body.style.cursor = 'none'; // Hide the cursor
-    }
-});
-
-
+        const interval = setInterval(() => { if (progress > 100) { clearInterval(interval); loadingScreen.classList.add('hidden'); } else { progressText.textContent = `${progress++}`; } }, 10);
+    });
+    document.addEventListener('mousemove', e => {
+        const invertOverlay = document.getElementById('invert-overlay');
+        const scrollY = window.scrollY;
+        const sections = document.querySelectorAll('.section');
+        const inSection2Or3 = scrollY >= sections[1].offsetTop && scrollY < (sections[2].offsetTop + sections[2].offsetHeight);
+        invertOverlay.style.clipPath = inSection2Or3 ? 'circle(0px at 0px 0px)' : `circle(50px at ${e.clientX}px ${e.clientY}px)`;
+        document.body.style.cursor = inSection2Or3 ? 'default' : 'none';
+    });
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    window.addEventListener('scroll', () => {
+        scrollToTopBtn.classList.toggle('hidden', document.documentElement.scrollTop < 100);
+    });
+    scrollToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 </script>

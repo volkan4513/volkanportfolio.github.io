@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHALKE_PORTFOLIO</title>
+
+<style>
+    @font-face { font-family: 'CrashDemons'; src: url('./font/CrashDemons.otf'); }
+    body { margin: 0; font-family: 'CrashDemons'; color: #fff; background: #000; font-size: 25px; scroll-snap-type: y mandatory; height: 100vh; overflow-y: scroll; }
+    h1 { font-size: 40px; margin-bottom: 10px; }
+    p { font-size: 22px; }
+    .hero { padding: 40px; text-align: center; }
+    .hero-sequence { height: 450vh; scroll-snap-type: y mandatory; }
+    .sticky-element { position: sticky; top: 0; height: 100vh; display: grid; place-items: center; }
+    .sequence-element canvas { display: block; width: 100%; height: 100%; }
+    footer { background: linear-gradient(rgb(0, 0, 0), rgb(59, 49, 71)); color: #fff; height: 250px; display: grid; place-items: center; font-size: 20px; }
+    .section { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; color: #ffffff; scroll-snap-align: start; }
+    #scrollText { position: absolute; bottom: 20px; font-size: 22px; color: #fff; background: rgba(0, 0, 0, 0.5); padding: 10px 20px; border-radius: 10px; animation: scaleText 3s infinite; }
+    @keyframes scaleText { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+    #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 1; transition: opacity 1.5s; }
+    #loading-screen.hidden { opacity: 0; pointer-events: none; }
+    #invert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: difference; background: white; z-index: 9999; transition: clip-path 0.05s; clip-path: circle(0px at 0px 0px); }
+    .scrollToTopBtn { position: fixed; bottom: 20px; right: 20px; background: #fff; color: #000; font-size: 18px; padding: 15px; cursor: pointer; opacity: 0.5; transition: opacity 0.3s ease; }
+    .scrollToTopBtn:hover { opacity: 1; }
+    .scrollToTopBtn.hidden { opacity: 0; pointer-events: none; }
+</style>
+
+<div id="invert-overlay"></div>
+
+<div class="section">
+    <div class="hero"><h1>Torque : Lore</h1></div>
+    <p id="scrollText">Scroll Down</p>
+</div>
+
+<div class="hero-sequence">
+    <div class="sticky-element">
+        <div class="sequence-element"><canvas id="canvas1"></canvas></div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="hero">
+        <h4>3d file yeaaaaah!</h4>
+        <iframe src="./GPT3dfile2.html" style="width: 95vw; height: 85vh; border: 0px solid rgb(59, 49, 71); border-radius: 15px;"></iframe>
+    </div>
+</div>
+
+<div class="section">
+    <div class="hero">
+        <h4>A parkour game, Wanna give a try?</h4>
+        <iframe src="./test_html_build_1/" style="width: 95vw; height: 85vh; border: 1px solid rgb(27, 27, 27); border-radius: 15px; background-color: #272727;"></iframe>
+    </div>
+</div>
+
+<div class="hero-sequence">
+    <div class="sticky-element">
+        <div class="sequence-element"><canvas id="canvas2"></canvas></div>
+    </div>
+</div>
+
+<button id="scrollToTopBtn" class="scrollToTopBtn">Scroll to Top</button>
+
+<footer>"" Never change to be accepted by others. ""<p>Stay weird</p></footer>
+
+<script>
+    const sequenceNames = ["GT400", "zz0"];
+    const canvases = [document.getElementById('canvas1'), document.getElementById('canvas2')];
+    const contexts = canvases.map(canvas => canvas.getContext('2d'));
+    const frameCounts = [120, 60];
+    const images = [[], []];
+    const setCanvasSize = canvas => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    canvases.forEach(setCanvasSize);
+    const prepareImages = seqIndex => {
+        for (let i = 1; i <= frameCounts[seqIndex]; i++) {
+            const img = new Image();
+            img.src = `./all_images/${seqIndex === 0 ? 'gt40_blender_images' : 'bigsequence2_filter'}/${sequenceNames[seqIndex]}${i.toString().padStart(3, '0')}.webp`;
+            images[seqIndex].push(img);
+            if (i === 1) img.onload = () => drawImage(seqIndex, 0);
+        }
+    };
+    const drawImageToFit = (ctx, img, canvas) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const aspectRatio = img.width / img.height;
+        const [newWidth, newHeight] = canvas.width / aspectRatio > canvas.height ? [canvas.height * aspectRatio, canvas.height] : [canvas.width, canvas.width / aspectRatio];
+        const offsetX = (canvas.width - newWidth) / 2;
+        const offsetY = (canvas.height - newHeight) / 2;
+        ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
+    };
+    const drawImage = (seqIndex, frameIndex) => drawImageToFit(contexts[seqIndex], images[seqIndex][frameIndex], canvases[seqIndex]);
+    sequenceNames.forEach((_, i) => prepareImages(i));
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop;
+        document.querySelectorAll('.hero-sequence').forEach((seq, i) => {
+            const offsetTop = seq.offsetTop;
+            const maxScroll = seq.scrollHeight - window.innerHeight;
+            const frameIndex = Math.max(0, Math.min(frameCounts[i] - 1, Math.ceil(((scrollTop - offsetTop) / maxScroll) * frameCounts[i])));
+            requestAnimationFrame(() => drawImage(i, frameIndex));
+        });
+    });
+    window.addEventListener('resize', () => canvases.forEach(setCanvasSize));
+    document.addEventListener('DOMContentLoaded', () => {
+        const loadingScreen = document.createElement('div');
+        loadingScreen.id = 'loading-screen';
+        const progressText = document.createElement('div');
+        progressText.id = 'loading-progress';
+        loadingScreen.appendChild(progressText);
+        document.body.appendChild(loadingScreen);
+        let progress = 0;
+        const interval = setInterval(() => { if (progress > 100) { clearInterval(interval); loadingScreen.classList.add('hidden'); } else { progressText.textContent = `${progress++}`; } }, 10);
+    });
+    document.addEventListener('mousemove', e => {
+        const invertOverlay = document.getElementById('invert-overlay');
+        const scrollY = window.scrollY;
+        const sections = document.querySelectorAll('.section');
+        const inSection2Or3 = scrollY >= sections[1].offsetTop && scrollY < (sections[2].offsetTop + sections[2].offsetHeight);
+        invertOverlay.style.clipPath = inSection2Or3 ? 'circle(0px at 0px 0px)' : `circle(50px at ${e.clientX}px ${e.clientY}px)`;
+        document.body.style.cursor = inSection2Or3 ? 'default' : 'none';
+    });
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    window.addEventListener('scroll', () => {
+        scrollToTopBtn.classList.toggle('hidden', document.documentElement.scrollTop < 100);
+    });
+    scrollToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+</script>
