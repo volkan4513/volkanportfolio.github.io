@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://p2rhblsvcgv1"]
+
+[resource]
+resource_name = "WIPERS_AND_LIGHTS_FRONT_WIPER"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.106136, 0.104064, 0.0978476, 1)
+metallic = 0.718182
+roughness = 0.266949

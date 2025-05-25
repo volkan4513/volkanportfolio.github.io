@@ -1,0 +1,22 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://deno43g4cpb5o"]
+
+[ext_resource type="Texture2D" uid="uid://dvql5gogc6bip" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_46.png" id="1_6i3h8"]
+[ext_resource type="Texture2D" uid="uid://dau3dnx82i3hk" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_48.png" id="2_kqcpf"]
+[ext_resource type="Texture2D" uid="uid://dwhu8u20q6hjc" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_47.png" id="3_aep5c"]
+[ext_resource type="Texture2D" uid="uid://d1rlxnkr0fuq0" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_49.png" id="4_uocnk"]
+
+[resource]
+resource_name = "SF_Lamp_Mat"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_6i3h8")
+metallic = 1.0
+metallic_texture = ExtResource("3_aep5c")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("3_aep5c")
+roughness_texture_channel = 1
+emission_enabled = true
+emission_energy_multiplier = 10.0
+emission_texture = ExtResource("2_kqcpf")
+normal_enabled = true
+normal_texture = ExtResource("4_uocnk")

@@ -1,0 +1,295 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://rxqy78442vjh"
+path="res://.godot/imported/TATA_CURV_TOP_VARIANT_21_NEW.glb-7023a5c03124cf7c08f1714ec45ea652.scn"
+
+[deps]
+
+source_file="res://Curvv_Compressed_1/TATA_CURV_TOP_VARIANT_21_NEW.glb"
+dest_files=["res://.godot/imported/TATA_CURV_TOP_VARIANT_21_NEW.glb-7023a5c03124cf7c08f1714ec45ea652.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+_subresources={
+"materials": {
+"COMMON_BUMPERS_AO_BLACK_ROUGH_PLASTIC": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_BUMPERS_AO_BLACK_ROUGH_PLASTIC.tres"
+},
+"COMMON_BUMPERS_AO_BLACK_SHINY": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_BUMPERS_AO_BLACK_SHINY.tres"
+},
+"COMMON_BUMPERS_AO_BLACK_SHINY2": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_BUMPERS_AO_BLACK_SHINY2.tres"
+},
+"COMMON_BUMPERS_AO_BLACK_SHINY3": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_BUMPERS_AO_BLACK_SHINY3.tres"
+},
+"COMMON_BUMPERS_AO_BUMPER_BLACK_PLASTIC": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_BUMPERS_AO_BUMPER_BLACK_PLASTIC.tres"
+},
+"COMMON_BUMPERS_AO_CHROME": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_BUMPERS_AO_CHROME.tres"
+},
+"COMMON_BUMPERS_AO_FRONT_BLACK_SHINY": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_BUMPERS_AO_FRONT_BLACK_SHINY.tres"
+},
+"COMMON_BUMPERS_AO_SKID_PLATE": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_BUMPERS_AO_SKID_PLATE.tres"
+},
+"COMMON_BUMPERS_AO_WHITE_SKIDPLATE": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_BUMPERS_AO_WHITE_SKIDPLATE.tres"
+},
+"COMMON_CARBODY_PLASTIC_AO_BLACK_PLASTIC": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_CARBODY_PLASTIC_AO_BLACK_PLASTIC.tres"
+},
+"COMMON_CARBODY_PLASTIC_AO_BLACK_SHINY": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_CARBODY_PLASTIC_AO_BLACK_SHINY.tres"
+},
+"COMMON_CARBODY_PLASTIC_AO_BLACK_SHINY4": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_CARBODY_PLASTIC_AO_BLACK_SHINY4.tres"
+},
+"COMMON_CARBODY_PLASTIC_AO_REAR_BLACK_PLASTIC": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_CARBODY_PLASTIC_AO_REAR_BLACK_PLASTIC.tres"
+},
+"COMMON_CARPAINT_AO_BLACK_CARPAINT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_CARPAINT_AO_BLACK_CARPAINT.tres"
+},
+"COMMON_CARPAINT_AO_CARPAINT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_CARPAINT_AO_CARPAINT.tres"
+},
+"COMMON_CURVV_EX_MATTE_BLACK": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/COMMON_CURVV_EX_MATTE_BLACK.tres"
+},
+"CURVV_BLACK_SHINY2_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_BLACK_SHINY2_MAT.tres"
+},
+"CURVV_BLACK_SHINY4_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_BLACK_SHINY4_MAT.tres"
+},
+"CURVV_BLACK_SHINY_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_BLACK_SHINY_MAT.tres"
+},
+"CURVV_DASH_GLOW_MAT.001": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_DASH_GLOW_MAT.001.tres"
+},
+"CURVV_DOOR_HANDLE_GLOW": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_DOOR_HANDLE_GLOW.tres"
+},
+"CURVV_EX_CB_BLACK_PLASTIC_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_EX_CB_BLACK_PLASTIC_MAT.tres"
+},
+"CURVV_EX_GLASS": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_EX_GLASS.tres"
+},
+"CURVV_EX_GLASS.001": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_EX_GLASS.001.tres"
+},
+"CURVV_EX_HINGES_BLACK_METAL_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_EX_HINGES_BLACK_METAL_MAT.tres"
+},
+"CURVV_EX_LIGHTS_INDICATOR_DETAIL_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_EX_LIGHTS_INDICATOR_DETAIL_MAT.tres"
+},
+"CURVV_EX_MAIN_LOGO_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_EX_MAIN_LOGO_MAT.tres"
+},
+"CURVV_EX_ORVM_LIGHT_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_EX_ORVM_LIGHT_MAT.tres"
+},
+"CURVV_EX_ORVM_MIRROR_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_EX_ORVM_MIRROR_MAT.tres"
+},
+"CURVV_EX_REAR_BLACK_PLASTIC_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_EX_REAR_BLACK_PLASTIC_MAT.tres"
+},
+"CURVV_FRONT_BLACK_SHINY_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_FRONT_BLACK_SHINY_MAT.tres"
+},
+"CURVV_INT_ROOF_PLASTIC_2_MAT1.003": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_INT_ROOF_PLASTIC_2_MAT1.003.tres"
+},
+"CURVV_INT_ROOF_PLASTIC_2_MAT1.004": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_INT_ROOF_PLASTIC_2_MAT1.004.tres"
+},
+"CURVV_IN_DECAL": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_IN_DECAL.tres"
+},
+"CURVV_IN_DOORS_ORVM_ADJUSTER_BUTTON_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_IN_DOORS_ORVM_ADJUSTER_BUTTON_MAT.tres"
+},
+"CURVV_ORVM_BLACK_SHINY_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_ORVM_BLACK_SHINY_MAT.tres"
+},
+"CURVV_RADIATOR": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_RADIATOR.tres"
+},
+"CURVV_SHADOW_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURVV_SHADOW_MAT.tres"
+},
+"CURV_EX_CAM_DECAL": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/CURV_EX_CAM_DECAL.tres"
+},
+"FOGLIGHT_GLASS": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/FOGLIGHT_GLASS.tres"
+},
+"GAPFILL.001": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/GAPFILL.001.tres"
+},
+"GLOW": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/GLOW.tres"
+},
+"GLOW.001": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/GLOW.001.tres"
+},
+"GREY_SENSER_PART": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/GREY_SENSER_PART.tres"
+},
+"HEADLIGHT_PATTERNED_GLASS": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/HEADLIGHT_PATTERNED_GLASS.tres"
+},
+"LENS": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/LENS.tres"
+},
+"P3_P2_IN_BOOT_LIGHT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/P3_P2_IN_BOOT_LIGHT.tres"
+},
+"RED_GLOW": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/RED_GLOW.tres"
+},
+"RED_TAILLIGHT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/RED_TAILLIGHT.tres"
+},
+"REVERSE_LAMP_RED_GLASS": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/REVERSE_LAMP_RED_GLASS.tres"
+},
+"TATA_CURVV_EX_BADGE_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/TATA_CURVV_EX_BADGE_MAT.tres"
+},
+"TATA_CURVV_EX_EV_BADGE_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/TATA_CURVV_EX_EV_BADGE_MAT.tres"
+},
+"WHEEL_TYRE_THREAD_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WHEEL_TYRE_THREAD_MAT.tres"
+},
+"WHEEL_TYRE_WALL_MAT": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WHEEL_TYRE_WALL_MAT.tres"
+},
+"WINDSHILED_MAT.001": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WINDSHILED_MAT.001.tres"
+},
+"WIPERS_AND_LIGHTS_BLACKPLASTIC": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WIPERS_AND_LIGHTS_BLACKPLASTIC.tres"
+},
+"WIPERS_AND_LIGHTS_FOGLAMP_BLACK_PLASTIC": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WIPERS_AND_LIGHTS_FOGLAMP_BLACK_PLASTIC.tres"
+},
+"WIPERS_AND_LIGHTS_FOGLAMP_LIGHTS": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WIPERS_AND_LIGHTS_FOGLAMP_LIGHTS.tres"
+},
+"WIPERS_AND_LIGHTS_FRONT_WIPER": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WIPERS_AND_LIGHTS_FRONT_WIPER.tres"
+},
+"WIPERS_AND_LIGHTS_HEADLIGHT_BLACKPLASTIC": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WIPERS_AND_LIGHTS_HEADLIGHT_BLACKPLASTIC.tres"
+},
+"WIPERS_AND_LIGHTS_LIGHT_BLACK_PLASTIC": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WIPERS_AND_LIGHTS_LIGHT_BLACK_PLASTIC.tres"
+},
+"WIPERS_AND_LIGHTS_REVERSE_LAMP_CLEAR_WHITE": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WIPERS_AND_LIGHTS_REVERSE_LAMP_CLEAR_WHITE.tres"
+},
+"WIPERS_AND_LIGHTS_WIPER_RUBBER": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/WIPERS_AND_LIGHTS_WIPER_RUBBER.tres"
+},
+"atlas_tex1": {
+"use_external/enabled": true,
+"use_external/path": "res://Curvv_Compressed_1/mat/atlas_tex1.tres"
+}
+}
+}
+gltf/naming_version=1
+gltf/embedded_image_handling=1

@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dnivnvtr04ss0"]
+
+[resource]
+resource_name = "COMMON_CURVV_EX_MATTE_BLACK"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.0735218, 0.0735218, 0.0735218, 1)
+metallic = 0.5
+roughness = 0.748767

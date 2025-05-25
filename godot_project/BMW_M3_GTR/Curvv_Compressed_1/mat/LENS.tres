@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bpk2ctf8nlriq"]
+
+[resource]
+resource_name = "LENS"
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.428491, 0.428491, 0.428491, 0.5)
+metallic = 1.0
+roughness = 0.0

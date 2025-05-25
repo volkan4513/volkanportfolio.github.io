@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c5r8cyh85176d"]
+
+[ext_resource type="Shader" path="res://custom_shaders/glow_around.gdshader" id="1_uqavv"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_uqavv")
+shader_parameter/line_color = Color(0.0838864, 0.632756, 0.609472, 1)
+shader_parameter/line_spacing = 1.0
+shader_parameter/line_thickness = 6.845
+shader_parameter/time = 0.0
+shader_parameter/inv_rot = Basis(1, 0, 0, 0, 1, 0, 0, 0, 1)
+shader_parameter/direction = 1

@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ch5woprtb230c"]
+
+[resource]
+resource_name = "SF_Bridge_Mat"
+cull_mode = 2
+roughness = 0.788526

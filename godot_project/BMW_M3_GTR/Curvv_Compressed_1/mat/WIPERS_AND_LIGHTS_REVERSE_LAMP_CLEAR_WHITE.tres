@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c34wkrq18im3l"]
+
+[resource]
+resource_name = "WIPERS_AND_LIGHTS_REVERSE_LAMP_CLEAR_WHITE"
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.792246, 0.792246, 0.792246, 0.549144)
+metallic = 0.5
+roughness = 0.748767

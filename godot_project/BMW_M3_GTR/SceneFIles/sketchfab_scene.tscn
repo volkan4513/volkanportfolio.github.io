@@ -1,0 +1,26 @@
+[gd_scene load_steps=7 format=3 uid="uid://brcm2d1ss88ub"]
+
+[ext_resource type="PackedScene" uid="uid://cfjtjhas8g5fl" path="res://PLANET/sea_keep_lonely_watcher.glb" id="1_mdd5q"]
+[ext_resource type="Material" uid="uid://h0u2u8ka4s4u" path="res://PLANET/materials/Fortress.tres" id="2_004sy"]
+[ext_resource type="Material" uid="uid://do0ttpccf45ly" path="res://PLANET/materials/Environment.tres" id="3_4piu2"]
+[ext_resource type="Material" uid="uid://cmtwjol56s3vf" path="res://PLANET/materials/Sand.tres" id="4_lyrho"]
+[ext_resource type="Material" uid="uid://bey4eyw6ga0p2" path="res://PLANET/materials/material.tres" id="5_0wslh"]
+[ext_resource type="Material" uid="uid://drbylqnr45a0y" path="res://PLANET/materials/material_4.tres" id="6_cgwdd"]
+
+[node name="Sketchfab_Scene" instance=ExtResource("1_mdd5q")]
+
+[node name="Fortress_Fortress_03" parent="Sketchfab_model/ef0dcba82d2d448fbfe0ca97f8fadd87_fbx/RootNode/Fortress/Object_4" index="2"]
+surface_material_override/0 = ExtResource("2_004sy")
+
+[node name="Fortress_Environment_0" parent="Sketchfab_model/ef0dcba82d2d448fbfe0ca97f8fadd87_fbx/RootNode/Fortress/Object_4" index="3"]
+surface_material_override/0 = ExtResource("3_4piu2")
+
+[node name="Fortress_Sand_0" parent="Sketchfab_model/ef0dcba82d2d448fbfe0ca97f8fadd87_fbx/RootNode/Fortress/Object_4" index="4"]
+surface_material_override/0 = ExtResource("4_lyrho")
+
+[node name="Sea_Sea_0" parent="Sketchfab_model/ef0dcba82d2d448fbfe0ca97f8fadd87_fbx/RootNode/Sea" index="0"]
+surface_material_override/0 = ExtResource("5_0wslh")
+
+[node name="Sky_Sky_0" parent="Sketchfab_model/ef0dcba82d2d448fbfe0ca97f8fadd87_fbx/RootNode/Sky" index="0"]
+visible = false
+surface_material_override/0 = ExtResource("6_cgwdd")

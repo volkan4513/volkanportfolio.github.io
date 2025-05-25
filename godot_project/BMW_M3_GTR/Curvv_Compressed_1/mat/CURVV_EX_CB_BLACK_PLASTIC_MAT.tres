@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bckgnad3n0yhf"]
+
+[resource]
+resource_name = "CURVV_EX_CB_BLACK_PLASTIC_MAT"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.0476502, 0.0468192, 0.051131, 1)
+roughness = 0.5

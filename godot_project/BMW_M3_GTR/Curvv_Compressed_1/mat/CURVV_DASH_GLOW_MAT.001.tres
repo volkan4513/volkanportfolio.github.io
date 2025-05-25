@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://mx0vkxgx37al"]
+
+[resource]
+resource_name = "CURVV_DASH_GLOW_MAT.001"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.109441, 0.662827, 0.662827, 1)
+roughness = 0.5

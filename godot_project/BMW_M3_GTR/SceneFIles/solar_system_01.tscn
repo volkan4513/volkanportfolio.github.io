@@ -1,0 +1,54 @@
+[gd_scene load_steps=10 format=3 uid="uid://b70o0cenbgvna"]
+
+[ext_resource type="Script" path="res://solar_orbit_01.gd" id="1_e54g8"]
+[ext_resource type="Script" path="res://Scripts/camera_3d3.gd" id="2_43m24"]
+[ext_resource type="Texture2D" uid="uid://c632norrt2m23" path="res://Curvv_Compressed_1/amphitheatre-zanzibar-fort_2K_d1f19453-3b2b-4352-9382-be96f10526211.jpg" id="3_uqb44"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oit6a"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_e7n8r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_117b4"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_tr5uk"]
+panorama = ExtResource("3_uqb44")
+
+[sub_resource type="Sky" id="Sky_vvfjw"]
+sky_material = SubResource("PanoramaSkyMaterial_tr5uk")
+
+[sub_resource type="Environment" id="Environment_043kn"]
+sky = SubResource("Sky_vvfjw")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_exposure = 2.0
+
+[node name="SOLAR_SYSTEM_01" type="Node3D"]
+
+[node name="Node3D" type="Node3D" parent="." node_paths=PackedStringArray("target_object")]
+script = ExtResource("1_e54g8")
+target_object = NodePath(".")
+orbit_speed = 0.0
+orbit_material = SubResource("StandardMaterial3D_oit6a")
+rotation_angle = 90.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+mesh = SubResource("BoxMesh_e7n8r")
+surface_material_override/0 = SubResource("StandardMaterial3D_117b4")
+
+[node name="CAMERA" type="Camera3D" parent="." node_paths=PackedStringArray("orbit_target", "zoom_slider")]
+transform = Transform3D(0.899558, 0, -0.436802, 0, 1, 0, 0.436802, 0, 0.899558, -2.779, 1.738, 4.473)
+fov = 45.0
+script = ExtResource("2_43m24")
+orbit_target = NodePath("../Node3D")
+min_distance = 4.0
+max_distance = 8.0
+zoom_slider = NodePath("")
+rotate_around_x_axis = false
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.94176, 0)
+visible = false
+sky_mode = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_043kn")

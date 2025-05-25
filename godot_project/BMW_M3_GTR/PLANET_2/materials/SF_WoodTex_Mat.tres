@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://c4qyu8t50y6ve"]
+
+[ext_resource type="Texture2D" uid="uid://cptxx2pvtpkhb" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_35.png" id="1_6m2cv"]
+[ext_resource type="Texture2D" uid="uid://e471x4edbudw" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_36.png" id="2_kramk"]
+
+[resource]
+resource_name = "SF_WoodTex_Mat"
+cull_mode = 2
+albedo_texture = ExtResource("1_6m2cv")
+roughness = 0.388347
+normal_enabled = true
+normal_texture = ExtResource("2_kramk")

@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddqojhmmjxn7y"]
+
+[ext_resource type="PackedScene" uid="uid://ccnwfi5428g6x" path="res://cosmos_assets/orbit.glb" id="1_v70t7"]
+[ext_resource type="Material" uid="uid://bct8dj0s8uvn2" path="res://cosmos_mat/planet.tres" id="2_opubg"]
+[ext_resource type="Script" path="res://cosmos_controller/orbit.gd" id="3_6tsxu"]
+
+[node name="orbit" instance=ExtResource("1_v70t7")]
+
+[node name="Circle" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_opubg")
+script = ExtResource("3_6tsxu")

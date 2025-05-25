@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://wweytmhhrodc"]
+
+[ext_resource type="Shader" path="res://2D-Images/ambient_light_mat_shade2.gdshader" id="1_85fd7"]
+
+[resource]
+render_priority = 1
+shader = ExtResource("1_85fd7")
+shader_parameter/source_color_2 = Color(0, 0, 0, 1)
+shader_parameter/emission_strength = 6.905
+shader_parameter/gradient_scale = 1.045
+shader_parameter/time_speed = 2.0
+shader_parameter/alpha_gradient_scale = 0.35
+shader_parameter/gradient_direction = Vector2(0, 0.085)
+shader_parameter/edge_falloff = 0.5

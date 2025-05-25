@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://d3vs0moe8f42h"]
+
+[resource]
+resource_name = "COMMON_BUMPERS_AO_WHITE_SKIDPLATE"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.90222, 0.942096, 1, 1)
+metallic = 0.509091
+roughness = 0.35458

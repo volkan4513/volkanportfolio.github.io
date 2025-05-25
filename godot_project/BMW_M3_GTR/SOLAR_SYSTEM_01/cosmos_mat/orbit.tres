@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://8euqqtllq8u2"]
+
+[resource]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 1.12
+backlight = Color(1, 1, 1, 1)
+distance_fade_mode = 1
+distance_fade_min_distance = 50.0
+distance_fade_max_distance = 20.0

@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ymo2l6gds3wf"]
+
+[resource]
+resource_name = "CURVV_IN_DOORS_ORVM_ADJUSTER_BUTTON_MAT"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.171694, 0.171694, 0.171694, 1)
+metallic = 0.5
+roughness = 0.748767

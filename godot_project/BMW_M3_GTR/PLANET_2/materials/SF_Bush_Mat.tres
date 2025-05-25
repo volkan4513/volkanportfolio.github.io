@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://djhr1yni0jjnu"]
+
+[ext_resource type="Texture2D" uid="uid://crruuos457wwv" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_12.png" id="1_r06jg"]
+[ext_resource type="Texture2D" uid="uid://bf6jgm8nxtq0" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_13.png" id="2_wsfm2"]
+
+[resource]
+resource_name = "SF_Bush_Mat"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_r06jg")
+metallic_texture = ExtResource("2_wsfm2")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_wsfm2")
+roughness_texture_channel = 1

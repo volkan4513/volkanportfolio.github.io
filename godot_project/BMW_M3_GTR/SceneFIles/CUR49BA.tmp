@@ -1,0 +1,196 @@
+[gd_scene load_steps=22 format=3 uid="uid://dgebdj50oj5ey"]
+
+[ext_resource type="PackedScene" uid="uid://bwhuu62p7ctml" path="res://extra/character_body_3d.tscn" id="1_7xwx4"]
+[ext_resource type="Texture2D" uid="uid://crae8vt8pygaa" path="res://extra/camera-design_24911-39918.png" id="2_y7k4m"]
+[ext_resource type="Script" path="res://SceneFIles/camera_3d1.gd" id="3_tngl6"]
+[ext_resource type="PackedScene" uid="uid://cor80epb515vv" path="res://MESH/curvv_1/CURVV_VARIANT.glb" id="4_gt7nl"]
+[ext_resource type="Material" uid="uid://lwymtag2b0fu" path="res://MESH/curvv_materials/WIPERS_AND_LIGHTS_HEADLIGHT_CHROME.tres" id="5_31m7x"]
+[ext_resource type="Material" uid="uid://p27fxwgj13rl" path="res://MESH/curvv_materials/CURVV_EX_GLASS.tres" id="6_2d8jb"]
+[ext_resource type="Script" path="res://FPS.gd" id="7_xd8ig"]
+[ext_resource type="Texture2D" uid="uid://cio74a1f2tg6l" path="res://EVITARA_ENV_DAY_DOME.jpg" id="8_ekvc7"]
+[ext_resource type="Script" path="res://SceneFIles/rotate_object_multiple.gd" id="9_uctak"]
+[ext_resource type="Script" path="res://SceneFIles/GLOW_SCRIPT_TOGGLE.gd" id="10_nowkx"]
+[ext_resource type="Script" path="res://SceneFIles/make_duplicate.gd" id="11_65ofk"]
+[ext_resource type="PackedScene" uid="uid://dgsvdw1o7rqdd" path="res://SceneFIles/tata_curv_top_variant_16.tscn" id="11_p723s"]
+[ext_resource type="Material" uid="uid://4bc4n74rv3yg" path="res://MESH/curvv_materials/CURVV_DOOR_HANDLE_GLOW.tres" id="12_uo8ve"]
+[ext_resource type="Material" uid="uid://dtkjcqdfj1d4b" path="res://MESH/curvv_materials/RED_GLOW.tres" id="13_tga3c"]
+[ext_resource type="Material" uid="uid://b22pa5qg0dfk7" path="res://MESH/curvv_materials/GLOW.001.tres" id="14_mn1mj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rl424"]
+albedo_texture = ExtResource("2_y7k4m")
+
+[sub_resource type="BoxMesh" id="BoxMesh_mie1y"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ekt4x"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_aut8l"]
+panorama = ExtResource("8_ekvc7")
+
+[sub_resource type="Sky" id="Sky_y8ktg"]
+sky_material = SubResource("PanoramaSkyMaterial_aut8l")
+
+[sub_resource type="Environment" id="Environment_akg7p"]
+sky = SubResource("Sky_y8ktg")
+ambient_light_source = 3
+reflected_light_source = 2
+glow_enabled = true
+glow_hdr_threshold = 0.0
+adjustment_enabled = true
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("1_7xwx4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.54641, 0)
+visible = false
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.999297, 0.0217105, -0.030552, 0, 0.815149, 0.579251, 0.0374803, 0.578844, -0.814576, -0.462593, 6.09456, -7.36486)
+visible = false
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(82.7452, 0, 0, 0, 1, 0, 0, 0, 55.5727, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_rl424")
+mesh = SubResource("BoxMesh_mie1y")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(82.7452, 0, 0, 0, 1, 0, 0, 0, 55.5727, 0, 0, 0)
+shape = SubResource("ConcavePolygonShape3D_ekt4x")
+
+[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("orbit_target")]
+transform = Transform3D(0.562804, -0.251998, 0.787242, 0, 0.952396, 0.304864, -0.826591, -0.171578, 0.536012, 3.18587, 2.11945, 0.522572)
+keep_aspect = 0
+current = true
+script = ExtResource("3_tngl6")
+orbit_target = NodePath("../MeshInstance3D2")
+distance = 6.0
+zoom_speed = 0.5
+min_distance = 4.5
+max_distance = 10.0
+
+[node name="CURVV_VARIANT" parent="." instance=ExtResource("4_gt7nl")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.465131, -2.1241)
+visible = false
+
+[node name="EX_FOGLIGHT_CAP_MESH" parent="CURVV_VARIANT" index="12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0132132, 0, 0)
+
+[node name="CURVV_BODY_MESH_HIGH_002" parent="CURVV_VARIANT" index="18"]
+surface_material_override/11 = ExtResource("5_31m7x")
+surface_material_override/16 = ExtResource("6_2d8jb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CURVV_VARIANT"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.15568, 0.906299, -6.80499e-09)
+visible = false
+skeleton = NodePath("../../Camera3D")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 181.0
+offset_bottom = 142.0
+script = ExtResource("7_xd8ig")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.144
+anchor_top = 0.106
+anchor_right = 0.144
+anchor_bottom = 0.106
+offset_left = 51.936
+offset_top = 43.948
+offset_right = 236.936
+offset_bottom = 129.948
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_akg7p")
+
+[node name="rotate_objects" type="Button" parent="." node_paths=PackedStringArray("objects_to_rotate")]
+offset_left = 56.0
+offset_top = 300.0
+offset_right = 151.0
+offset_bottom = 331.0
+action_mode = 0
+text = "rotate_doors"
+script = ExtResource("9_uctak")
+objects_to_rotate = [NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/FRONT_RIGHT_DOOR_MESH"), NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/REAR_RIGHT_DOOR_MESH"), NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/FRONT_LEFT_DOOR_MESH"), NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/REAR_LEFT_DOOR_MESH"), NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/BOOT_DOOR_MESH")]
+rotation_values = Array[float]([45.0, 45.0, -45.0, -45.0, 45.0])
+rotation_axes = Array[String](["y", "y", "y", "y", "z"])
+rotation_speed = 20.0
+
+[node name="toggle_object" type="Button" parent="." node_paths=PackedStringArray("objects_to_toggle", "continuous_toggle_objects")]
+offset_left = 56.0
+offset_top = 344.0
+offset_right = 161.0
+offset_bottom = 375.0
+action_mode = 0
+text = "toggle_lights
+"
+script = ExtResource("10_nowkx")
+objects_to_toggle = [NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/BRAKE_LIGHTS_WHITE_GLOW_TOGGLE"), NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/TAIL_LIGHT_2_GLOW_TOGGLE"), NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/HL_GLOW1_TOGGLE"), NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/PLASTIC_METALPARTS_HIGH_GLOW_TOGGLE"), NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/BOOT_DOOR_MESH/BOOT_DOOR_MESH_GLOW")]
+continuous_toggle_objects = [NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/FRONT_RIGHT_DOOR_MESH/FRONT_RIGHT_DOOR_MESH_GLOW"), NodePath("../TATA_CURV_TOP_VARIANT_16_NEW/FRONT_LEFT_DOOR_MESH/FRONT_LEFT_DOOR_MESH_GLOW")]
+
+[node name="make_duplicate" type="Button" parent="." node_paths=PackedStringArray("object_to_duplicate")]
+offset_left = 56.0
+offset_top = 386.0
+offset_right = 161.0
+offset_bottom = 417.0
+action_mode = 0
+text = "make_duplicate"
+script = ExtResource("11_65ofk")
+object_to_duplicate = NodePath("../TATA_CURV_TOP_VARIANT_16_NEW")
+offset = Vector3(0, 0, -2)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.773115, 0)
+rotation_order = 0
+skeleton = NodePath("../Camera3D")
+
+[node name="TATA_CURV_TOP_VARIANT_16_NEW" parent="." instance=ExtResource("11_p723s")]
+
+[node name="FRONT_RIGHT_DOOR_MESH_GLOW" parent="TATA_CURV_TOP_VARIANT_16_NEW/FRONT_RIGHT_DOOR_MESH" index="0"]
+visible = false
+surface_material_override/0 = ExtResource("12_uo8ve")
+
+[node name="FRONT_LEFT_DOOR_MESH_GLOW" parent="TATA_CURV_TOP_VARIANT_16_NEW/FRONT_LEFT_DOOR_MESH" index="0"]
+visible = false
+surface_material_override/0 = ExtResource("12_uo8ve")
+
+[node name="BOOT_DOOR_MESH_GLOW" parent="TATA_CURV_TOP_VARIANT_16_NEW/BOOT_DOOR_MESH" index="0"]
+visible = false
+surface_material_override/0 = ExtResource("13_tga3c")
+
+[node name="BOOT_DOOR_TAIL_LIGHT_GLOW_ALLTIME" parent="TATA_CURV_TOP_VARIANT_16_NEW/BOOT_DOOR_MESH" index="1"]
+surface_material_override/0 = ExtResource("13_tga3c")
+
+[node name="HEAD_LIGHT_GLOW_ALLTIME" parent="TATA_CURV_TOP_VARIANT_16_NEW" index="22"]
+surface_material_override/0 = ExtResource("14_mn1mj")
+
+[node name="TAIL_LIGHT_GLOW_ALLTIME" parent="TATA_CURV_TOP_VARIANT_16_NEW" index="23"]
+surface_material_override/0 = ExtResource("13_tga3c")
+
+[node name="TAIL_LIGHT_2_GLOW_TOGGLE" parent="TATA_CURV_TOP_VARIANT_16_NEW" index="26"]
+visible = false
+surface_material_override/0 = ExtResource("13_tga3c")
+
+[node name="HL_GLOW1_TOGGLE" parent="TATA_CURV_TOP_VARIANT_16_NEW" index="27"]
+visible = false
+surface_material_override/0 = ExtResource("14_mn1mj")
+
+[node name="PLASTIC_METALPARTS_HIGH_GLOW_TOGGLE" parent="TATA_CURV_TOP_VARIANT_16_NEW" index="28"]
+visible = false
+surface_material_override/0 = ExtResource("14_mn1mj")
+
+[node name="BRAKE_LIGHTS_WHITE_GLOW_TOGGLE" parent="TATA_CURV_TOP_VARIANT_16_NEW" index="29"]
+visible = false
+surface_material_override/0 = ExtResource("14_mn1mj")
+
+[editable path="CURVV_VARIANT"]
+[editable path="TATA_CURV_TOP_VARIANT_16_NEW"]

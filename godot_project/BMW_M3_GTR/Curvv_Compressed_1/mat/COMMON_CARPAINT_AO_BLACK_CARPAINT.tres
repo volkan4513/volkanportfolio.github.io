@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ip366yhgx23u"]
+
+[resource]
+resource_name = "COMMON_CARPAINT_AO_BLACK_CARPAINT"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.0478872, 0.0478787, 0.0478775, 1)
+metallic = 0.832
+roughness = 0.18

@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://2k3j7qne4obd"]
+
+[ext_resource type="Texture2D" uid="uid://b6mnt7241xmvv" path="res://Curvv_Compressed_1/TATA_CURV_TOP_VARIANT_21_NEW_GROUND_SHADOW.png" id="1_0uhfc"]
+
+[resource]
+resource_name = "CURVV_SHADOW_MAT"
+transparency = 4
+cull_mode = 2
+shading_mode = 0
+albedo_texture = ExtResource("1_0uhfc")
