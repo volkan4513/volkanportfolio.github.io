@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cursor Rectangle + Clock</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    min-height: 100vh;
+    overflow: auto;
+    background: url("noisy3.png") center/cover no-repeat;
+    cursor: none;
+    font-family: "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Cursor rectangle */
+  .neg-rect {
+    position: fixed;
+    pointer-events: none;
+    width: 70px;
+    height: 140px;
+    transform: translate(-50%, -50%);
+    border: 2px solid #fff;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+    overflow: hidden;
+    z-index: 9999;
+    will-change: transform;
+  }
+
+  .neg-rect img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  /* Clock widget */
+  .clock {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.141);
+    padding: 12px 20px;
+    font-size: 1.5rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.6);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    user-select: none;
+    z-index: 10000;
+    backdrop-filter: blur(6px);
+    border: 2px solid #fff;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    body { cursor: default; }
+  }
+</style>
+</head>
+<body>
+  <!-- Cursor Rectangle -->
+  <div class="neg-rect" id="neg">
+    <img id="overlayImg" src="clear3.png" alt="">
+  </div>
+
+  <!-- Clock Widget -->
+  <div class="clock" id="clock">--:--:--</div>
+
+<script>
+const rect = document.getElementById('neg');
+const img  = document.getElementById('overlayImg');
+const clock = document.getElementById('clock');
+
+let x = window.innerWidth / 2;
+let y = window.innerHeight / 2;
+let raf = null;
+
+function updatePositionOnce() {
+  rect.style.left = x + 'px';
+  rect.style.top  = y + 'px';
+
+  const r = rect.getBoundingClientRect();
+  img.style.left = (-x + r.width / 2) + "px";
+  img.style.top  = (-y + r.height / 2) + "px";
+
+  raf = null;
+}
+function scheduleUpdate() {
+  if (!raf) raf = requestAnimationFrame(updatePositionOnce);
+}
+
+// Mouse
+window.addEventListener('mousemove', e => {
+  x = e.clientX; y = e.clientY;
+  scheduleUpdate();
+}, { passive: true });
+
+// Touch
+window.addEventListener('touchmove', e => {
+  if (e.touches.length > 0) {
+    x = e.touches[0].clientX;
+    y = e.touches[0].clientY;
+    scheduleUpdate();
+  }
+}, { passive: true });
+
+window.addEventListener('touchstart', e => {
+  if (e.touches.length > 0) {
+    x = e.touches[0].clientX;
+    y = e.touches[0].clientY;
+    scheduleUpdate();
+  }
+}, { passive: true });
+
+/* Clock Update */
+function updateClock() {
+  const now = new Date();
+  const hrs = String(now.getHours()).padStart(2, '0');
+  const mins = String(now.getMinutes()).padStart(2, '0');
+  const secs = String(now.getSeconds()).padStart(2, '0');
+  clock.textContent = `${hrs}:${mins}:${secs}`;
+}
+setInterval(updateClock, 1000);
+updateClock(); // initial call
+</script>
+</body>
+</html>
