@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glass Edge Cursor</title>
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: linear-gradient(180deg, #0f172a 0%, #071029 60%);
+  cursor: none;
+  overflow: hidden;
+}
+
+.cursor-trail {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.trail-dot {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.015);
+  transform: translate(-50%,-50%);
+  will-change: transform, opacity;
+}
+
+/* create beveled edges with chromatic effect using pseudo-elements */
+.trail-dot::before,
+.trail-dot::after,
+.trail-dot::nth-child(3) {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  background: transparent;
+}
+
+/* top & bottom edges (red/blue chromatic) */
+.trail-dot::before {
+  top: 0; left: 0; right: 0; height: 6px;
+  background: linear-gradient(to bottom, rgba(255,0,0,0.1), transparent);
+}
+.trail-dot::after {
+  bottom: 0; left: 0; right: 0; height: 6px;
+  background: linear-gradient(to top, rgba(0,255,255,0.1), transparent);
+}
+
+/* left & right edges */
+.trail-dot span {
+  position: absolute;
+  top: 0; bottom: 0; width: 6px;
+}
+.trail-dot span.left {
+  left: 0;
+  background: linear-gradient(to right, rgba(255,0,255,0.01), transparent);
+}
+.trail-dot span.right {
+  right: 0;
+  background: linear-gradient(to left, rgba(0,255,0,0.01), transparent);
+}
+
+/* floating text */
+.cursor-text {
+  position: fixed;
+  font-size: 1.5rem;
+  color: #fff;
+  font-weight: bold;
+  pointer-events: none;
+  transform: translate(-50%, -120%);
+  text-shadow: 0 0 6px rgba(0,0,0,0.6);
+  white-space: nowrap;
+}
+
+main {
+  padding: 4rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: #fff;
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-trail" id="cursorTrail"></div>
+<!-- <div class="cursor-text" id="cursorText">Glass Cursor</div> -->
+
+<main>
+  <h1>Glass Cursor with Beveled Edges</h1>
+  <p>Move your mouse to see a big square cursor with smooth motion. The edges have a chromatic bevel to simulate light refraction along the sides.</p>
+  <section style="height:300vh;"></section>
+</main>
+
+<script>
+(function(){
+  const trailContainer = document.getElementById('cursorTrail');
+  // const cursorText = document.getElementById('cursorText');
+
+  const DOTS = 50;
+  const HISTORY = 60;
+  const lerpAmt = 0.05; // slower = smoother
+
+  const posHistory = [];
+  let pointer = { x: window.innerWidth/2, y: window.innerHeight/2 };
+
+  const dots = [];
+  for(let i=0;i<DOTS;i++){
+    const el = document.createElement('div');
+    el.className='trail-dot';
+
+    // create left/right edges
+    const leftEdge = document.createElement('span');
+    leftEdge.className='left';
+    const rightEdge = document.createElement('span');
+    rightEdge.className='right';
+    el.appendChild(leftEdge);
+    el.appendChild(rightEdge);
+
+    trailContainer.appendChild(el);
+    dots.push({el,x:pointer.x,y:pointer.y});
+  }
+
+  for(let i=0;i<HISTORY;i++) posHistory.push({x:pointer.x,y:pointer.y});
+
+  function updatePointer(x,y){
+    pointer.x=x;
+    pointer.y=y;
+    posHistory.unshift({x,y});
+    if(posHistory.length>HISTORY) posHistory.pop();
+  }
+
+  window.addEventListener('pointermove', e=>updatePointer(e.clientX, e.clientY));
+  window.addEventListener('touchmove', e=>{
+    if(e.touches && e.touches[0]) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+  }, {passive:true});
+
+  function animate(){
+    for(let i=0;i<dots.length;i++){
+      const dot = dots[i];
+      const t = i/(dots.length-1);
+      const idx = Math.floor(t*(posHistory.length-1));
+      const target = posHistory[idx]||posHistory[posHistory.length-1];
+
+      dot.x += (target.x - dot.x) * lerpAmt;
+      dot.y += (target.y - dot.y) * lerpAmt;
+
+      const sizeFactor = 1.0 - t*0.3;
+      const op = 0.9 - t*0.85;
+      dot.el.style.transform = `translate(${dot.x}px,${dot.y}px) translate(-50%,-50%) scale(${sizeFactor})`;
+      dot.el.style.opacity = op;
+    }
+
+    // cursorText.style.left = pointer.x + 'px';
+    // cursorText.style.top = (pointer.y - 80) + 'px';
+
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+})();
+</script>
+
+</body>
+</html>

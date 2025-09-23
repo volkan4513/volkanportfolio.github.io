@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Responsive Image Effects Grid</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1e1e2f;
+      color: #fff;
+    }
+
+    .container {
+      display: grid;
+      width: 100vw;
+      min-height: 100vh;
+      gap: 10px;
+      padding: 10px;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto;
+    }
+
+    .section {
+      background: #2c2c3f;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .section:hover { transform: scale(1.03); }
+
+    input[type=file] { display: none; }
+
+    .section h3 { margin-bottom: 10px; }
+
+    canvas, pre {
+      width: 100%;
+      height: 100%;
+      border: 2px solid #444;
+      background: #000;
+      display: block;
+      object-fit: cover;
+    }
+
+    pre {
+      white-space: pre;
+      font-size: 6px;
+      line-height: 8px;
+      padding: 10px;
+      overflow: auto;
+      color: #aaa;
+      width: 100%;
+      flex: 1;
+    }
+
+    .slider-container {
+      width: 90%;
+      margin: 10px 0;
+    }
+
+    input[type=range] { width: 100%; }
+
+    /* Responsive Grid Layouts */
+    @media (orientation: landscape) and (min-aspect-ratio: 4/3) {
+      .container { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (orientation: portrait) and (max-aspect-ratio: 3/4) {
+      .container { grid-template-columns: 1fr; grid-template-rows: repeat(4, auto); }
+    }
+    @media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) {
+      .container { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, auto); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Section 1: Image Upload -->
+  <div class="section" id="uploadSection">
+    <h3>Select or Drag Image</h3>
+    <input type="file" id="fileInput" accept="image/*">
+    <label for="fileInput" style="cursor:pointer; color:#0af;">Click to select</label>
+    <p style="font-size:0.8rem; color:#aaa;">or drag image here</p>
+  </div>
+
+  <!-- Section 2: Scanline -->
+  <div class="section">
+    <h3>Scanline</h3>
+    <canvas id="canvasScanline"></canvas>
+  </div>
+
+  <!-- Section 3: ASCII -->
+  <div class="section">
+    <h3>ASCII</h3>
+    <pre id="asciiOutput"></pre>
+  </div>
+
+  <!-- Section 4: Pixel Art -->
+  <div class="section">
+    <h3>Pixel Art</h3>
+    <canvas id="canvasPixel"></canvas>
+    <div class="slider-container">
+      <label>Pixel Colors:
+        <input type="range" id="colorSlider" min="4" max="40" value="20">
+      </label>
+    </div>
+  </div>
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const uploadSection = document.getElementById('uploadSection');
+
+const canvasScanline = document.getElementById('canvasScanline');
+const ctxScanline = canvasScanline.getContext('2d');
+
+const canvasPixel = document.getElementById('canvasPixel');
+const ctxPixel = canvasPixel.getContext('2d');
+
+const asciiOutput = document.getElementById('asciiOutput');
+const colorSlider = document.getElementById('colorSlider');
+
+let img = new Image();
+
+// Drag & drop
+uploadSection.addEventListener('dragover', e => { e.preventDefault(); uploadSection.style.background = "#333"; });
+uploadSection.addEventListener('dragleave', e => { e.preventDefault(); uploadSection.style.background = "#2c2c3f"; });
+uploadSection.addEventListener('drop', e => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if(file && file.type.startsWith('image/')) loadImage(file);
+});
+
+fileInput.addEventListener('change', e => { const file = e.target.files[0]; if(file) loadImage(file); });
+
+function loadImage(file) {
+  const reader = new FileReader();
+  reader.onload = ev => { 
+    img.src = ev.target.result;
+    uploadSection.style.backgroundImage = `url(${ev.target.result})`;
+    uploadSection.style.backgroundSize = "cover";
+    uploadSection.style.backgroundPosition = "center";
+  };
+  reader.readAsDataURL(file);
+}
+
+img.onload = () => {
+  drawScanline();
+  drawPixelArt();
+  drawASCII();
+};
+
+function drawScanline() {
+  const w = canvasScanline.clientWidth;
+  const h = canvasScanline.clientHeight;
+  canvasScanline.width = w;
+  canvasScanline.height = h;
+
+  const scale = Math.max(w/img.width, h/img.height);
+  const sw = img.width * scale;
+  const sh = img.height * scale;
+  const sx = (w - sw)/2;
+  const sy = (h - sh)/2;
+
+  ctxScanline.clearRect(0,0,w,h);
+  ctxScanline.drawImage(img, sx, sy, sw, sh);
+
+  let imageData = ctxScanline.getImageData(0,0,w,h);
+  let data = imageData.data;
+  for(let y=0;y<h;y++){
+    if(y%2===0){
+      for(let x=0;x<w;x++){
+        let idx=(y*w+x)*4;
+        data[idx]=data[idx+1]=data[idx+2]=0;
+      }
+    }
+  }
+  ctxScanline.putImageData(imageData,0,0);
+}
+
+function drawPixelArt() {
+  const w = canvasPixel.clientWidth;
+  const h = canvasPixel.clientHeight;
+  canvasPixel.width = w;
+  canvasPixel.height = h;
+
+  const scale = Math.max(w/img.width, h/img.height);
+  const sw = img.width * scale;
+  const sh = img.height * scale;
+  const sx = (w - sw)/2;
+  const sy = (h - sh)/2;
+
+  const blockSize = 3;
+  ctxPixel.clearRect(0,0,w,h);
+  ctxPixel.drawImage(img, sx, sy, sw, sh);
+  let imageData = ctxPixel.getImageData(0,0,w,h);
+  let data = imageData.data;
+
+  const numColors = parseInt(colorSlider.value);
+  const colors = [];
+  for(let i=0;i<data.length;i+=4) colors.push([data[i],data[i+1],data[i+2]]);
+  
+  function getClosestColor(r,g,b,palette){
+    let minDist=Infinity, closest=palette[0];
+    for(const c of palette){
+      const d=(r-c[0])**2+(g-c[1])**2+(b-c[2])**2;
+      if(d<minDist){ minDist=d; closest=c;}
+    }
+    return closest;
+  }
+
+  const palette=[];
+  const step=Math.floor(colors.length/numColors);
+  for(let i=0;i<colors.length && palette.length<numColors;i+=step) palette.push(colors[i]);
+
+  for(let y=0;y<h;y+=blockSize){
+    for(let x=0;x<w;x+=blockSize){
+      let r=0,g=0,b=0,count=0;
+      for(let by=0;by<blockSize;by++){
+        for(let bx=0;bx<blockSize;bx++){
+          let px=x+bx, py=y+by;
+          if(px>=w || py>=h) continue;
+          let idx=(py*w+px)*4;
+          r+=data[idx]; g+=data[idx+1]; b+=data[idx+2]; count++;
+        }
+      }
+      r=Math.floor(r/count); g=Math.floor(g/count); b=Math.floor(b/count);
+      const [nr,ng,nb] = getClosestColor(r,g,b,palette);
+      for(let by=0;by<blockSize;by++){
+        for(let bx=0;bx<blockSize;bx++){
+          let px=x+bx, py=y+by;
+          if(px>=w || py>=h) continue;
+          let idx=(py*w+px)*4;
+          data[idx]=nr; data[idx+1]=ng; data[idx+2]=nb;
+        }
+      }
+    }
+  }
+  ctxPixel.putImageData(imageData,0,0);
+}
+
+function drawASCII() {
+  asciiOutput.style.display="block";
+  const w = asciiOutput.clientWidth;
+  const h = asciiOutput.clientHeight;
+
+  const tempCanvas = document.createElement('canvas');
+  tempCanvas.width = 100;
+  tempCanvas.height = 60;
+  const tempCtx = tempCanvas.getContext('2d');
+  const scale = Math.max(100/img.width, 60/img.height);
+  const sw = img.width * scale;
+  const sh = img.height * scale;
+  const sx = (100 - sw)/2;
+  const sy = (60 - sh)/2;
+  tempCtx.drawImage(img, sx, sy, sw, sh);
+
+  let imgData = tempCtx.getImageData(0,0,100,60).data;
+  let chars=" .:-=+*#%@";
+  let str="";
+  for(let y=0;y<60;y++){
+    for(let x=0;x<100;x++){
+      let idx=(y*100+x)*4;
+      let avg=(imgData[idx]+imgData[idx+1]+imgData[idx+2])/3;
+      str+=chars[Math.floor((avg/255)*(chars.length-1))];
+    }
+    str+="\n";
+  }
+  asciiOutput.textContent=str;
+}
+
+colorSlider.addEventListener('input', drawPixelArt);
+
+// Redraw on window resize
+window.addEventListener('resize', () => {
+  if(img.src) { drawScanline(); drawPixelArt(); drawASCII(); }
+});
+
+</script>
+
+</body>
+</html>

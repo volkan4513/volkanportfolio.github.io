@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draggable & Resizable Cat Message with Iframe</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #323232;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    touch-action: none; /* prevent touch scrolling when dragging/resizing */
+}
+
+.window {
+    position: absolute;
+    width: 80vw;
+    max-width: 600px;
+    height: 60vh;
+    max-height: 400px;
+    background-color: #fff;
+    border: 30px solid rgba(255, 214, 152,0.3); /* outer draggable border */
+    box-shadow: 0 5px 0px rgba(0, 0, 0, 0.3);
+    cursor: move;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    touch-action: none;
+}
+
+.resize-handle {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 8px solid rgba(255, 195, 56, 0.5); /* inner border for resizing */
+    box-sizing: border-box;
+    pointer-events: all;
+    cursor: nwse-resize;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: auto; /* allow interaction */
+}
+</style>
+</head>
+<body>
+
+<div id="dialog" class="window">
+    <div class="resize-handle"></div>
+    <iframe src="pixel_art_page.html"></iframe>
+</div>
+
+<script>
+const dialog = document.getElementById('dialog');
+const resizeHandle = dialog.querySelector('.resize-handle');
+
+let isDragging = false, dragOffsetX, dragOffsetY;
+let isResizing = false, startWidth, startHeight, startX, startY;
+
+// CENTER THE WINDOW
+function centerWindow() {
+    dialog.style.left = (window.innerWidth - dialog.offsetWidth) / 2 + 'px';
+    dialog.style.top = (window.innerHeight - dialog.offsetHeight) / 2 + 'px';
+}
+
+// Helper: clamp a value between min and max
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+
+// DRAG FUNCTIONALITY
+function startDrag(e) {
+    if (e.target === resizeHandle) return;
+    isDragging = true;
+    const rect = dialog.getBoundingClientRect();
+    dragOffsetX = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    dragOffsetY = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    dialog.style.cursor = 'move';
+}
+function dragMove(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    let newLeft = clientX - dragOffsetX;
+    let newTop = clientY - dragOffsetY;
+
+    // clamp within viewport
+    const maxLeft = window.innerWidth - dialog.offsetWidth;
+    const maxTop = window.innerHeight - dialog.offsetHeight;
+    dialog.style.left = clamp(newLeft, 0, maxLeft) + 'px';
+    dialog.style.top = clamp(newTop, 0, maxTop) + 'px';
+}
+function endDrag() {
+    isDragging = false;
+    dialog.style.cursor = 'default';
+}
+
+// RESIZE FUNCTIONALITY
+function startResize(e) {
+    e.stopPropagation();
+    isResizing = true;
+    startWidth = dialog.offsetWidth;
+    startHeight = dialog.offsetHeight;
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    document.body.style.cursor = 'nwse-resize';
+}
+function resizeMove(e) {
+    if (!isResizing) return;
+    e.preventDefault();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    let newWidth = startWidth + (clientX - startX);
+    let newHeight = startHeight + (clientY - startY);
+
+    // clamp sizes
+    newWidth = clamp(newWidth, 200, window.innerWidth - dialog.offsetLeft);
+    newHeight = clamp(newHeight, 150, window.innerHeight - dialog.offsetTop);
+
+    dialog.style.width = newWidth + 'px';
+    dialog.style.height = newHeight + 'px';
+}
+function endResize() {
+    isResizing = false;
+    document.body.style.cursor = 'default';
+}
+
+// Event listeners
+dialog.addEventListener('mousedown', startDrag);
+dialog.addEventListener('touchstart', startDrag);
+
+document.addEventListener('mousemove', dragMove);
+document.addEventListener('touchmove', dragMove, {passive:false});
+
+document.addEventListener('mouseup', endDrag);
+document.addEventListener('touchend', endDrag);
+
+resizeHandle.addEventListener('mousedown', startResize);
+resizeHandle.addEventListener('touchstart', startResize);
+
+document.addEventListener('mousemove', resizeMove);
+document.addEventListener('touchmove', resizeMove, {passive:false});
+
+document.addEventListener('mouseup', endResize);
+document.addEventListener('touchend', endResize);
+
+// CENTER WINDOW ON LOAD & RESIZE
+window.addEventListener('load', centerWindow);
+window.addEventListener('resize', centerWindow);
+</script>
+
+</body>
+</html>
