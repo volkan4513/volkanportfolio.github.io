@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Glass Edge Cursor</title>
+<title>Glass Edge Cursor (Optimized)</title>
 <style>
 html, body {
   height: 100%;
@@ -24,61 +24,45 @@ html, body {
 
 .trail-dot {
   position: absolute;
-  width: 50px;
-  height: 50px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(20px) saturate(200%);
-  -webkit-backdrop-filter: blur(20px) saturate(200%);
-  border: 1px solid rgba(255,255,255,0.015);
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.05);
   transform: translate(-50%,-50%);
   will-change: transform, opacity;
+  overflow: hidden;
 }
 
-/* create beveled edges with chromatic effect using pseudo-elements */
+/* top & bottom edges (subtle chromatic bevel) */
 .trail-dot::before,
-.trail-dot::after,
-.trail-dot::nth-child(3) {
+.trail-dot::after {
   content: '';
   position: absolute;
-  pointer-events: none;
-  inset: 0;
-  background: transparent;
+  left: 0; right: 0;
+  height: 4px;
 }
-
-/* top & bottom edges (red/blue chromatic) */
 .trail-dot::before {
-  top: 0; left: 0; right: 0; height: 6px;
-  background: linear-gradient(to bottom, rgba(255,0,0,0.1), transparent);
+  top: 0;
+  background: linear-gradient(to bottom, rgba(255,0,0,0.15), transparent);
 }
 .trail-dot::after {
-  bottom: 0; left: 0; right: 0; height: 6px;
-  background: linear-gradient(to top, rgba(0,255,255,0.1), transparent);
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0,255,255,0.15), transparent);
 }
 
 /* left & right edges */
 .trail-dot span {
   position: absolute;
-  top: 0; bottom: 0; width: 6px;
+  top: 0; bottom: 0; width: 4px;
 }
 .trail-dot span.left {
   left: 0;
-  background: linear-gradient(to right, rgba(255,0,255,0.01), transparent);
+  background: linear-gradient(to right, rgba(255,0,255,0.08), transparent);
 }
 .trail-dot span.right {
   right: 0;
-  background: linear-gradient(to left, rgba(0,255,0,0.01), transparent);
-}
-
-/* floating text */
-.cursor-text {
-  position: fixed;
-  font-size: 1.5rem;
-  color: #fff;
-  font-weight: bold;
-  pointer-events: none;
-  transform: translate(-50%, -120%);
-  text-shadow: 0 0 6px rgba(0,0,0,0.6);
-  white-space: nowrap;
+  background: linear-gradient(to left, rgba(0,255,0,0.08), transparent);
 }
 
 main {
@@ -93,22 +77,20 @@ main {
 <body>
 
 <div class="cursor-trail" id="cursorTrail"></div>
-<!-- <div class="cursor-text" id="cursorText">Glass Cursor</div> -->
 
 <main>
-  <h1>Glass Cursor with Beveled Edges</h1>
-  <p>Move your mouse to see a big square cursor with smooth motion. The edges have a chromatic bevel to simulate light refraction along the sides.</p>
+  <h1>Glass Cursor with Beveled Edges (Optimized)</h1>
+  <p>This version avoids heavy <code>backdrop-filter</code> and uses fewer trail dots for smoother performance on mobile.</p>
   <section style="height:300vh;"></section>
 </main>
 
 <script>
 (function(){
   const trailContainer = document.getElementById('cursorTrail');
-  // const cursorText = document.getElementById('cursorText');
 
-  const DOTS = 50;
-  const HISTORY = 60;
-  const lerpAmt = 0.05; // slower = smoother
+  const DOTS = 20;      // fewer = lighter
+  const HISTORY = 30;   // smaller buffer
+  const lerpAmt = 0.12; // faster follow, less calc
 
   const posHistory = [];
   let pointer = { x: window.innerWidth/2, y: window.innerHeight/2 };
@@ -154,14 +136,11 @@ main {
       dot.x += (target.x - dot.x) * lerpAmt;
       dot.y += (target.y - dot.y) * lerpAmt;
 
-      const sizeFactor = 1.0 - t*0.3;
-      const op = 0.9 - t*0.85;
+      const sizeFactor = 1.0 - t*0.25;
+      const op = 0.85 - t*0.8;
       dot.el.style.transform = `translate(${dot.x}px,${dot.y}px) translate(-50%,-50%) scale(${sizeFactor})`;
       dot.el.style.opacity = op;
     }
-
-    // cursorText.style.left = pointer.x + 'px';
-    // cursorText.style.top = (pointer.y - 80) + 'px';
 
     requestAnimationFrame(animate);
   }

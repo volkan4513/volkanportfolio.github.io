@@ -8,78 +8,62 @@
     * { margin:0; padding:0; box-sizing:border-box; }
 
     html, body {
-      min-height: 100%;
+      width: 100%;
+      height: 100%;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #1e1e2f;
       color: #fff;
+      overflow: hidden;
     }
 
     .container {
       display: grid;
-      width: 100vw;
-      min-height: 100vh;
+      width: 100%;
+      height: 100%;
       gap: 10px;
       padding: 10px;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: auto;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      box-sizing: border-box;
     }
 
     .section {
-      background: #2c2c3f;
       border-radius: 10px;
       overflow: hidden;
+      position: relative;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: relative;
       cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .section:hover { transform: scale(1.03); }
-
-    input[type=file] { display: none; }
-
-    .section h3 { margin-bottom: 10px; }
-
-    canvas, pre {
+      background-size: cover;
+      background-position: center;
       width: 100%;
       height: 100%;
-      border: 2px solid #444;
-      background: #000;
-      display: block;
-      object-fit: cover;
     }
 
-    pre {
-      white-space: pre;
-      font-size: 6px;
-      line-height: 8px;
-      padding: 10px;
-      overflow: auto;
-      color: #aaa;
-      width: 100%;
-      flex: 1;
+    .header {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 6px #000;
+      z-index: 2;
     }
 
     .slider-container {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 90%;
-      margin: 10px 0;
+      z-index: 2;
     }
 
     input[type=range] { width: 100%; }
 
-    /* Responsive Grid Layouts */
-    @media (orientation: landscape) and (min-aspect-ratio: 4/3) {
-      .container { grid-template-columns: repeat(4, 1fr); }
-    }
-    @media (orientation: portrait) and (max-aspect-ratio: 3/4) {
-      .container { grid-template-columns: 1fr; grid-template-rows: repeat(4, auto); }
-    }
-    @media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) {
-      .container { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, auto); }
-    }
+    input[type=file] { display: none; }
   </style>
 </head>
 <body>
@@ -87,28 +71,25 @@
 <div class="container">
   <!-- Section 1: Image Upload -->
   <div class="section" id="uploadSection">
-    <h3>Select or Drag Image</h3>
+    <div class="header">Select or Drag Image</div>
     <input type="file" id="fileInput" accept="image/*">
-    <label for="fileInput" style="cursor:pointer; color:#0af;">Click to select</label>
-    <p style="font-size:0.8rem; color:#aaa;">or drag image here</p>
+    <label for="fileInput" style="cursor:pointer; color:#0af; position:absolute; bottom:40px;">Click to select</label>
+    <p style="font-size:0.8rem; color:#aaa; position:absolute; bottom:20px;">or drag image here</p>
   </div>
 
   <!-- Section 2: Scanline -->
-  <div class="section">
-    <h3>Scanline</h3>
-    <canvas id="canvasScanline"></canvas>
+  <div class="section" id="scanlineSection">
+    <div class="header">Scanline</div>
   </div>
 
   <!-- Section 3: ASCII -->
-  <div class="section">
-    <h3>ASCII</h3>
-    <pre id="asciiOutput"></pre>
+  <div class="section" id="asciiSection">
+    <div class="header">ASCII</div>
   </div>
 
   <!-- Section 4: Pixel Art -->
-  <div class="section">
-    <h3>Pixel Art</h3>
-    <canvas id="canvasPixel"></canvas>
+  <div class="section" id="pixelSection">
+    <div class="header">Pixel Art</div>
     <div class="slider-container">
       <label>Pixel Colors:
         <input type="range" id="colorSlider" min="4" max="40" value="20">
@@ -120,14 +101,9 @@
 <script>
 const fileInput = document.getElementById('fileInput');
 const uploadSection = document.getElementById('uploadSection');
-
-const canvasScanline = document.getElementById('canvasScanline');
-const ctxScanline = canvasScanline.getContext('2d');
-
-const canvasPixel = document.getElementById('canvasPixel');
-const ctxPixel = canvasPixel.getContext('2d');
-
-const asciiOutput = document.getElementById('asciiOutput');
+const scanlineSection = document.getElementById('scanlineSection');
+const asciiSection = document.getElementById('asciiSection');
+const pixelSection = document.getElementById('pixelSection');
 const colorSlider = document.getElementById('colorSlider');
 
 let img = new Image();
@@ -160,11 +136,19 @@ img.onload = () => {
   drawASCII();
 };
 
+// Helper function to convert canvas to data URL and set as background
+function setSectionBackground(canvas, section) {
+  section.style.backgroundImage = `url(${canvas.toDataURL()})`;
+}
+
+// Scanline effect
 function drawScanline() {
-  const w = canvasScanline.clientWidth;
-  const h = canvasScanline.clientHeight;
-  canvasScanline.width = w;
-  canvasScanline.height = h;
+  const canvas = document.createElement('canvas');
+  const w = scanlineSection.clientWidth;
+  const h = scanlineSection.clientHeight;
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
 
   const scale = Math.max(w/img.width, h/img.height);
   const sw = img.width * scale;
@@ -172,10 +156,9 @@ function drawScanline() {
   const sx = (w - sw)/2;
   const sy = (h - sh)/2;
 
-  ctxScanline.clearRect(0,0,w,h);
-  ctxScanline.drawImage(img, sx, sy, sw, sh);
+  ctx.drawImage(img, sx, sy, sw, sh);
 
-  let imageData = ctxScanline.getImageData(0,0,w,h);
+  let imageData = ctx.getImageData(0,0,w,h);
   let data = imageData.data;
   for(let y=0;y<h;y++){
     if(y%2===0){
@@ -185,14 +168,18 @@ function drawScanline() {
       }
     }
   }
-  ctxScanline.putImageData(imageData,0,0);
+  ctx.putImageData(imageData,0,0);
+  setSectionBackground(canvas, scanlineSection);
 }
 
+// Pixel Art effect
 function drawPixelArt() {
-  const w = canvasPixel.clientWidth;
-  const h = canvasPixel.clientHeight;
-  canvasPixel.width = w;
-  canvasPixel.height = h;
+  const canvas = document.createElement('canvas');
+  const w = pixelSection.clientWidth;
+  const h = pixelSection.clientHeight;
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
 
   const scale = Math.max(w/img.width, h/img.height);
   const sw = img.width * scale;
@@ -201,15 +188,14 @@ function drawPixelArt() {
   const sy = (h - sh)/2;
 
   const blockSize = 3;
-  ctxPixel.clearRect(0,0,w,h);
-  ctxPixel.drawImage(img, sx, sy, sw, sh);
-  let imageData = ctxPixel.getImageData(0,0,w,h);
+  ctx.drawImage(img, sx, sy, sw, sh);
+  let imageData = ctx.getImageData(0,0,w,h);
   let data = imageData.data;
 
   const numColors = parseInt(colorSlider.value);
   const colors = [];
   for(let i=0;i<data.length;i+=4) colors.push([data[i],data[i+1],data[i+2]]);
-  
+
   function getClosestColor(r,g,b,palette){
     let minDist=Infinity, closest=palette[0];
     for(const c of palette){
@@ -246,18 +232,24 @@ function drawPixelArt() {
       }
     }
   }
-  ctxPixel.putImageData(imageData,0,0);
+  ctx.putImageData(imageData,0,0);
+  setSectionBackground(canvas, pixelSection);
 }
 
+// ASCII effect
 function drawASCII() {
-  asciiOutput.style.display="block";
-  const w = asciiOutput.clientWidth;
-  const h = asciiOutput.clientHeight;
+  const canvas = document.createElement('canvas');
+  const w = asciiSection.clientWidth;
+  const h = asciiSection.clientHeight;
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
 
   const tempCanvas = document.createElement('canvas');
   tempCanvas.width = 100;
   tempCanvas.height = 60;
   const tempCtx = tempCanvas.getContext('2d');
+
   const scale = Math.max(100/img.width, 60/img.height);
   const sw = img.width * scale;
   const sh = img.height * scale;
@@ -266,26 +258,28 @@ function drawASCII() {
   tempCtx.drawImage(img, sx, sy, sw, sh);
 
   let imgData = tempCtx.getImageData(0,0,100,60).data;
-  let chars=" .:-=+*#%@";
-  let str="";
+  const chars=" .:-=+*#%@";
+  ctx.font = "6px monospace";
+  ctx.fillStyle = "#aaa";
+
   for(let y=0;y<60;y++){
     for(let x=0;x<100;x++){
       let idx=(y*100+x)*4;
       let avg=(imgData[idx]+imgData[idx+1]+imgData[idx+2])/3;
-      str+=chars[Math.floor((avg/255)*(chars.length-1))];
+      let char = chars[Math.floor((avg/255)*(chars.length-1))];
+      ctx.fillText(char, x* (w/100), y*(h/60));
     }
-    str+="\n";
   }
-  asciiOutput.textContent=str;
+  setSectionBackground(canvas, asciiSection);
 }
 
+// Update pixel art on slider change
 colorSlider.addEventListener('input', drawPixelArt);
 
 // Redraw on window resize
 window.addEventListener('resize', () => {
   if(img.src) { drawScanline(); drawPixelArt(); drawASCII(); }
 });
-
 </script>
 
 </body>
