@@ -62,7 +62,6 @@
     }
 
     input[type=range] { width: 100%; }
-
     input[type=file] { display: none; }
   </style>
 </head>
@@ -80,18 +79,31 @@
   <!-- Section 2: Scanline -->
   <div class="section" id="scanlineSection">
     <div class="header">Scanline</div>
+    <div class="slider-container">
+      <label>Scanline Density:
+        <input type="range" id="scanlineSlider" min="1" max="10" value="2">
+      </label>
+    </div>
   </div>
 
   <!-- Section 3: ASCII -->
   <div class="section" id="asciiSection">
     <div class="header">ASCII</div>
+    <div class="slider-container">
+      <label>ASCII Scale:
+        <input type="range" id="asciiSlider" min="20" max="200" value="100">
+      </label>
+    </div>
   </div>
 
   <!-- Section 4: Pixel Art -->
   <div class="section" id="pixelSection">
     <div class="header">Pixel Art</div>
     <div class="slider-container">
-      <label>Pixel Colors:
+      <label>Pixel Block Size:
+        <input type="range" id="pixelSlider" min="1" max="20" value="3">
+      </label>
+      <label>Colors:
         <input type="range" id="colorSlider" min="4" max="40" value="20">
       </label>
     </div>
@@ -104,9 +116,18 @@ const uploadSection = document.getElementById('uploadSection');
 const scanlineSection = document.getElementById('scanlineSection');
 const asciiSection = document.getElementById('asciiSection');
 const pixelSection = document.getElementById('pixelSection');
+
 const colorSlider = document.getElementById('colorSlider');
+const pixelSlider = document.getElementById('pixelSlider');
+const scanlineSlider = document.getElementById('scanlineSlider');
+const asciiSlider = document.getElementById('asciiSlider');
 
 let img = new Image();
+img.src = "https://i.imgur.com/6oK2hZb.jpg"; // default image
+img.onload = () => { 
+  uploadSection.style.backgroundImage = `url(${img.src})`;
+  drawScanline(); drawPixelArt(); drawASCII();
+};
 
 // Drag & drop
 uploadSection.addEventListener('dragover', e => { e.preventDefault(); uploadSection.style.background = "#333"; });
@@ -130,38 +151,28 @@ function loadImage(file) {
   reader.readAsDataURL(file);
 }
 
-img.onload = () => {
-  drawScanline();
-  drawPixelArt();
-  drawASCII();
-};
-
-// Helper function to convert canvas to data URL and set as background
 function setSectionBackground(canvas, section) {
   section.style.backgroundImage = `url(${canvas.toDataURL()})`;
 }
 
-// Scanline effect
+// Scanline
 function drawScanline() {
   const canvas = document.createElement('canvas');
   const w = scanlineSection.clientWidth;
   const h = scanlineSection.clientHeight;
-  canvas.width = w;
-  canvas.height = h;
+  canvas.width = w; canvas.height = h;
   const ctx = canvas.getContext('2d');
 
   const scale = Math.max(w/img.width, h/img.height);
-  const sw = img.width * scale;
-  const sh = img.height * scale;
-  const sx = (w - sw)/2;
-  const sy = (h - sh)/2;
+  const sw = img.width*scale; const sh = img.height*scale;
+  const sx = (w-sw)/2; const sy = (h-sh)/2;
 
   ctx.drawImage(img, sx, sy, sw, sh);
-
   let imageData = ctx.getImageData(0,0,w,h);
   let data = imageData.data;
+  const density = parseInt(scanlineSlider.value);
   for(let y=0;y<h;y++){
-    if(y%2===0){
+    if(y%density===0){
       for(let x=0;x<w;x++){
         let idx=(y*w+x)*4;
         data[idx]=data[idx+1]=data[idx+2]=0;
@@ -172,22 +183,18 @@ function drawScanline() {
   setSectionBackground(canvas, scanlineSection);
 }
 
-// Pixel Art effect
+// Pixel Art
 function drawPixelArt() {
   const canvas = document.createElement('canvas');
-  const w = pixelSection.clientWidth;
-  const h = pixelSection.clientHeight;
-  canvas.width = w;
-  canvas.height = h;
+  const w = pixelSection.clientWidth; const h = pixelSection.clientHeight;
+  canvas.width = w; canvas.height = h;
   const ctx = canvas.getContext('2d');
 
   const scale = Math.max(w/img.width, h/img.height);
-  const sw = img.width * scale;
-  const sh = img.height * scale;
-  const sx = (w - sw)/2;
-  const sy = (h - sh)/2;
+  const sw = img.width*scale; const sh = img.height*scale;
+  const sx = (w-sw)/2; const sy = (h-sh)/2;
 
-  const blockSize = 3;
+  const blockSize = parseInt(pixelSlider.value);
   ctx.drawImage(img, sx, sy, sw, sh);
   let imageData = ctx.getImageData(0,0,w,h);
   let data = imageData.data;
@@ -205,8 +212,7 @@ function drawPixelArt() {
     return closest;
   }
 
-  const palette=[];
-  const step=Math.floor(colors.length/numColors);
+  const palette=[]; const step=Math.floor(colors.length/numColors);
   for(let i=0;i<colors.length && palette.length<numColors;i+=step) palette.push(colors[i]);
 
   for(let y=0;y<h;y+=blockSize){
@@ -236,47 +242,44 @@ function drawPixelArt() {
   setSectionBackground(canvas, pixelSection);
 }
 
-// ASCII effect
+// ASCII
 function drawASCII() {
   const canvas = document.createElement('canvas');
-  const w = asciiSection.clientWidth;
-  const h = asciiSection.clientHeight;
-  canvas.width = w;
-  canvas.height = h;
+  const w = asciiSection.clientWidth; const h = asciiSection.clientHeight;
+  canvas.width = w; canvas.height = h;
   const ctx = canvas.getContext('2d');
 
   const tempCanvas = document.createElement('canvas');
-  tempCanvas.width = 100;
-  tempCanvas.height = 60;
+  const scaleVal = parseInt(asciiSlider.value);
+  tempCanvas.width = scaleVal; tempCanvas.height = Math.floor(scaleVal*0.6);
   const tempCtx = tempCanvas.getContext('2d');
 
-  const scale = Math.max(100/img.width, 60/img.height);
-  const sw = img.width * scale;
-  const sh = img.height * scale;
-  const sx = (100 - sw)/2;
-  const sy = (60 - sh)/2;
+  const scale = Math.max(tempCanvas.width/img.width, tempCanvas.height/img.height);
+  const sw = img.width*scale; const sh = img.height*scale;
+  const sx = (tempCanvas.width-sw)/2; const sy = (tempCanvas.height-sh)/2;
   tempCtx.drawImage(img, sx, sy, sw, sh);
 
-  let imgData = tempCtx.getImageData(0,0,100,60).data;
+  let imgData = tempCtx.getImageData(0,0,tempCanvas.width,tempCanvas.height).data;
   const chars=" .:-=+*#%@";
-  ctx.font = "6px monospace";
-  ctx.fillStyle = "#aaa";
+  ctx.font = "6px monospace"; ctx.fillStyle = "#aaa";
 
-  for(let y=0;y<60;y++){
-    for(let x=0;x<100;x++){
-      let idx=(y*100+x)*4;
+  for(let y=0;y<tempCanvas.height;y++){
+    for(let x=0;x<tempCanvas.width;x++){
+      let idx=(y*tempCanvas.width+x)*4;
       let avg=(imgData[idx]+imgData[idx+1]+imgData[idx+2])/3;
       let char = chars[Math.floor((avg/255)*(chars.length-1))];
-      ctx.fillText(char, x* (w/100), y*(h/60));
+      ctx.fillText(char, x*(w/tempCanvas.width), y*(h/tempCanvas.height));
     }
   }
   setSectionBackground(canvas, asciiSection);
 }
 
-// Update pixel art on slider change
+// Event listeners
+scanlineSlider.addEventListener('input', drawScanline);
+pixelSlider.addEventListener('input', drawPixelArt);
 colorSlider.addEventListener('input', drawPixelArt);
+asciiSlider.addEventListener('input', drawASCII);
 
-// Redraw on window resize
 window.addEventListener('resize', () => {
   if(img.src) { drawScanline(); drawPixelArt(); drawASCII(); }
 });
