@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro WebView</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Courier New", monospace;
+      display: flex;
+      flex-direction: column;
+      background: #c0c0c0;
+      color: #000;
+    }
+
+    #searchBar {
+      display: flex;
+      padding: 5px;
+      background: #000080;
+      border-bottom: 2px solid #808080;
+    }
+
+    #urlInput {
+      flex: 1;
+      padding: 5px;
+      font-size: 14px;
+      border: 2px inset #fff;
+      background: #c0c0c0;
+      color: #000;
+    }
+
+    #goButton {
+      padding: 5px 10px;
+      font-size: 14px;
+      border: 2px outset #fff;
+      background: #c0c0c0;
+      cursor: pointer;
+      margin-left: 2px;
+    }
+
+    #webviewContainer {
+      flex: 1;
+      position: relative;
+      border: 2px inset #fff;
+      margin: 5px;
+      background: #fff;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #fallbackLink {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 14px;
+      display: none;
+      padding: 10px;
+      background: #c0c0c0;
+      border: 2px outset #fff;
+    }
+
+    #fallbackLink a {
+      color: #0000ff;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="searchBar">
+    <input type="text" id="urlInput" placeholder="Enter a URL, e.g., https://example.com">
+    <button id="goButton">Go</button>
+  </div>
+
+  <div id="webviewContainer">
+    <iframe id="webview" src="https://example.com"></iframe>
+    <div id="fallbackLink">
+      <p>This site cannot be embedded.<br><a id="externalLink" href="#" target="_blank">Open in new tab</a></p>
+    </div>
+  </div>
+
+  <script>
+    const goButton = document.getElementById('goButton');
+    const urlInput = document.getElementById('urlInput');
+    const webview = document.getElementById('webview');
+    const fallbackLink = document.getElementById('fallbackLink');
+    const externalLink = document.getElementById('externalLink');
+
+    function loadURL() {
+      let url = urlInput.value.trim();
+      if (!url) return;
+
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+
+      // Hide fallback first
+      fallbackLink.style.display = 'none';
+      webview.src = url;
+
+      // Wait a bit to detect failure
+      setTimeout(() => {
+        try {
+          const doc = webview.contentDocument || webview.contentWindow.document;
+          // If we can access, hide fallback
+          fallbackLink.style.display = 'none';
+        } catch (e) {
+          // Blocked by X-Frame-Options
+          fallbackLink.style.display = 'block';
+          externalLink.href = webview.src;
+        }
+      }, 500); // half-second delay
+    }
+
+    goButton.addEventListener('click', loadURL);
+    urlInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') loadURL();
+    });
+  </script>
+
+</body>
+</html>
