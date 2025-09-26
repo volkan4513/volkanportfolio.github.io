@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimal Music Player</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: #f5efe6;
+    color: #222;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+  }
+
+  /* Top part: 4 divs in 2 columns 7:3 ratio */
+  .top {
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    gap: 20px;
+  }
+  .top > div {
+    background: #f5efe6;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  /* Bottom part: 2 divs 4:6 ratio */
+  .bottom {
+    display: grid;
+    grid-template-columns: 4fr 6fr;
+    gap: 20px;
+  }
+  .bottom > div {
+    background: #f5efe6;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  /* Player */
+  .player h1 { margin: 0 0 10px 0; font-size: 18px; letter-spacing: 1px; }
+  .time-bar { display: flex; align-items: center; gap: 10px; width: 100%; }
+  .time-bar span { font-family: monospace; font-weight: bold; }
+  .progress { flex: 1; height: 10px; background: #ccc; display: flex; overflow: hidden; border-radius: 5px; }
+  .progress div { height: 100%; width: 50%; background: #222; }
+
+  /* Controller */
+  .controller { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  .controller button { width: 80px; padding: 10px; margin: 10px 0; border: 1px solid #222; border-radius: 20px; background: none; cursor: pointer; font-weight: bold; }
+  .knob { width: 100px; height: 100px; border: 2px solid #222; border-radius: 50%; margin: 20px 0; position: relative; }
+  .knob::before { content: ''; position: absolute; width: 6px; height: 40%; background: #222; top: 10%; left: 50%; transform: translateX(-50%) rotate(-45deg); transform-origin: bottom center; border-radius: 3px; }
+
+  /* Podcast info */
+  .podcast h2 { margin: 0 0 10px 0; }
+  .podcast p { color: #555; font-size: 14px; }
+
+  /* Actions */
+  .actions { display: flex; flex-direction: column; justify-content: center; }
+  .actions button { padding: 10px; margin: 10px 0; border: 1px solid #222; border-radius: 5px; background: none; cursor: pointer; }
+
+</style>
+</head>
+<body>
+
+  <!-- Top part -->
+  <div class="top">
+    <div class="player">
+      <h1>PLAYER</h1>
+      <div class="time-bar">
+        <span>00:32:00</span>
+        <div class="progress"><div></div></div>
+      </div>
+    </div>
+    <div class="controller">
+      <button>Pause</button>
+      <div class="knob"></div>
+      <button>Silence</button>
+    </div>
+  </div>
+
+  <!-- Bottom part -->
+  <div class="bottom">
+    <div class="podcast">
+      <h2>Brian Redban</h2>
+      <p>The raw audio from Joe Rogan's weekly live video show with Brian Reichle</p>
+    </div>
+    <div class="actions">
+      <button>Mark</button>
+      <button>Cast</button>
+    </div>
+  </div>
+
+</body>
+</html>
