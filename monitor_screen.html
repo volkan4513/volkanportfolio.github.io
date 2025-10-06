@@ -20,7 +20,7 @@
 
     .tv {
       position: relative;
-      width: 800px; /* adjust to match your image */
+      width: auto; /* adjust to match your image */
       height: auto;
     }
 
@@ -31,11 +31,13 @@
 
     .screen {
       position: absolute;
-      top: 15.5%;   /* adjust */
-      left: 10%;    /* adjust */
-      width: 79.5%;
-      height: 69%; 
+      top: 11%;   /* adjust */
+      left: 24.7%;    /* adjust */
+      width: 51.25%;
+      height: 53.25%; 
       overflow: hidden;
+      border-radius: 8px;
+      
     }
 
     .screen iframe {
@@ -43,6 +45,7 @@
       height: 100%;
       border: none;
       display: block;
+      border-radius: 8px;
     }
 
     /* vignette overlay (corners + top + bottom fade) */
@@ -66,7 +69,7 @@
 <body>
   <div class="tv">
     <!-- your TV frame -->
-    <img src="page_images/monitor_02.png" alt="Retro TV">
+    <img src="page_images/monitor_03.webp" alt="Retro TV">
 
     <!-- the screen area -->
     <div class="screen">

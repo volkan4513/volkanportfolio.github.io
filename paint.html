@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MS Paint Clone</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ececec;
+    }
+
+    #toolbar {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      background-color: #d4d0c8;
+      border-bottom: 2px solid #a0a0a0;
+    }
+
+    #toolbar label, #toolbar button {
+      margin-right: 10px;
+    }
+
+    input[type="color"],
+    input[type="range"] {
+      vertical-align: middle;
+    }
+
+    button {
+      padding: 5px 10px;
+      border: 1px solid #808080;
+      background-color: #f0f0f0;
+      cursor: pointer;
+    }
+
+    button:active {
+      border: 1px inset #808080;
+      background-color: #dcdcdc;
+    }
+
+    button.active {
+      background-color: #c0c0c0;
+    }
+
+    #canvasContainer {
+      padding: 10px;
+    }
+
+    #canvas {
+      border: 2px inset #a0a0a0;
+      background-color: #ffffff;
+      display: block;
+      margin: auto;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    h2 {
+      margin: 10px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🖌️ MS Paint Clone</h2>
+
+  <div id="toolbar">
+    <label>🎨 Color:
+      <input type="color" id="colorPicker" value="#000000">
+    </label>
+    <label>🖌️ Brush:
+      <input type="range" id="brushSize" min="1" max="50" value="5">
+    </label>
+    <button id="eraserBtn">🧽 Eraser</button>
+    <button id="undoBtn">↶ Undo</button>
+    <button id="saveBtn">💾 Save</button>
+    <button id="clearBtn">🗑️ Clear</button>
+  </div>
+
+  <div id="canvasContainer">
+    <canvas id="canvas" width="800" height="600"></canvas>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const colorPicker = document.getElementById('colorPicker');
+    const brushSize = document.getElementById('brushSize');
+    const clearBtn = document.getElementById('clearBtn');
+    const eraserBtn = document.getElementById('eraserBtn');
+    const undoBtn = document.getElementById('undoBtn');
+    const saveBtn = document.getElementById('saveBtn');
+
+    let drawing = false;
+    let isErasing = false;
+    let history = [];
+    const maxHistory = 50;
+
+    function saveHistory() {
+      if (history.length >= maxHistory) history.shift();
+      history.push(canvas.toDataURL());
+    }
+
+    function undo() {
+      if (history.length === 0) return;
+      const previous = history.pop();
+      const img = new Image();
+      img.src = previous;
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+      };
+    }
+
+    function setDrawSettings() {
+      ctx.lineWidth = brushSize.value;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = isErasing ? '#FFFFFF' : colorPicker.value;
+    }
+
+    // Mouse events
+    canvas.addEventListener('mousedown', (e) => {
+      saveHistory();
+      drawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!drawing) return;
+      setDrawSettings();
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      drawing = false;
+      ctx.closePath();
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      drawing = false;
+      ctx.closePath();
+    });
+
+    // Touch events
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      saveHistory();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      drawing = true;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (!drawing) return;
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      setDrawSettings();
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    });
+
+    canvas.addEventListener('touchend', () => {
+      drawing = false;
+      ctx.closePath();
+    });
+
+    // Clear canvas
+    clearBtn.addEventListener('click', () => {
+      saveHistory();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    // Eraser toggle
+    eraserBtn.addEventListener('click', () => {
+      isErasing = !isErasing;
+      eraserBtn.classList.toggle('active');
+    });
+
+    // Undo button
+    undoBtn.addEventListener('click', () => {
+      undo();
+    });
+
+    // Keyboard shortcut: Ctrl+Z
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        e.preventDefault();
+        undo();
+      }
+    });
+
+    // Save Image
+    saveBtn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'drawing.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+
+    // Initialize
+    saveHistory();
+  </script>
+
+</body>
+</html>
