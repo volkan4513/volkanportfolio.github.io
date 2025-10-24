@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Full Page QR Code Generator</title>
+<title>Full Page QR & Barcode Generator</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
     html, body {
@@ -62,7 +62,7 @@
         justify-content: center;
     }
 
-    #qrcode {
+    #codeContainer {
         flex-grow: 1;
         display: flex;
         justify-content: center;
@@ -70,46 +70,61 @@
         max-width: 90vw;
         max-height: 90vh;
         overflow: hidden;
+        flex-direction: column;
     }
 
-    canvas {
+    canvas, svg {
         max-width: 100%;
         max-height: 100%;
+    }
+
+    .checkbox-group {
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        font-size: 0.9em;
     }
 </style>
 </head>
 <body>
 <div class="container">
-    <h2>Full Page QR Code Generator</h2>
-    <input type="text" id="linkInput" placeholder="Enter any URL" />
+    <h2>Full Page QR & Barcode Generator</h2>
+    <input type="text" id="linkInput" placeholder="Enter any URL or text" />
     <div class="button-group">
         <button onclick="generateQRCode()">Generate QR Code</button>
-        <button id="downloadBtn" onclick="downloadQRCode()" style="display:none;">Download QR Code</button>
+        <button onclick="generateBarcode()">Generate Barcode</button>
+        <button id="downloadBtn" onclick="downloadCode()" style="display:none;">Download</button>
     </div>
-    <div id="qrcode"></div>
+    <div class="checkbox-group">
+        <input type="checkbox" id="showText" checked />
+        <label for="showText">Show text below barcode</label>
+    </div>
+    <div id="codeContainer"></div>
 </div>
 
 <!-- QRCode.js Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- JsBarcode Library -->
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 <script>
-let currentQRCode = null;
+let currentCode = null;
+let currentType = null;
 
 function generateQRCode() {
     const link = document.getElementById('linkInput').value.trim();
-    const qrContainer = document.getElementById('qrcode');
+    const container = document.getElementById('codeContainer');
 
-    qrContainer.innerHTML = "";
+    container.innerHTML = "";
     document.getElementById("downloadBtn").style.display = "none";
 
     if (!link) {
-        alert("Please enter a URL");
+        alert("Please enter a URL or text");
         return;
     }
 
-    // Ensure QR fits inside container
     let size = Math.min(window.innerWidth * 0.8, window.innerHeight * 0.6);
 
-    currentQRCode = new QRCode(qrContainer, {
+    currentCode = new QRCode(container, {
         text: link,
         width: size,
         height: size,
@@ -118,25 +133,85 @@ function generateQRCode() {
         correctLevel: QRCode.CorrectLevel.H
     });
 
+    currentType = 'qr';
+
     setTimeout(() => {
         document.getElementById("downloadBtn").style.display = "inline-block";
     }, 100);
 }
 
-function downloadQRCode() {
-    const qrContainer = document.getElementById('qrcode');
-    const canvas = qrContainer.querySelector("canvas");
-    if (!canvas) return;
+function generateBarcode() {
+    const link = document.getElementById('linkInput').value.trim();
+    const container = document.getElementById('codeContainer');
+    const showText = document.getElementById('showText').checked;
 
-    const link = document.createElement("a");
-    link.href = canvas.toDataURL("image/png");
-    link.download = "qrcode.png";
-    link.click();
+    container.innerHTML = "";
+    document.getElementById("downloadBtn").style.display = "none";
+
+    if (!link) {
+        alert("Please enter text for barcode");
+        return;
+    }
+
+    // Create an SVG element for JsBarcode
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    container.appendChild(svg);
+
+    let width = Math.min(window.innerWidth * 0.8, 600);
+    let height = 100;
+
+    JsBarcode(svg, link, {
+        format: "CODE128",
+        lineColor: "#000",
+        width: 2,
+        height: height,
+        displayValue: showText,  // Only show text if checkbox is checked
+        margin: 10
+    });
+
+    currentCode = svg;
+    currentType = 'barcode';
+
+    document.getElementById("downloadBtn").style.display = "inline-block";
+}
+
+function downloadCode() {
+    if (!currentCode) return;
+
+    if (currentType === 'qr') {
+        const canvas = document.getElementById('codeContainer').querySelector("canvas");
+        if (!canvas) return;
+
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "qrcode.png";
+        link.click();
+    } else if (currentType === 'barcode') {
+        const svg = currentCode;
+        const serializer = new XMLSerializer();
+        const svgStr = serializer.serializeToString(svg);
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const img = new Image();
+        img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            const link = document.createElement("a");
+            link.href = canvas.toDataURL("image/png");
+            link.download = "barcode.png";
+            link.click();
+        };
+        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgStr)));
+    }
 }
 
 window.addEventListener("resize", () => {
-    if (document.getElementById("linkInput").value.trim()) {
-        generateQRCode();
+    const inputValue = document.getElementById("linkInput").value.trim();
+    if (inputValue) {
+        if (currentType === 'qr') generateQRCode();
+        else if (currentType === 'barcode') generateBarcode();
     }
 });
 </script>

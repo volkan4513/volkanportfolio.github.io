@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Magnifying Glass Cursor — three.js shader</title>
+  <style>
+    html,body{height:100%;margin:0}
+    body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;background:#111;color:#fff;overflow:hidden}
+    canvas{display:block;cursor:none}
+    .info{
+      position:fixed;left:12px;top:12px;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);padding:8px 12px;border-radius:8px;font-size:13px
+    }
+  </style>
+</head>
+<body>
+  <div class="info">Move the mouse — magnifying glass follows cursor. Scroll to change radius. Click to toggle zoom.</div>
+  <canvas id="c"></canvas>
+
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
+
+    const canvas = document.getElementById('c');
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(innerWidth, innerHeight);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load('https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=2000&auto=format&fit=crop');
+
+    const uniforms = {
+      uTex: {value: texture},
+      uResolution: {value: new THREE.Vector2(innerWidth, innerHeight)},
+      uMouse: {value: new THREE.Vector2(-0.5,-0.5)},
+      uRadius: {value: 0.15},
+      uZoom: {value: 2.0},
+      uTime: {value: 0},
+      uAspect: {value: innerWidth/innerHeight},
+      uTrailCount: {value: 10},
+      uTrail: {value: Array.from({length:10}, ()=>new THREE.Vector2(-1,-1))}
+    };
+
+    const material = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader:`
+        varying vec2 vUv;
+        void main(){vUv=uv;gl_Position=vec4(position,1.0);}
+      `,
+      fragmentShader:`
+        uniform sampler2D uTex;
+        uniform vec2 uMouse;
+        uniform float uRadius;
+        uniform float uZoom;
+        uniform vec2 uTrail[10];
+        varying vec2 vUv;
+
+        float circleMask(vec2 uv, vec2 c, float r){
+          float d=distance(uv,c);
+          return 1.0 - smoothstep(r, r+0.002, d);
+        }
+
+        void main(){
+          vec4 base=texture2D(uTex,vUv);
+          vec4 color=base;
+
+          // main magnified circle
+          vec2 dir=vUv - uMouse;
+          vec2 zoomUV=uMouse + dir/uZoom;
+          float mask=circleMask(vUv,uMouse,uRadius);
+          vec4 magnified=texture2D(uTex,zoomUV);
+          color=mix(base,magnified,mask);
+
+          // subtle glass glow
+          float dist=distance(vUv,uMouse)/uRadius;
+          color.rgb += smoothstep(1.0,0.0,dist)*0.1;
+
+          // trail effect (ghost circles)
+          for(int i=0;i<10;i++){
+            vec2 t=uTrail[i];
+            float m=circleMask(vUv,t,uRadius*0.6);
+            color.rgb += m*0.05*(1.0-float(i)/10.0);
+          }
+
+          gl_FragColor=color;
+        }
+      `
+    });
+
+    const geometry=new THREE.PlaneGeometry(2,2);
+    const mesh=new THREE.Mesh(geometry,material);
+    scene.add(mesh);
+
+    function onResize(){
+      renderer.setSize(innerWidth, innerHeight);
+      uniforms.uResolution.value.set(innerWidth, innerHeight);
+      uniforms.uAspect.value = innerWidth/innerHeight;
+    }
+    addEventListener('resize',onResize);
+
+    const trailSize=10;
+    const trailPositions=Array.from({length:trailSize},()=>new THREE.Vector2(-1,-1));
+
+    function onMove(e){
+      const x=(e.clientX)/innerWidth;
+      const y=1-(e.clientY)/innerHeight;
+      uniforms.uMouse.value.set(x,y);
+      trailPositions.pop();
+      trailPositions.unshift(new THREE.Vector2(x,y));
+      for(let i=0;i<trailSize;i++)uniforms.uTrail.value[i].copy(trailPositions[i]);
+    }
+    window.addEventListener('pointermove',onMove);
+
+    window.addEventListener('wheel',(e)=>{
+      uniforms.uRadius.value=Math.min(Math.max(0.03,uniforms.uRadius.value+e.deltaY*0.0006),0.6);
+    },{passive:true});
+
+    let zoomed=true;
+    window.addEventListener('click',()=>{
+      zoomed=!zoomed;
+      uniforms.uZoom.value=zoomed?2.0:1.0;
+    });
+
+    const clock=new THREE.Clock();
+    function animate(){
+      uniforms.uTime.value=clock.getElapsedTime();
+      renderer.render(scene,camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>

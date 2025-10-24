@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Grid Layout</title>
+<style>
+/* --- Base Styles --- */
+body {
+  margin: 0;
+  height: 100vh;
+  background: #303030;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* <-- CORRECTED THIS LINE */
+  transition: background 0.5s ease;
+}
+
+/* --- Default Grid Container & Items --- */
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 5fr 4fr 5fr;
+  gap: 5px;
+  width: 75vw;
+  height: 90vh;
+  padding: 5px;
+  background: #a0a0a0;
+  border-radius: 15px;
+  transition: grid-template-columns 0.5s ease, grid-template-rows 0.5s ease;
+}
+
+.grid div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.5em;
+  /*background: #000;*/
+  border-radius: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, 
+              grid-column 0.5s ease, grid-row 0.5s ease;
+  transform-origin: center center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* This rule makes iframes fill their parent div.
+   'pointer-events: none;' makes the iframe "unclickable" by default,
+   so clicking it actually clicks the parent div.
+*/
+.grid div iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 15px; /* Match the parent's border-radius */
+  pointer-events: none; 
+}
+
+/* Hover effects for default state */
+.grid:not(.expanded):hover div {
+  transform: scale(0.96);
+}
+
+.grid:not(.expanded) div:hover {
+  transform: scale(1.0);
+  opacity: 1;
+  border: 2px solid rgb(255, 217, 0);
+  box-shadow: 0 0 20px rgba(0,0,0,0.25);
+}
+
+/* Default Grid Item Positioning */
+.item1 { grid-column: 1 / 2; grid-row: 1 / 2; background: #cccccc; }
+.item2 { grid-column: 2 / 3; grid-row: 1 / 2; background: #1d213c; }
+.item3 { grid-column: 3 / 4; grid-row: 1 / 3; background: #f35122; }
+.item4 { grid-column: 4 / 5; grid-row: 1 / 3; background: #cccccc; }
+.item5 { grid-column: 1 / 3; grid-row: 2 / 4; background: #1d213c; }
+.item6 { grid-column: 5 / 6; grid-row: 2 / 3; background: #e6d5b9; }
+.item7 { grid-column: 3 / 4; grid-row: 3 / 4; background: #e6d5b9; }
+.item8 { grid-column: 5 / 6; grid-row: 1 / 2; background: #1d213c; }
+.item9 { grid-column: 4 / 6; grid-row: 3 / 4; background: #cccccc; }
+
+/* Show class names for clarity */
+.grid div:before {
+  content: attr(class);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 1.5em;
+  opacity: 0.5;
+  transition: opacity 0.3s ease; 
+}
+
+/* --- Expanded State Styles --- */
+.grid.expanded {
+  grid-template-columns: 2fr 1fr 8fr 1fr 2fr; 
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  z-index: 10;
+}
+
+.grid.expanded div {
+  transform: none;
+  opacity: 1;
+}
+
+.grid div.current {
+  grid-column: 3 / 4 !important; 
+  grid-row: 1 / 5 !important;
+  border-radius: 15px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  background-color: #303030;
+  color: black;
+  z-index: 5;
+}
+
+/*
+  This re-enables pointer events (like clicks and scrolling)
+  ONLY for the iframe that is inside the 'current' (expanded) div.
+*/
+.grid div.current iframe {
+  pointer-events: auto;
+}
+
+/* This hides the class name label */
+.grid div.current:before {
+  opacity: 0;
+}
+
+
+/* Left-side items */
+.grid div.left-side {
+  grid-column: 1 / 3 !important; 
+  pointer-events: none;
+}
+.grid div.left-side.row1 { grid-row: 1 / 2 !important; }
+.grid div.left-side.row2 { grid-row: 2 / 3 !important; }
+.grid div.left-side.row3 { grid-row: 3 / 4 !important; }
+.grid div.left-side.row4 { grid-row: 4 / 5 !important; }
+
+/* Right-side items */
+.grid div.right-side {
+  grid-column: 4 / 6 !important; 
+  pointer-events: none;
+}
+.grid div.right-side.row1 { grid-row: 1 / 2 !important; }
+.grid div.right-side.row2 { grid-row: 2 / 3 !important; }
+.grid div.right-side.row3 { grid-row: 3 / 4 !important; }
+.grid div.right-side.row4 { grid-row: 4 / 5 !important; }
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease, background 0.2s ease;
+  pointer-events: none;
+}
+
+.current .close-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.close-btn:hover {
+  background: #FF5733;
+}
+</style>
+</head>
+<body>
+  <div class="grid" id="interactive-grid">
+    <div class="item1" data-id="1">
+      <iframe src="new_grid_page_part01.html"></iframe>
+    </div>
+    <div class="item2" data-id="2"></div>
+    <div class="item3" data-id="3"></div>
+    <div class="item4" data-id="4"></div>
+    <div class="item5" data-id="5">
+      <!-- <iframe src="unblur_page.html"></iframe> -->
+    </div>
+    <div class="item6" data-id="6"></div>
+    <div class="item7" data-id="7"></div>
+    <div class="item8" data-id="8"></div>
+    <div class="item9" data-id="9"></div>
+  </div>
+
+  <script>
+    const grid = document.getElementById('interactive-grid');
+    const items = Array.from(grid.querySelectorAll('div[data-id]'));
+
+    const originalStates = {};
+    items.forEach(item => {
+      originalStates[item.getAttribute('data-id')] = item.className;
+      item.insertAdjacentHTML('beforeend', '<button class="close-btn">X</button>');
+    });
+
+    const closeButtons = grid.querySelectorAll('.close-btn');
+    closeButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        resetGrid();
+      });
+    });
+
+    items.forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        if (!grid.classList.contains('expanded')) {
+          e.preventDefault();
+          expandItem(item, index);
+        }
+      });
+    });
+
+    function expandItem(clickedItem, clickedIndex) {
+      grid.classList.add('expanded');
+      // document.body.style.background = '#eee';
+
+      const otherItems = items.filter(item => item !== clickedItem);
+      const leftSideItems = otherItems.slice(0, 4);
+      const rightSideItems = otherItems.slice(4, 8);
+
+      clickedItem.className = originalStates[clickedItem.getAttribute('data-id')] + ' current';
+
+      leftSideItems.forEach((item, i) => {
+        item.className = originalStates[item.getAttribute('data-id')] + ' left-side row' + (i + 1);
+      });
+
+      rightSideItems.forEach((item, i) => {
+        item.className = originalStates[item.getAttribute('data-id')] + ' right-side row' + (i + 1);
+      });
+    }
+
+    function resetGrid() {
+      grid.classList.remove('expanded');
+      // document.body.style.background = '#303030';
+
+      items.forEach(item => {
+        item.className = originalStates[item.getAttribute('data-id')];
+      });
+    }
+  </script>
+</body>
+</html>

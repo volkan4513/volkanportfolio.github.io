@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fullscreen Flip Counter (3 digits)</title>
+<style>
+  :root{
+    --bg:#0f1724;
+    --face:#18273b;
+    --seam:#0a0f1c;
+    --text:#e6eef6;
+  }
+
+  html, body {
+    margin:0;
+    height:100%;
+    width:100%;
+    background:var(--bg);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+  }
+
+  .counter {
+    display:flex;
+    gap:1%;
+    width:100%;
+    height:100%;
+  }
+
+  .digit {
+    flex:1;
+    position:relative;
+    perspective:1000px;
+  }
+
+  .half {
+    position:absolute;
+    left:0; right:0;
+    height:50%;
+    overflow:hidden;
+    background:var(--face);
+    display:flex;
+    justify-content:center;
+    border-radius:2%;
+    box-sizing:border-box;
+  }
+
+  .top {
+    top:0;
+    border-top-left-radius:2%;
+    border-top-right-radius:2%;
+    border-bottom:0.2% solid var(--seam);
+  }
+
+  .bottom {
+    bottom:0;
+    border-bottom-left-radius:2%;
+    border-bottom-right-radius:2%;
+    border-top:0.2% solid var(--seam);
+  }
+
+  .char {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-weight:800;
+    font-size:20vw; /* Scales with viewport width */
+    line-height:100vh; /* Set line-height to the full viewport height */
+    color:var(--text);
+    display:inline-block;
+    position:absolute;
+    left:50%;
+    top:0; /* Align text block to the top edge of the half container */
+    transform: translateX(-50%); /* Center horizontally */
+    will-change:transform;
+  }
+
+  /* No vertical transform needed for the top half */
+  .top .char {
+    /* Default transform: translateX(-50%) */
+  }
+
+  /* Shift the entire character block up by 50vh to show the bottom half */
+  .bottom .char {
+    transform: translateX(-50%) translateY(-50vh); 
+  }
+
+  .flip {
+    position:absolute;
+    left:0; right:0;
+    height:50%;
+    overflow:hidden;
+    background:var(--face);
+    backface-visibility:hidden;
+  }
+
+  .flip.top {
+    top:0;
+    transform-origin:center bottom;
+    border-top-left-radius:2%;
+    border-top-right-radius:2%;
+    border-bottom:0.2% solid var(--seam);
+  }
+
+  .flip.bottom {
+    bottom:0;
+    transform-origin:center top;
+    border-bottom-left-radius:2%;
+    border-bottom-right-radius:2%;
+    border-top:0.2% solid var(--seam);
+    transform: rotateX(90deg);
+  }
+
+  @keyframes foldTop {
+    0% { transform: rotateX(0deg); }
+    100% { transform: rotateX(-90deg); }
+  }
+  @keyframes unfoldBottom {
+    0% { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+  }
+
+</style>
+</head>
+<body>
+<div class="counter" id="counter"></div>
+
+<script>
+const DIGITS = 3;
+const INTERVAL_MS = 1000;
+const counterEl = document.getElementById('counter');
+let value = 0;
+
+function createDigit(initial='0'){
+  const d = document.createElement('div');
+  d.className='digit';
+  d.innerHTML=`
+    <div class="half top"><span class="char">${initial}</span></div>
+    <div class="half bottom"><span class="char">${initial}</span></div>
+  `;
+  return d;
+}
+
+function init(){
+  for(let i=0;i<DIGITS;i++) counterEl.appendChild(createDigit('0'));
+}
+
+function setStaticDigit(digitEl,ch){
+  const top = digitEl.querySelector('.top .char');
+  const bottom = digitEl.querySelector('.bottom .char');
+  top.textContent = ch;
+  bottom.textContent = ch;
+  // CSS handles alignment.
+}
+
+function flipDigit(digitEl, fromChar, toChar, durations={top:550,bottom:550}){
+  return new Promise(resolve=>{
+    const topStatic=digitEl.querySelector('.top');
+    const bottomStatic=digitEl.querySelector('.bottom');
+
+    const flipTop=document.createElement('div');
+    flipTop.className='flip top';
+    const topChar=document.createElement('span');
+    topChar.className='char';
+    topChar.textContent=fromChar;
+    flipTop.appendChild(topChar);
+    digitEl.appendChild(flipTop);
+    flipTop.style.animation=`foldTop ${durations.top}ms ease-in forwards`;
+
+    setTimeout(()=>{
+      topStatic.querySelector('.char').textContent=toChar;
+
+      const flipBottom=document.createElement('div');
+      flipBottom.className='flip bottom';
+      const bottomChar=document.createElement('span');
+      bottomChar.className='char';
+      bottomChar.textContent=toChar;
+      
+      // Need to explicitly apply the 'bottom .char' transform to the flipping element
+      bottomChar.style.transform='translateX(-50%) translateY(-50vh)'; 
+
+      flipBottom.appendChild(bottomChar);
+      digitEl.appendChild(flipBottom);
+      flipBottom.style.animation=`unfoldBottom ${durations.bottom}ms ease-out forwards`;
+
+      setTimeout(()=>{
+        bottomStatic.querySelector('.char').textContent=toChar;
+        flipTop.remove();
+        flipBottom.remove();
+        resolve();
+      }, durations.bottom+10);
+
+    }, durations.top+10);
+  });
+}
+
+function padded(value){ return String(value).padStart(DIGITS,'0'); }
+
+async function updateTo(newValue){
+  const newStr=padded(newValue);
+  const digitEls=Array.from(counterEl.children);
+  const toFlip=[];
+  for(let i=0;i<DIGITS;i++){
+    const cur=digitEls[i].querySelector('.top .char').textContent;
+    if(cur!==newStr[i]) toFlip.push(i);
+  }
+
+  const delays=120;
+  const promises=[];
+  for(let k=toFlip.length-1;k>=0;k--){
+    const i=toFlip[k];
+    const digitEl=digitEls[i];
+    const from=digitEl.querySelector('.top .char').textContent;
+    const to=newStr[i];
+    const promise=new Promise(res=>{
+      setTimeout(()=>{flipDigit(digitEl,from,to).then(res);},(toFlip.length-1-k)*delays);
+    });
+    promises.push(promise);
+  }
+  await Promise.all(promises);
+}
+
+function start(){
+  init();
+  const digitEls=Array.from(counterEl.children);
+  for(let i=0;i<DIGITS;i++) setStaticDigit(digitEls[i],'0');
+  updateTo(value);
+
+  setInterval(async()=>{
+    const newVal=(value+1)%1000;
+    await updateTo(newVal);
+    value=newVal;
+  },INTERVAL_MS);
+}
+
+start();
+</script>
+</body>
+</html>
