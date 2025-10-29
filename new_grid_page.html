@@ -81,7 +81,7 @@ body {
 .item9 { grid-column: 4 / 6; grid-row: 3 / 4; background: #cccccc; }
 
 /* Show class names for clarity */
-.grid div:before {
+/* .grid div:before {
   content: attr(class);
   position: absolute;
   top: 50%;
@@ -91,7 +91,7 @@ body {
   font-size: 1.5em;
   opacity: 0.5;
   transition: opacity 0.3s ease; 
-}
+} */
 
 /* --- Expanded State Styles --- */
 .grid.expanded {
@@ -178,23 +178,57 @@ body {
 .close-btn:hover {
   background: #FF5733;
 }
+
+.preview-frame,
+.expanded-frame {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.preview-frame {
+  opacity: 1;
+}
+
+.grid div.current .preview-frame {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.grid div.current .expanded-frame {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 </style>
 </head>
 <body>
   <div class="grid" id="interactive-grid">
     <div class="item1" data-id="1">
-      <iframe src="new_grid_page_part01.html"></iframe>
+      <iframe class="preview-frame" src="new_grid_page_part01.html"></iframe>
+      <iframe class="expanded-frame" src="new_grid_page_part02.html"></iframe>
     </div>
-    <div class="item2" data-id="2"></div>
+    <div class="item2" data-id="2">
+      <iframe class="preview-frame" src="speedometer_speed_test_part01.html"></iframe>
+      <iframe class="expanded-frame" src="speedometer_speed_test.html"></iframe>
+    </div>
     <div class="item3" data-id="3"></div>
     <div class="item4" data-id="4"></div>
     <div class="item5" data-id="5">
-      <!-- <iframe src="unblur_page.html"></iframe> -->
+      <!-- <iframe src="monitor_screen.html"></iframe> -->
     </div>
-    <div class="item6" data-id="6"></div>
+    <div class="item6" data-id="6">
+      <!-- <iframe src="flipclock.html"></iframe> -->
+
+    </div>
     <div class="item7" data-id="7"></div>
     <div class="item8" data-id="8"></div>
-    <div class="item9" data-id="9"></div>
+    <div class="item9" data-id="9">
+      <!-- <iframe src="lots_of_square_cursor.html"></iframe> -->
+    </div>
   </div>
 
   <script>

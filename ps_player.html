@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     
+    <meta charset="UTF-8" />
+     
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Song Player with Layered Divs</title>
+      <style>
+        body {
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        .container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            /* Added a stronger transition duration for position changes */
+            transition: transform 0.6s ease-in-out, opacity 0.4s ease;
+        }
+
+        /* Layers */
+        #layer1 {
+            background-image: url('ps_player_images/ps_front_cover.webp');
+            z-index: 5;
+        }
+
+        #layer2 {
+            background-image: url('ps_player_images/ps_disk_cover.webp');
+            z-index: 4;
+        }
+
+        #disk {
+            background-image: url('ps_player_images/ps_default_disk_00.webp');
+            z-index: 3;
+        }
+
+        #layer4 {
+            background-image: url('ps_player_images/ps_empty_disk.webp');
+            z-index: 2;
+        }
+
+        #layer5 {
+            background-image: url('ps_player_images/ps_disk_back.webp');
+            z-index: 1;
+        }
+
+        /* Control buttons */
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            background: #222;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        /* Rotation animation */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .rotating {
+            animation: spin 6s linear infinite;
+        }
+
+        /* Slide transitions */
+        .slide-down {
+            transform: translateY(120%);
+            opacity: 0;
+        }
+
+        .slide-up {
+            transform: translateY(-120%);
+            opacity: 0;
+        }
+
+        .slide-reset {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+      <div class="container">
+            <div id="layer1" class="layer"></div>
+            <div id="layer2" class="layer"></div>
+            <div id="disk" class="layer"></div>
+            <div id="layer4" class="layer"></div>
+            <div id="layer5" class="layer"></div>
+          </div>
+
+      <div class="controls">
+            <button id="prevBtn">⏮ Previous</button>
+            <button id="playBtn">▶ Play</button>
+            <button id="pauseBtn">⏸ Pause</button>
+            <button id="nextBtn">⏭ Next</button>
+          </div>
+
+      <audio id="audio"></audio>
+
+     
+    <script>
+        const audio = document.getElementById("audio");
+        const playBtn = document.getElementById("playBtn");
+        const pauseBtn = document.getElementById("pauseBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        const layer2 = document.getElementById("layer2");
+        const layer4 = document.getElementById("layer4");
+        const disk = document.getElementById("disk");
+
+        const DEFAULT_DISK_IMAGE = "ps_player_images/ps_default_disk_00.webp";
+
+        const playlist = [
+            {
+                src: "music/kaleidoscope.mp3",
+                diskImage: "ps_player_images/ps_naruto_disk_01.webp"
+            },
+            {
+                src: "music/trainer_battle_gen4.mp3",
+                diskImage: "ps_player_images/ps_pokemon_disk.webp"
+            },
+            {
+                src: "music/twinleaf_town.mp3",
+                diskImage: "ps_player_images/non_existent_disk.webp" // fallback test
+            }
+        ];
+
+        let currentSong = 0;
+
+        // --- Utility function for async delays ---
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // --- Safe image loader with fallback ---
+        function setDiskImage(imageUrl) {
+            return new Promise((resolve) => {
+                const testImg = new Image();
+                testImg.onload = () => {
+                    disk.style.backgroundImage = `url('${imageUrl}')`;
+                    resolve();
+                };
+                testImg.onerror = () => {
+                    console.warn("⚠️ Disk image not found, using default:", imageUrl);
+                    disk.style.backgroundImage = `url('${DEFAULT_DISK_IMAGE}')`;
+                    resolve();
+                };
+                testImg.src = imageUrl;
+            });
+        }
+
+        function loadSong(index) {
+            const song = playlist[index];
+            audio.src = song.src;
+            return setDiskImage(song.diskImage || DEFAULT_DISK_IMAGE);
+        }
+
+        function playSong() {
+            loadSong(currentSong).then(() => {
+                audio.play();
+                disk.classList.add("rotating");
+            });
+        }
+
+        function pauseSong() {
+            audio.pause();
+            disk.classList.remove("rotating");
+        }
+
+        // 🚀 CORRECTED ANIMATION SEQUENCE
+        async function transitionToNextSong(nextIndex) {
+            pauseSong(); // Stop rotation and audio
+
+            // 1️⃣ Layer 2 slides down
+            layer2.classList.remove("slide-reset");
+            layer2.classList.add("slide-down");
+            await wait(400);
+
+            // 2️⃣ Layer 4 and Disk slide down
+            layer4.classList.remove("slide-reset");
+            layer4.classList.add("slide-down");
+            disk.classList.remove("slide-reset");
+            disk.classList.add("slide-down");
+            await wait(600); // Wait for the disk/layer4 to finish sliding out
+
+            // Change song and prepare the new disk
+            currentSong = nextIndex;
+            await loadSong(currentSong); // Load the new disk image
+
+            // --- NEW DISK ENTRY SEQUENCE ---
+            // A. Prepare the disk to come from the top
+            disk.classList.remove("slide-down"); // CRITICAL: Remove 'slide-down' before adding 'slide-up'
+            disk.classList.add("slide-up");
+            await wait(50); // Small delay to ensure the browser registers the new starting position
+
+            // B. Disk slides back into place (slide-reset)
+            disk.classList.remove("slide-up");
+            disk.classList.add("slide-reset");
+            await wait(600); // Wait for the disk to finish sliding in
+
+            // --- LAYERS SLIDE BACK IN SEQUENCE ---
+            // 3️⃣ Layer 4 slides back in
+            layer4.classList.remove("slide-down");
+            layer4.classList.add("slide-reset");
+            await wait(400);
+
+            // 4️⃣ Layer 2 slides back in
+            layer2.classList.remove("slide-down");
+            layer2.classList.add("slide-reset");
+            await wait(400);
+
+            // Final Step: Start playing the new song
+            playSong();
+        }
+
+        function prevSong() {
+            const nextIndex = (currentSong - 1 + playlist.length) % playlist.length;
+            transitionToNextSong(nextIndex);
+        }
+
+        function nextSong() {
+            const nextIndex = (currentSong + 1) % playlist.length;
+            transitionToNextSong(nextIndex);
+        }
+
+        // Initial load (optional, but good practice)
+        loadSong(currentSong);
+
+        playBtn.addEventListener("click", playSong);
+        pauseBtn.addEventListener("click", pauseSong);
+        prevBtn.addEventListener("click", prevSong);
+        nextBtn.addEventListener("click", nextSong);
+    </script>
+
+</body>
+
+</html>

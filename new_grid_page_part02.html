@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TorqueLore Interface // 16:9 Responsive Fixed</title>
+  <link href="https://fonts.cdnfonts.com/css/quantie" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --fg: #000;
+      --bg: #fff;
+      --accent: #000;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --mono-font: 'Space Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* ✅ 16:9 container that scales proportionally */
+    .interface {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      width: 90vw;
+      height: auto;
+      max-height: 90vh;
+      background: var(--bg);
+      border: 0.4vh solid var(--accent);
+      box-shadow: 0 0 0 0.8vh var(--bg) inset;
+      color: var(--fg);
+      font-family: var(--mono-font);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* --- decorative background --- */
+    .pattern {
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0, transparent 0.2vw, transparent 10vw),
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.08) 0, transparent 0.2vh, transparent 10vh);
+      opacity: 0.8;
+      z-index: 0;
+    }
+
+    .rings {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 0.2vh solid var(--border-color);
+      transform: translate(-50%, -50%);
+      animation: spin 45s linear infinite reverse;
+      z-index: 1;
+    }
+
+    .rings::before,
+    .rings::after {
+      content: '';
+      position: absolute;
+      inset: 5%;
+      border: 0.1vh solid var(--border-color);
+      border-radius: 50%;
+    }
+
+    .rings::after {
+      inset: 10%;
+    }
+
+    @keyframes spin {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    /* --- header --- */
+    header {
+      z-index: 3;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 1vh 2vw;
+      border-bottom: 0.2vh solid var(--accent);
+      flex-shrink: 0;
+    }
+
+    h1 {
+      font-family: 'Quantie', sans-serif;
+      font-size: 7vh;
+      letter-spacing: 0.1em;
+      line-height: 0.8;
+    }
+
+    h2 {
+      font-size: 2.5vh;
+      letter-spacing: 0.3em;
+      align-self: flex-end;
+    }
+
+    .side-text {
+      position: absolute;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 1.2vh;
+      letter-spacing: 0.4em;
+      color: rgba(0, 0, 0, 0.6);
+      z-index: 3;
+    }
+
+    .side-left {
+      left: 1vw;
+      top: 1vh;
+    }
+
+    .side-right {
+      right: 1vw;
+      bottom: 1vh;
+      transform: rotate(180deg);
+    }
+
+    /* --- main grid --- */
+    main {
+      z-index: 3;
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      place-items: center;
+      gap: 1.5vh 3vw;
+      padding: 2vh 0;
+      width: 100%;
+    }
+
+    .main-label {
+      grid-column: 1 / -1;
+      font-size: 3.5vh;
+      letter-spacing: 0.3em;
+      border: 0.1vh solid var(--accent);
+      padding: 0.5vh 1vw;
+      animation: blink-text 2s step-end infinite;
+    }
+
+    @keyframes blink-text {
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    iframe {
+      grid-column: 1 / -1;
+      width: 25vw;
+      height: 10vh;
+      border: 0.1vh solid var(--accent);
+      transform: perspective(500px) rotateX(2deg);
+      box-shadow: 0 0 0.5vh rgba(0, 0, 0, 0.5);
+    }
+
+    .data-block {
+      font-size: 1.6vh;
+      letter-spacing: 0.1em;
+      text-align: left;
+      border: 0.1vh dashed var(--accent);
+      padding: 1vh;
+      width: 90%;
+      max-width: 30vw;
+      line-height: 1.4;
+      align-self: start;
+    }
+
+    .data-block strong {
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.25vh;
+    }
+
+    /* --- footer --- */
+    footer {
+      z-index: 3;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1vh 2vw;
+      border-top: 0.2vh solid var(--accent);
+      flex-shrink: 0;
+    }
+
+    footer span {
+      font-size: 2vh;
+      letter-spacing: 0.2em;
+    }
+
+    img {
+      width: 25vw;
+      height: 4vh;
+      border: 0.1vh solid var(--accent);
+      padding: 0.1vh 0.3vw;
+      transform: skewX(-5deg);
+    }
+
+    @media (max-width: 900px) {
+      .interface {
+        width: 100vw;
+        height: auto;
+        max-height: 100vh;
+      }
+
+      header,
+      footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 1vh;
+      }
+
+      h1 {
+        font-size: 6vh;
+      }
+
+      h2 {
+        font-size: 2vh;
+      }
+
+      iframe {
+        width: 60vw;
+        height: 12vh;
+      }
+
+      .data-block {
+        width: 90%;
+        max-width: 90%;
+        text-align: center;
+        font-size: 1.8vh;
+      }
+
+      img {
+        width: 40vw;
+        height: 3vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="interface">
+    <div class="pattern"></div>
+    <div class="rings"></div>
+
+    <header>
+      <h1>TORQUELORE</h1>
+      <h2>INTERFACE LOG V3.1</h2>
+    </header>
+
+    <div class="side-text side-left">SYSTEM ONLINE // INITIATING DATA LINK</div>
+    <div class="side-text side-right">NODE 2025 // ACCESS LEVEL: TIER-3</div>
+
+    <main>
+      <span class="main-label">HUMANOID SIGNAL DETECTED</span>
+
+      <iframe src="flipclock.html" title="Digital Clock Interface"></iframe>
+
+      <div class="data-block">
+        <strong>SENSOR ARRAY: A-9</strong>
+        STATUS: NOMINAL<br>
+        TEMP: 288.15 K<br>
+        PRESSURE: 101.3 kPa
+      </div>
+
+      <div class="data-block">
+        <strong>COMM LINK: N-55</strong>
+        CHANNEL: SECURE<br>
+        PING: 42 MS<br>
+        ENCRYPTION: AES-256
+      </div>
+
+      <div class="data-block" style="grid-column: 1 / -1; text-align: center;">
+        <strong>POWER STATUS</strong>
+        SUBSYSTEMS: 98% | CORE TEMP: NORMAL | WARNING: NONE
+      </div>
+    </main>
+
+    <footer>
+      <span>ORIGIN: 1997</span>
+      <img src="page_images/barcode_bmw.png" alt="System Barcode ID">
+      <span>CURRENT: 2025</span>
+    </footer>
+  </div>
+</body>
+
+</html>
