@@ -7,7 +7,7 @@
   <title>Custom Image Song Player with List</title>
   <style>
     :root {
-      --bg-color: #111;
+      --bg-color: #444444;
       --btn-bg: #222;
       --btn-hover: #444;
       --accent-color: #0a0;
@@ -30,53 +30,32 @@
       color: var(--text-color);
       font-family: system-ui, sans-serif;
       margin: 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr;
       height: 100vh;
+      
       overflow: hidden;
-      gap: 1.5rem;
-      padding: 1.5rem;
-    }
-
-    .player-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow: auto;
-      min-width: 0;
-      min-height: 0;
-    }
-
-    .list-container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.625rem;
-      min-width: 0;
-      min-height: 0;
-      overflow-y: auto;
     }
 
     #searchBox {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      border: 0.125rem solid var(--text-color);
+      padding: 1rem;
+      /* border: 0.125rem solid var(--text-color); */
       background: var(--btn-bg);
       color: var(--text-color);
-      font-size: 1rem;
+      font-size: 3rem;
+      width: 100%;
     }
 
     ul#musicList {
       padding: 0;
       margin: 0;
       list-style: none;
+      
     }
 
     ul#musicList li {
       position: relative;
       width: 100%;
       max-width: 500px;
-      height:150px;
+      height: 150px;
       margin: 1rem auto;
       cursor: pointer;
       border-radius: 1rem;
@@ -94,29 +73,27 @@
     }
 
     ul#musicList li img {
-  position: absolute;
-  top: 73px;
-  left: 73px;
-  width: 181px;
-  height: 181px;
-  object-fit: cover;
-  border-radius: 0.5rem;
-  z-index: 1;
-  transform: translate(-50%, -50%);
-}
-
+      position: absolute;
+      top: 73px;
+      left: 73px;
+      width: 181px;
+      height: 181px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+    }
 
     ul#musicList li span {
       position: absolute;
-      top: 40px;
+      top: 60px;
       left: 190px;
       right: 20px;
       z-index: 4;
       color: #2e2e2e;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       font-weight: 600;
-        font-family: Consolas, 'Courier New', monospace;
-      /* text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7); */
+      font-family: Consolas, 'Courier New', monospace;
     }
 
     ul#musicList li:hover {
@@ -130,9 +107,9 @@
     .container {
       position: relative;
       width: 100%;
-      max-width: 37.5rem;
+      max-width: 45.5rem;
       aspect-ratio: 1 / 1;
-      border-radius: 1.25rem;
+      /* border-radius: 1.25rem; */
       overflow: hidden;
       margin-bottom: 1.5rem;
       transform-origin: center center;
@@ -182,10 +159,19 @@
     .volume-controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 1rem;
+      /* gap: 1rem; */
+      /* justify-content: center; */
+      /* align-items: center; */
+      /* margin-bottom: 1rem; */
+    }
+    
+    /* This rule applies to the original controls div, not the new grid wrapper */
+    div.controls {
+        /* margin-bottom: 1rem; */
+    }
+    /* This rule applies to the volume controls div */
+    .volume-controls {
+        margin-bottom: 0; /* Remove double margin */
     }
 
     button {
@@ -260,14 +246,114 @@
       box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3), inset 0 0 0.625rem rgba(0, 0, 0, 0.5);
     }
 
+    /* --- NEW GRID LAYOUT --- */
+    .grid {
+      display: grid;
+      width: 100vw;
+      height: 100vh;
+      gap: 1rem; 
+      padding: 1rem;
+      box-sizing: border-box;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 1fr 2fr 2fr 1fr;
+    }
+
+    /* Layout positions */
+    .player {
+      grid-column: 1 / 2;
+      grid-row: 1 / 4;
+      /* Added styles to center player and allow scroll if needed */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      min-width: 0;
+      min-height: 0;
+      border: 5px solid transparent;
+      border-radius: 15px;
+      background: linear-gradient(to top, #7e7e7e, #2e2e2e) padding-box,
+                  linear-gradient(to bottom, #7e7e7e, #2e2e2e) border-box;
+      
+
+    }
+
+    /* This is the new grid wrapper for BOTH control sets */
+    .controls {
+      grid-column: 1 / 2;
+      grid-row: 4 / 5;
+      /* Added styles to stack/center the control divs */
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      border: 5px solid transparent;
+      border-radius: 15px;
+      background: linear-gradient(to top, #7e7e7e, #2e2e2e) padding-box,
+                  linear-gradient(to bottom, #7e7e7e, #2e2e2e) border-box;
+
+
+    }
+
+    .search_box {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+      /* Added styles to center search box */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      border: 5px solid transparent;
+      border-radius: 15px;
+      /* background: linear-gradient(to top, #171717, #171717) padding-box,
+                  linear-gradient(to bottom, #7e7e7e, #2e2e2e) border-box; */
+
+    }
+
+    .list {
+      grid-column: 2 / 3;
+      grid-row: 2 / 5;
+      /* Added styles from old .list-container */
+      overflow-y: auto;
+      min-width: 0;
+      min-height: 0;
+      border: 5px solid transparent;
+      border-radius: 15px;
+      background: linear-gradient(to top, #7e7e7e, #2e2e2e) padding-box,
+                  linear-gradient(to bottom, #7e7e7e, #2e2e2e) border-box;
+
+    }
+    /* --- END NEW GRID LAYOUT --- */
+
+
     @media (max-width: 900px) {
-      body {
+      .grid { /* UPDATED from body */
         grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr;
+        grid-template-rows: auto auto auto 1fr; /* UPDATED for 4 items */
         height: 100vh;
         padding: 1rem;
         gap: 1rem;
       }
+      
+      /* ADDED mobile grid layout */
+      .player {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+      }
+      .controls {
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+      }
+      .search_box {
+        grid-column: 1 / 2;
+        grid-row: 3 / 4;
+      }
+      .list {
+        grid-column: 1 / 2;
+        grid-row: 4 / 5;
+      }
+      /* END ADDED */
 
       html {
         font-size: 2vmin;
@@ -280,9 +366,9 @@
   </style>
 </head>
 
-<body>
+<body class="grid">
 
-  <div class="player-container">
+  <div class="player">
     <div class="container">
       <div id="layer1" class="layer"></div>
       <div id="layer2" class="layer"></div>
@@ -290,9 +376,10 @@
       <div id="layer4" class="layer"></div>
       <div id="layer5" class="layer"></div>
     </div>
+  </div>
 
-    <div class="controls">
-      <button id="shuffleBtn" title="Shuffle"><img src="ps_player_images/icons/shuffle.png" alt="Shuffle"></button>
+  <div class="controls">
+    <div class="controls"> <button id="shuffleBtn" title="Shuffle"><img src="ps_player_images/icons/shuffle.png" alt="Shuffle"></button>
       <button id="prevBtn" title="Previous"><img src="ps_player_images/icons/prev.png" alt="Previous"></button>
       <button id="playPauseBtn" title="Play/Pause"><img src="ps_player_images/icons/play.png" alt="Play" id="playPauseIcon"></button>
       <button id="nextBtn" title="Next"><img src="ps_player_images/icons/next.png" alt="Next"></button>
@@ -306,8 +393,11 @@
     </div>
   </div>
 
-  <div class="list-container">
+  <div class="search_box">
     <input type="text" id="searchBox" placeholder="Search...">
+  </div>
+
+  <div class="list">
     <ul id="musicList"></ul>
   </div>
 
