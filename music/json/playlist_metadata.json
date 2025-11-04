@@ -1,0 +1,34 @@
+[
+  {
+    "src": "/music/naruto-shippuden-opening-03-blue-bird.mp3",
+    "diskImage": "music/cover/naruto-shippuden-opening-03-blue-bird.webp",
+    "name": "Naruto Shippuden Opening 03 - Blue Bird - KPASI Music",
+    "title": "Naruto Shippuden Opening 03 - Blue Bird",
+    "artist": "KPASI Music",
+    "album": "Unknown Album"
+  },
+  {
+    "src": "/music/sunstroke_project.mp3",
+    "diskImage": "music/cover/sunstroke_project.webp",
+    "name": "sunstroke_project - Unknown Artist",
+    "title": "sunstroke_project",
+    "artist": "Unknown Artist",
+    "album": "Unknown Album"
+  },
+  {
+    "src": "/music/trainer_battle_gen4.mp3",
+    "diskImage": "music/cover/trainer_battle_gen4.webp",
+    "name": "Battle! (Trainer Battle) - Junichi Masuda",  
+    "title": "Battle! (Trainer Battle)",
+    "artist": "Junichi Masuda",
+    "album": "Pokémon Diamond & Pearl Super Music Collection"
+  },
+  {
+    "src": "/music/twinleaf_town.mp3",
+    "diskImage": "music/cover/twinleaf_town.webp",
+    "name": "Twinleaf Town (Day) - Hitomi Sato",
+    "title": "Twinleaf Town (Day)",
+    "artist": "Hitomi Sato",
+    "album": "Pokémon Diamond & Pearl Super Music Collection"
+  }
+]
