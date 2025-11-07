@@ -7,18 +7,72 @@
 html{font-size:1.6vmin;box-sizing:border-box}
 *,*:before,*:after{box-sizing:inherit}
 body{background:var(--bg-color);color:var(--text-color);font-family:system-ui,sans-serif;margin:0;height:100vh;overflow:hidden}
-#searchBox{padding:1rem;background:var(--btn-bg);color:var(--text-color);font-size:3rem;width:100%}
+#searchBox{padding:1rem;background:var(--btn-bg);color:var(--text-color);font-size:3rem;width:100%;border-radius: 1rem;}
 ul#musicList{padding:0;margin:0;list-style:none}
-ul#musicList li{position:relative;width:100%;max-width:500px;height:150px;margin:1rem auto;cursor:pointer;border-radius:1rem;overflow:hidden;transition:transform .2s ease,box-shadow .3s ease}
+ul#musicList li {
+    position: relative;
+    width: 95%;
+    max-width: 500px;
+    height: auto; /* Use aspect-ratio instead of fixed height */
+    aspect-ratio: 500 / 150; /* Original 500px / 150px ratio */
+    margin: 0.2rem auto;
+    cursor: pointer;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform .2s ease, box-shadow .3s ease;
+}
+
 ul#musicList li::before{content:"";position:absolute;inset:0;background:url("ps_player_images/ps_list_design_01.webp") center/contain no-repeat;z-index:3;pointer-events:none}
-ul#musicList li .cover-outer-layer{position:absolute;top:73px;left:73px;width:181px;height:181px;background:url("ps_player_images/cover_image_outter_part.png") center/contain no-repeat;z-index:4;pointer-events:none;transition:opacity .2s ease;transform:translate(-50%,-50%)}
-ul#musicList li img{position:absolute;top:73px;left:73px;width:181px;height:181px;object-fit:cover;border-radius:.5rem;z-index:1;transform:translate(-50%,-50%)}
-ul#musicList li .info-container{position:absolute;top:40px;left:190px;right:60px;z-index:4;color:#2e2e2e;display:flex;flex-direction:column}
+ul#musicList li .cover-outer-layer,
+ul#musicList li img {
+    position: absolute;
+    top: 48.7%;    /* 73px / 150px */
+    left: 14.6%;   /* 73px / 500px */
+    width: 36.2%;  /* 181px / 500px */
+    height: 120.7%;/* 181px / 150px */
+    transform: translate(-50%, -50%);
+}
+
+/* Specific rule for outer layer */
+ul#musicList li .cover-outer-layer {
+    background: url("ps_player_images/cover_image_outter_part.png") center/contain no-repeat;
+    z-index: 4;
+    pointer-events: none;
+    transition: opacity .2s ease;
+}
+
+/* Specific rule for image */
+ul#musicList li img {
+    object-fit: cover;
+    border-radius: .5rem;
+    z-index: 1;
+}
+
+ul#musicList li .info-container {
+    position: absolute;
+    top: 26.7%;     /* 40px / 150px */
+    left: 38%;      /* 190px / 500px */
+    right: 12%;     /* 60px / 500px */
+    z-index: 4;
+    color: #2e2e2e;
+    display: flex;
+    flex-direction: column;
+}
+
 ul#musicList li .song-title,ul#musicList li .artist-name,ul#musicList li .album-name{font-size:1rem;font-weight:600;line-height:1.2;margin-bottom:.1rem;font-family:Consolas,'Courier New',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 ul#musicList li .song-title{font-weight:800}
 ul#musicList li .album-name{font-weight:400;opacity:.8}
+ul#musicList li span{position:static;font-size:initial}
 ul#musicList li:hover{transform:scale(1.03)}
-ul#musicList li.active{transform:scale(1.15)}
+ul#musicList li.active::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("ps_player_images/ps_list_highlight_01.webp") center/contain no-repeat;
+    z-index: 3; 
+    pointer-events: none;
+}
+
 .container{position:relative;width:100%;max-width:45.5rem;aspect-ratio:1/1;overflow:hidden;margin:0 auto 1.5rem;transform-origin:center}
 .layer{position:absolute;inset:0;border-radius:1.25rem;background-position:center;background-repeat:no-repeat;background-size:contain;transition:transform 1s ease-in-out,opacity .4s ease}
 #layer1{background-image:url('ps_player_images/ps_front_cover.webp');z-index:5}
@@ -40,6 +94,15 @@ button img{width:60%;height:60%;object-fit:contain;pointer-events:none}
 .volume-controls input[type="range"]{width:10rem;accent-color:var(--accent-color)}
 @keyframes spin{from{transform:rotate(var(--rotation-offset,0deg))}to{transform:rotate(calc(var(--rotation-offset,0deg) + 360deg))}}
 .rotating{animation:spin 6s linear infinite}
+@keyframes spin-list {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+ul#musicList li img.rotating-list-item {
+    animation: spin-list 6s linear infinite;
+}
+
 .slide-down{transform:translateY(150%);opacity:0}
 .slide-up{transform:translateY(-150%);opacity:0}
 .slide-reset{transform:translateY(0);opacity:1}
@@ -173,6 +236,8 @@ async function loadSong(index){
     await setDiskImage(song.diskImage)
 }
 function updatePlayPauseIcon(){playPauseIcon.src=isPlaying?"ps_player_images/icons/pause.png":"ps_player_images/icons/play.png"}
+
+/* --- MODIFIED JS --- */
 function playSong(){
     if(!audio.src)return;
     audio.play().then(()=>{
@@ -180,13 +245,21 @@ function playSong(){
         disk.style.transform="";
         disk.style.setProperty("--rotation-offset",`${currentRotation}deg`);
         disk.classList.add("rotating");
-        updatePlayPauseIcon()
+        updatePlayPauseIcon();
+        
+        // Add rotation to the active list item's image
+        const activeLi = musicListElement.querySelector('li.active');
+        if (activeLi) {
+            const img = activeLi.querySelector('img');
+            if (img) img.classList.add('rotating-list-item');
+        }
     }).catch(error=>{
         console.warn("Autoplay was prevented:",error);
         isPlaying=!1;
         updatePlayPauseIcon()
     })
 }
+
 function pauseSong(){
     audio.pause();
     isPlaying=!1;
@@ -194,10 +267,17 @@ function pauseSong(){
     disk.classList.remove("rotating");
     disk.style.transform=`rotate(${angle}deg)`;
     currentRotation=angle;
-    updatePlayPauseIcon()
+    updatePlayPauseIcon();
+
+    // Remove rotation from the active list item's image
+    const activeLi = musicListElement.querySelector('li.active');
+    if (activeLi) {
+        const img = activeLi.querySelector('img');
+        if (img) img.classList.remove('rotating-list-item');
+    }
 }
 async function transitionToNextSong(nextIndex){
-    pauseSong();
+    pauseSong(); // This will now also stop the list item from spinning
     currentRotation=0;
     disk.style.transform="";
     disk.style.setProperty("--rotation-offset","0deg");
