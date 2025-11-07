@@ -490,28 +490,22 @@
             return matrix ? Math.round(Math.atan2(parseFloat(matrix[1].split(", ")[1]), parseFloat(matrix[1].split(", ")[0])) * (180 / Math.PI)) : 0
         }
 
-        // triggerJsonDownload function removed
-        // listMp3Files function removed
-        // extractAndBuildPlaylist function removed
-
         async function initializePlaylist() {
-            // Hard-coded music list
-            // !! IMPORTANT: Update this list with your actual music files !!
             const hardcodedMusicData = [
                 {
-                    "filename": "music/_Sunstroke_Project_Olia_Tira_._-_Run_Away_-_(mp3.pm).mp3",
+                    "filename": "./music/_Sunstroke_Project_Olia_Tira_._-_Run_Away_-_(mp3.pm).mp3",
                     "title": "Run_Away",
                     "artist": "Sunstroke",
                     "album": ""
                 },
                 {
-                    "filename": "music/10. Twinleaf Town (Day).mp3",
+                    "filename": "./music/10. Twinleaf Town (Day).mp3",
                     "title": "Twinleaf Town (Daytime)",
                     "artist": "Hitomi Sato",
                     "album": "Pokémon Diamond, Pearl, & Platinum: Original Soundtrack"
                 },
                 {
-                    "filename": "music/kpasi-music_naruto-shippuden-opening-03-blue-bird.mp3",
+                    "filename": "./music/kpasi-music_naruto-shippuden-opening-03-blue-bird.mp3",
                     "title": "Naruto Shippuden Opening 03 - Blue Bird",
                     "artist": "KPASI Music",
                     "album": ""
@@ -520,13 +514,12 @@
 
             if (hardcodedMusicData.length > 0) {
                 playlist = hardcodedMusicData.map(song => {
-                    // "music/V_A_-_Interstellar_01_Main_Theme.mp3" -> "V_A_-_Interstellar_01_Main_Theme"
                     const baseFilename = song.filename.substring(song.filename.lastIndexOf('/') + 1).replace(/\.[^/.]+$/, "");
                     
                     return {
-                        src: song.filename, // e.g., "music/V_A_-_Interstellar_01_Main_Theme.mp3"
-                        diskImage: `music/cover/${baseFilename}.webp`, // e.g., "music/cover/V_A_-_Interstellar_01_Main_Theme.webp"
-                        title: song.title || baseFilename.replace(/_/g, " "), // Use provided title or fallback
+                        src: song.filename, 
+                        diskImage: `./music/cover/${baseFilename}.webp`, 
+                        title: song.title || baseFilename.replace(/_/g, " "),
                         artist: song.artist || "Unknown Artist",
                         album: song.album || "Unknown Album"
                     };
