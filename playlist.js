@@ -17,5 +17,29 @@ const hardcodedMusicData = [
         "title": "Naruto Shippuden Opening 03 - Blue Bird",
         "artist": "KPASI Music",
         "album": ""
+    },
+    {
+        "filename": "./music/Nujabes-Luv-Sic-Pt6-feat-Shing02.mp3",
+        "title": "Luv (Sic) Pt.6 (feat. Shing02) (Uyama Hiroto Remix)",
+        "artist": "Nujabes",
+        "album": "Luv (Sic)"
+    },
+    {
+        "filename": "./music/Feather-Nujabes.mp3",
+        "title": "Feather",
+        "artist": "Nujabes",
+        "album": "Modal Soul"
+    },
+    {
+        "filename": "./music/Aruarian-Dance-Nujabes.mp3",
+        "title": "Aruarian Dance",
+        "artist": "Nujabes",
+        "album": ""
+    },
+    {
+        "filename": "./music/Nujabes - reflection eternal [Official Audio] - Nujabes.mp3",
+        "title": "Reflection Eternal",
+        "artist": "Nujabes",
+        "album": "Modal Soul"
     }
 ];
