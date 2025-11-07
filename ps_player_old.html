@@ -22,7 +22,7 @@ ul#musicList li {
     transition: transform .2s ease, box-shadow .3s ease;
 }
 
-ul#musicList li::before{content:"";position:absolute;inset:0;background:url("ps_player_images/ps_list_design_01.webp") center/contain no-repeat;z-index:3;pointer-events:none}
+ul#musicList li::before{content:"";position:absolute;inset:0;background:url("./ps_player_images/ps_list_design_01.webp") center/contain no-repeat;z-index:3;pointer-events:none}
 ul#musicList li .cover-outer-layer,
 ul#musicList li img {
     position: absolute;
@@ -35,7 +35,7 @@ ul#musicList li img {
 
 /* Specific rule for outer layer */
 ul#musicList li .cover-outer-layer {
-    background: url("ps_player_images/cover_image_outter_part.png") center/contain no-repeat;
+    background: url("./ps_player_images/cover_image_outter_part.png") center/contain no-repeat;
     z-index: 4;
     pointer-events: none;
     transition: opacity .2s ease;
@@ -62,25 +62,25 @@ ul#musicList li .info-container {
 ul#musicList li .song-title,ul#musicList li .artist-name,ul#musicList li .album-name{font-size:1rem;font-weight:600;line-height:1.2;margin-bottom:.1rem;font-family:Consolas,'Courier New',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 ul#musicList li .song-title{font-weight:800}
 ul#musicList li .album-name{font-weight:400;opacity:.8}
-ul#musicList li span{position:static;font-size:initial}
+ul#musicList li span{position:static;font-size:initial} 
 ul#musicList li:hover{transform:scale(1.03)}
 ul#musicList li.active::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: url("ps_player_images/ps_list_highlight_01.webp") center/contain no-repeat;
+    background: url("./ps_player_images/ps_list_highlight_01.webp") center/contain no-repeat;
     z-index: 3; 
     pointer-events: none;
 }
 
 .container{position:relative;width:100%;max-width:45.5rem;aspect-ratio:1/1;overflow:hidden;margin:0 auto 1.5rem;transform-origin:center}
 .layer{position:absolute;inset:0;border-radius:1.25rem;background-position:center;background-repeat:no-repeat;background-size:contain;transition:transform 1s ease-in-out,opacity .4s ease}
-#layer1{background-image:url('ps_player_images/ps_front_cover.webp');z-index:5}
-#layer2{background-image:url('ps_player_images/ps_disk_cover.webp');z-index:4}
-#layer3{background-image:url('ps_player_images/cover_image_outter_part.png');z-index:3}
-#disk{background-image:url('ps_player_images/ps_default_disk_00.webp');z-index:2}
-#layer4{background-image:url('ps_player_images/ps_empty_disk.webp');z-index:1}
-#layer5{background-image:url('ps_player_images/ps_disk_back.webp');z-index:0}
+#layer1{background-image:url('./ps_player_images/ps_front_cover.webp');z-index:5}
+#layer2{background-image:url('./ps_player_images/ps_disk_cover.webp');z-index:4}
+#layer3{background-image:url('./ps_player_images/cover_image_outter_part.png');z-index:3}
+#disk{background-image:url('./ps_player_images/ps_default_disk_00.webp');z-index:2}
+#layer4{background-image:url('./ps_player_images/ps_empty_disk.webp');z-index:1}
+#layer5{background-image:url('./ps_player_images/ps_disk_back.webp');z-index:0}
 .controls-inner{display:flex;align-items:center;justify-content:space-around;width:100%;padding:0 1rem}
 .controls-buttons{display:flex;gap:1rem}
 .volume-controls{display:flex;align-items:center;gap:.5rem}
@@ -128,26 +128,32 @@ html{font-size:2vmin}
 .volume-controls{display:none}
 .controls-inner{justify-content:center}
 }
+
 </style>
 </head>
 <body class="grid">
     <div class="player">
         <div class="container">
-            <div id="layer1" class="layer"></div><div id="layer2" class="layer"></div><div id="layer3" class="layer"></div><div id="disk" class="layer"></div><div id="layer4" class="layer"></div><div id="layer5" class="layer"></div>
+            <div id="layer1" class="layer"></div>
+            <div id="layer2" class="layer"></div>
+            <div id="layer3" class="layer"></div>
+            <div id="disk" class="layer"></div>
+            <div id="layer4" class="layer"></div>
+            <div id="layer5" class="layer"></div>
         </div>
     </div>
     <div class="controls">
         <div class="progress-container"><span id="currentTimeDisplay" class="time-display">0:00</span><input type="range" id="progressSlider" min="0" max="100" value="0" step="0.1"><span id="durationDisplay" class="time-display">0:00</span></div>
         <div class="controls-inner">
-            <div class="controls-buttons"><button id="shuffleBtn" title="Shuffle"><img src="ps_player_images/icons/shuffle.png" alt="Shuffle"></button><button id="prevBtn" title="Previous"><img src="ps_player_images/icons/prev.png" alt="Previous"></button><button id="playPauseBtn" title="Play/Pause"><img src="ps_player_images/icons/play.png" alt="Play" id="playPauseIcon"></button><button id="nextBtn" title="Next"><img src="ps_player_images/icons/next.png" alt="Next"></button><button id="muteBtn" title="Mute"><img src="ps_player_images/icons/volume_up.png" alt="Mute" id="muteIcon"></button></div>
-            <div class="volume-controls"><button id="volDownBtn" title="Volume Down"><img src="ps_player_images/icons/volume_down.png" alt="Volume Down"></button><input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1"><button id="volUpBtn" title="Volume Up"><img src="ps_player_images/icons/volume_up.png" alt="Volume Up"></button></div>
+            <div class="controls-buttons"><button id="shuffleBtn" title="Shuffle"><img src="./ps_player_images/icons/shuffle.png" alt="Shuffle"></button><button id="prevBtn" title="Previous"><img src="./ps_player_images/icons/prev.png" alt="Previous"></button><button id="playPauseBtn" title="Play/Pause"><img src="./ps_player_images/icons/play.png" alt="Play" id="playPauseIcon"></button><button id="nextBtn" title="Next"><img src="./ps_player_images/icons/next.png" alt="Next"></button><button id="muteBtn" title="Mute"><img src="./ps_player_images/icons/volume_up.png" alt="Mute" id="muteIcon"></button></div>
+            <div class="volume-controls"><button id="volDownBtn" title="Volume Down"><img src="./ps_player_images/icons/volume_down.png" alt="Volume Down"></button><input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1"><button id="volUpBtn" title="Volume Up"><img src="./ps_player_images/icons/volume_up.png" alt="Volume Up"></button></div>
         </div>
     </div>
     <div class="search_box"><input type="text" id="searchBox" placeholder="Search..."></div>
     <div class="list"><ul id="musicList" style="display:none;"></ul></div>
     <audio id="audio"></audio>
     <script src="playlist.js"></script> <script>
-const audio=document.getElementById("audio"),playPauseBtn=document.getElementById("playPauseBtn"),playPauseIcon=document.getElementById("playPauseIcon"),prevBtn=document.getElementById("prevBtn"),nextBtn=document.getElementById("nextBtn"),shuffleBtn=document.getElementById("shuffleBtn"),muteBtn=document.getElementById("muteBtn"),muteIcon=document.getElementById("muteIcon"),volumeSlider=document.getElementById("volumeSlider"),volUpBtn=document.getElementById("volUpBtn"),volDownBtn=document.getElementById("volDownBtn"),layer2=document.getElementById("layer2"),layer3=document.getElementById("layer3"),layer4=document.getElementById("layer4"),disk=document.getElementById("disk"),musicListElement=document.getElementById("musicList"),searchBox=document.getElementById("searchBox"),progressSlider=document.getElementById("progressSlider"),currentTimeDisplay=document.getElementById("currentTimeDisplay"),durationDisplay=document.getElementById("durationDisplay"),DEFAULT_DISK_IMAGE="ps_player_images/ps_default_disk_00.webp";
+const audio=document.getElementById("audio"),playPauseBtn=document.getElementById("playPauseBtn"),playPauseIcon=document.getElementById("playPauseIcon"),prevBtn=document.getElementById("prevBtn"),nextBtn=document.getElementById("nextBtn"),shuffleBtn=document.getElementById("shuffleBtn"),muteBtn=document.getElementById("muteBtn"),muteIcon=document.getElementById("muteIcon"),volumeSlider=document.getElementById("volumeSlider"),volUpBtn=document.getElementById("volUpBtn"),volDownBtn=document.getElementById("volDownBtn"),layer2=document.getElementById("layer2"),layer3=document.getElementById("layer3"),layer4=document.getElementById("layer4"),disk=document.getElementById("disk"),musicListElement=document.getElementById("musicList"),searchBox=document.getElementById("searchBox"),progressSlider=document.getElementById("progressSlider"),currentTimeDisplay=document.getElementById("currentTimeDisplay"),durationDisplay=document.getElementById("durationDisplay"),DEFAULT_DISK_IMAGE="./ps_player_images/ps_default_disk_00.webp";
 let playlist=[],currentSong=0,isPlaying=!1,isShuffling=!1,currentRotation=0;
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 function formatTime(s){
@@ -240,7 +246,7 @@ async function loadSong(index){
     progressSlider.value=0;
     await setDiskImage(song.diskImage)
 }
-function updatePlayPauseIcon(){playPauseIcon.src=isPlaying?"ps_player_images/icons/pause.png":"ps_player_images/icons/play.png"}
+function updatePlayPauseIcon(){playPauseIcon.src=isPlaying?"./ps_player_images/icons/pause.png":"./ps_player_images/icons/play.png"}
 
 /* --- MODIFIED JS --- */
 function playSong(){
@@ -334,7 +340,7 @@ playPauseBtn.addEventListener("click",()=>isPlaying?pauseSong():playSong());
 volumeSlider.addEventListener("input",e=>audio.volume=e.target.value);
 volUpBtn.addEventListener("click",()=>{audio.volume=Math.min(audio.volume+.1,1);volumeSlider.value=audio.volume});
 volDownBtn.addEventListener("click",()=>{audio.volume=Math.max(audio.volume-.1,0);volumeSlider.value=audio.volume});
-muteBtn.addEventListener("click",()=>{audio.muted=!audio.muted;muteIcon.src=audio.muted?"ps_player_images/icons/mute.png":"ps_player_images/icons/volume_up.png"});
+muteBtn.addEventListener("click",()=>{audio.muted=!audio.muted;muteIcon.src=audio.muted?"./ps_player_images/icons/mute.png":"./ps_player_images/icons/volume_up.png"});
 shuffleBtn.addEventListener("click",()=>{isShuffling=!isShuffling;shuffleBtn.classList.toggle("active",isShuffling)});
 prevBtn.addEventListener("click",()=>transitionToNextSong((currentSong-1+playlist.length)%playlist.length).then(()=>playSong()));
 nextBtn.addEventListener("click",nextSong);
