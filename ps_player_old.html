@@ -393,7 +393,8 @@
             /* border: 3px solid #2C3E50; */
             padding: 1rem 0;
             -webkit-mask-image: linear-gradient(to top, transparent, black 40%);
-            mask-image: linear-gradient(to top, transparent, black 40%);     
+            mask-image: linear-gradient(to top, transparent, black 40%);  
+               
         }
 
 
@@ -409,16 +410,22 @@
         }
 
         .list {
-            grid-area: 2/2/5/3;
-            overflow-y: auto;
-            min-width: 0;
-            min-height: 0;
-            /* border-radius: 10px; */
-            /* background-color: #2e2e2e; */
-            /* border: 3px solid #7e7e7e; */
-            -webkit-mask-image: linear-gradient(to top, transparent, black 40%);
-            mask-image: linear-gradient(to top, transparent, black 40%);
-        }
+  grid-area: 2/2/5/3;
+  overflow-y: auto;
+  min-width: 0;
+  min-height: 0;
+
+  /* Create fade at both top and bottom */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 40%, black 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent, black 40%, black 60%, transparent 100%);
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
 
 
         @media (max-width:900px) {
