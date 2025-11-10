@@ -358,8 +358,6 @@
             border-radius: 10px;
             background: #636363;
             border: 3px solid #2e2e2e;
-
-            /* Fade bottom using mask */
             -webkit-mask-image: linear-gradient(to top, transparent, black 40%);
             mask-image: linear-gradient(to top, transparent, black 40%);
         }
@@ -375,24 +373,10 @@
             border-radius: 10px;
             background: #636363;
             border: 3px solid #2e2e2e;
-            padding: 1rem 0         
-        }
-
-        /* .controls {
-            grid-area: 4/1/5/2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-width: 0;
-            border-radius: 10px;
-            background: #636363;
-            border: 3px solid #2e2e2e;
             padding: 1rem 0;
-
-            -webkit-mask-image: linear-gradient(to bottom, transparent, black 100%);
-            mask-image: linear-gradient(to bottom, transparent, black 100%);
-        } */
+            -webkit-mask-image: linear-gradient(to top, transparent, black 40%);
+            mask-image: linear-gradient(to top, transparent, black 40%);     
+        }
 
 
         .search_box {
@@ -401,8 +385,9 @@
             align-items: center;
             justify-content: center;
             min-width: 0;
-            /* border: 5px solid transparent; */
-            border-radius: 5px
+            border-radius: 5px;
+            -webkit-mask-image: linear-gradient(to bottom transparent, black 40%);
+            mask-image: linear-gradient(to bottom, transparent, black 40%);
         }
 
         .list {
@@ -410,11 +395,9 @@
             overflow-y: auto;
             min-width: 0;
             min-height: 0;
-            border-radius: 5px;
-            background: linear-gradient(to top, #7e7e7e, #2e2e2e) padding-box,
-                linear-gradient(to bottom, #7e7e7e, #2e2e2e) border-box;
-
-            /* Fade bottom using mask */
+            border-radius: 10px;
+            background-color: #2e2e2e;
+            border: 3px solid #7e7e7e;
             -webkit-mask-image: linear-gradient(to top, transparent, black 40%);
             mask-image: linear-gradient(to top, transparent, black 40%);
         }
@@ -425,8 +408,8 @@
                 grid-template-columns: 1fr;
                 /* grid-template-rows: 35vh auto 5vh 1fr; */
                 grid-template-rows: 35vh 35vh 10vh 1fr 1fr;
-                padding: 1rem;
-                gap: 1rem
+                padding: 0.5rem;
+                gap: 0rem
             }
 
             .player {
@@ -484,12 +467,12 @@
                 class="time-display">0:00</span></div>
         <div class="controls-inner">
             <div class="controls-buttons"><button id="shuffleBtn" title="Shuffle"><img
-                        src="./ps_player_images/icons/shuffle.png" alt="Shuffle"></button><button id="prevBtn"
+                        src="./ps_player_images/icons/Shuffle.png" alt="Shuffle"></button><button id="prevBtn"
                     title="Previous"><img src="./ps_player_images/icons/prev.png" alt="Previous"></button><button
-                    id="playPauseBtn" title="Play/Pause"><img src="./ps_player_images/icons/play.png" alt="Play"
+                    id="playPauseBtn" title="Play/Pause"><img src="./ps_player_images/icons/Play.png" alt="Play"
                         id="playPauseIcon"></button><button id="nextBtn" title="Next"><img
                         src="./ps_player_images/icons/next.png" alt="Next"></button><button id="muteBtn"
-                    title="Mute"><img src="./ps_player_images/icons/volume_up.png" alt="Mute" id="muteIcon"></button>
+                    title="Mute"><img src="./ps_player_images/icons/mute.png" alt="Mute" id="muteIcon"></button>
             </div>
             <div class="volume-controls"><button id="volDownBtn" title="Volume Down"><img
                         src="./ps_player_images/icons/volume_down.png" alt="Volume Down"></button><input type="range"
@@ -597,7 +580,7 @@
             progressSlider.value = 0;
             await setDiskImage(song.diskImage)
         }
-        function updatePlayPauseIcon() { playPauseIcon.src = isPlaying ? "./ps_player_images/icons/pause.png" : "./ps_player_images/icons/play.png" }
+        function updatePlayPauseIcon() { playPauseIcon.src = isPlaying ? "./ps_player_images/icons/Pause.png" : "./ps_player_images/icons/Play.png" }
 
         /* --- MODIFIED JS --- */
         function playSong() {
@@ -691,8 +674,8 @@
         volumeSlider.addEventListener("input", e => audio.volume = e.target.value);
         volUpBtn.addEventListener("click", () => { audio.volume = Math.min(audio.volume + .1, 1); volumeSlider.value = audio.volume });
         volDownBtn.addEventListener("click", () => { audio.volume = Math.max(audio.volume - .1, 0); volumeSlider.value = audio.volume });
-        muteBtn.addEventListener("click", () => { audio.muted = !audio.muted; muteIcon.src = audio.muted ? "./ps_player_images/icons/mute.png" : "./ps_player_images/icons/volume_up.png" });
-        shuffleBtn.addEventListener("click", () => { isShuffling = !isShuffling; shuffleBtn.classList.toggle("active", isShuffling) });
+        muteBtn.addEventListener("click", () => { audio.muted = !audio.muted; muteBtn.classList.toggle("active", isMuted)});
+        shuffleBtn.addEventListener("click", () => { isShuffling = !isShuffling; shuffleBtn.classList.toggle("active", true) });
         prevBtn.addEventListener("click", () => transitionToNextSong((currentSong - 1 + playlist.length) % playlist.length).then(() => playSong()));
         nextBtn.addEventListener("click", nextSong);
         audio.addEventListener("ended", nextSong);
