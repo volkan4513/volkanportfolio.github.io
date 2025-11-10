@@ -464,6 +464,37 @@
             .controls-inner {
                 justify-content: center
             }
+
+            ul#musicList li .song-title,
+            ul#musicList li .artist-name,
+            ul#musicList li .album-name {
+                font-size: 1.5rem;
+                font-weight: 600;
+                line-height: 1.2;
+                margin-bottom: .1rem;
+                font-family: Consolas, 'Courier New', monospace;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis
+            }
+
+            ul#musicList li .info-container {
+            position: absolute;
+            top: 30%;
+            left: 38%;
+            right: 12%;
+            z-index: 4;
+            color: #2e2e2e;
+            display: flex;
+            flex-direction: column;
+        }
+
+        ul#musicList li .album-name {
+                margin-top: 2.5rem;
+            }
+            ul#musicList li .song-title {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
