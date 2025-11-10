@@ -7,7 +7,7 @@
     <title>Music Player</title>
     <style>
         :root {
-            --bg-color: #444;
+            --bg-color: #424846;
             --btn-bg: #222;
             --btn-hover: #444;
             --accent-color: #0a0;
@@ -51,13 +51,13 @@
 
         ul#musicList li {
             position: relative;
-            width: 95%;
+            /* width: 95%; */
             max-width: 500px;
             height: auto;
             /* Use aspect-ratio instead of fixed height */
             aspect-ratio: 500 / 150;
             /* Original 500px / 150px ratio */
-            margin: 0.2rem auto;
+            /* margin: 0.2rem auto; */
             cursor: pointer;
             border-radius: 1rem;
             overflow: hidden;
@@ -68,7 +68,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: url("./ps_player_images/ps_list_design_01.webp") center/contain no-repeat;
+            background: url("./ps_player_images/ps_list_design_06.webp") center/contain no-repeat;
             z-index: 3;
             pointer-events: none
         }
@@ -90,7 +90,7 @@
         /* Specific rule for outer layer */
         ul#musicList li .cover-outer-layer {
             background: url("./ps_player_images/cover_image_outter_part.png") center/contain no-repeat;
-            z-index: 4;
+            z-index: 2;
             pointer-events: none;
             transition: opacity .2s ease;
         }
@@ -151,7 +151,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: url("./ps_player_images/ps_list_highlight_01.webp") center/contain no-repeat;
+            background: url("./ps_player_images/ps_list_highlight_03.webp") center/contain no-repeat;
             z-index: 3;
             pointer-events: none;
         }
@@ -370,8 +370,10 @@
             min-height: 0;
 
             border-radius: 10px;
-            background: #636363;
-            border: 3px solid #2e2e2e;
+            /* background: #636363;
+            border: 3px solid #2e2e2e; */
+            background: #383838;
+            /* border: 3px solid #D2B1A3; */
             -webkit-mask-image: linear-gradient(to top, transparent, black 40%);
             mask-image: linear-gradient(to top, transparent, black 40%);
         }
@@ -385,8 +387,10 @@
             justify-content: center;
             min-width: 0;
             border-radius: 10px;
-            background: #636363;
-            border: 3px solid #2e2e2e;
+            /* background: #636363;
+            border: 3px solid #2e2e2e; */
+            /* background: #D35400 ; */
+            /* border: 3px solid #2C3E50; */
             padding: 1rem 0;
             -webkit-mask-image: linear-gradient(to top, transparent, black 40%);
             mask-image: linear-gradient(to top, transparent, black 40%);     
@@ -401,8 +405,6 @@
             min-width: 0;
             border-radius: 10px;
             /* border: 3px solid #2e2e2e; */
-            -webkit-mask-image: linear-gradient(to bottom transparent, black 40%);
-            mask-image: linear-gradient(to bottom, transparent, black 40%);
             
         }
 
@@ -411,9 +413,9 @@
             overflow-y: auto;
             min-width: 0;
             min-height: 0;
-            border-radius: 10px;
-            background-color: #2e2e2e;
-            border: 3px solid #7e7e7e;
+            /* border-radius: 10px; */
+            /* background-color: #2e2e2e; */
+            /* border: 3px solid #7e7e7e; */
             -webkit-mask-image: linear-gradient(to top, transparent, black 40%);
             mask-image: linear-gradient(to top, transparent, black 40%);
         }
