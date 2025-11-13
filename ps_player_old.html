@@ -328,11 +328,11 @@
                 transform: rotate(360deg);
             }
         }
-        
-        /* --- NEW LOADER STYLES --- */
+
+        /* --- NEW LOADER STYLES (MOVED TO TOP-RIGHT) --- */
         .loader {
             position: absolute;
-            bottom: 2rem;
+            top: 2rem;  /* <-- CHANGED */
             right: 2rem;
             width: 3rem;
             height: 3rem;
@@ -410,8 +410,9 @@
             /* border: 3px solid #D2B1A3; */
             -webkit-mask-image: linear-gradient(to top, transparent, black 40%);
             mask-image: linear-gradient(to top, transparent, black 40%);
-            
-            position: relative; /* --- ADDED FOR LOADER POSITIONING --- */
+
+            position: relative;
+            /* --- ADDED FOR LOADER POSITIONING --- */
         }
 
 
@@ -540,9 +541,9 @@
                 font-size: 2rem;
             }
 
-            /* --- NEW MOBILE LOADER STYLES --- */
+            /* --- NEW MOBILE LOADER STYLES (MOVED TO TOP-RIGHT) --- */
             .loader {
-                bottom: 1rem;
+                top: 1rem; /* <-- CHANGED */
                 right: 1rem;
                 width: 2.5rem;
                 height: 2.5rem;
