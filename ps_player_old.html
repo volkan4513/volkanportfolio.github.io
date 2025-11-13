@@ -49,6 +49,14 @@
             list-style: none
         }
 
+        ul#musicList::before,
+        ul#musicList::after {
+            content: "";
+            display: block;
+            /* This value creates the space. Adjust as needed. */
+            height: 10rem;
+        }
+
         ul#musicList li {
             position: relative;
             /* width: 95%; */
@@ -332,7 +340,8 @@
         /* --- NEW LOADER STYLES (MOVED TO TOP-RIGHT) --- */
         .loader {
             position: absolute;
-            top: 2rem;  /* <-- CHANGED */
+            top: 2rem;
+            /* <-- CHANGED */
             right: 2rem;
             width: 3rem;
             height: 3rem;
@@ -543,7 +552,8 @@
 
             /* --- NEW MOBILE LOADER STYLES (MOVED TO TOP-RIGHT) --- */
             .loader {
-                top: 1rem; /* <-- CHANGED */
+                top: 1rem;
+                /* <-- CHANGED */
                 right: 1rem;
                 width: 2.5rem;
                 height: 2.5rem;
@@ -593,7 +603,7 @@
     <script>
         // --- UPDATED CONST LIST TO INCLUDE 'loader' ---
         const audio = document.getElementById("audio"), playPauseBtn = document.getElementById("playPauseBtn"), playPauseIcon = document.getElementById("playPauseIcon"), prevBtn = document.getElementById("prevBtn"), nextBtn = document.getElementById("nextBtn"), shuffleBtn = document.getElementById("shuffleBtn"), muteBtn = document.getElementById("muteBtn"), muteIcon = document.getElementById("muteIcon"), volumeSlider = document.getElementById("volumeSlider"), volUpBtn = document.getElementById("volUpBtn"), volDownBtn = document.getElementById("volDownBtn"), layer2 = document.getElementById("layer2"), layer3 = document.getElementById("layer3"), layer4 = document.getElementById("layer4"), disk = document.getElementById("disk"), musicListElement = document.getElementById("musicList"), searchBox = document.getElementById("searchBox"), progressSlider = document.getElementById("progressSlider"), currentTimeDisplay = document.getElementById("currentTimeDisplay"), durationDisplay = document.getElementById("durationDisplay"), loader = document.getElementById("loader"), DEFAULT_DISK_IMAGE = "./ps_player_images/ps_default_disk_00.webp";
-        
+
         let playlist = [], currentSong = 0, isPlaying = !1, isShuffling = !1, currentRotation = 0;
         const wait = ms => new Promise(r => setTimeout(r, ms));
         function formatTime(s) {
