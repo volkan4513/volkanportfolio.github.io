@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello, I'm Mac.</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap">
+    <style>
+        :root {
+            --bg-color: #f0f0f0;
+            --text-color: #1a1a1a;
+            --border-color: #1a1a1a;
+            --section-separator: 1px solid var(--border-color);
+            --window-border: 1px solid var(--border-color);
+            --font-mono: 'IBM Plex Mono', monospace;
+            --nav-bg: #ffffffc2;
+        }
+
+        
+
+        body {
+            font-family: var(--font-mono);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* background-image: url ('./page_images/pbg.jpg'); */
+
+        }
+
+        .flex-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .flex-grid {
+            display: grid;
+        }
+
+
+        .container {
+            max-width: 80vw;
+            margin: 0 auto;
+            border-left: var(--section-separator);
+            border-right: var(--section-separator);
+            min-height: 100vh;
+            box-sizing: border-box;
+            background-image: url('page_images/pbg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 15px;
+            border-bottom: var(--section-separator);
+            background-color: var(--nav-bg);
+            font-size: 0.8em;
+        }
+
+        .top-bar .logo {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .top-bar .logo svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+        }
+
+        .top-bar nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 15px;
+            padding: 3px 0;
+            position: relative;
+        }
+
+
+        .hero-section {
+            padding: 40px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: var(--section-separator);
+            gap: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5em;
+            line-height: 1;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: 1em;
+            max-width: 380px;
+            margin-bottom: 20px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .hero-buttons a {
+            padding: 8px 15px;
+            font-size: 0.85em;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            text-decoration: none;
+            border: var(--window-border);
+            box-shadow: 2px 2px 0 var(--border-color);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .hero-buttons a:hover {
+            box-shadow: 1px 1px 0 var(--border-color);
+            transform: translate(1px, 1px);
+        }
+
+        .hero-illustration {
+            width: 250px;
+            height: 200px;
+            border: var(--window-border);
+            flex-shrink: 0;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-illustration svg {
+            width: 80px;
+            height: 80px;
+        }
+
+
+        .quick-links-section {
+            padding: 20px 15px 30px;
+            border-bottom: var(--section-separator);
+            background-color: var(--nav-bg);
+        }
+
+        .quick-links-section h3 {
+            font-size: 1.1em;
+            margin: 0 0 15px 0;
+        }
+
+        .quick-links-grid {
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .quick-links-grid a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 10px 15px;
+            font-size: 0.8em;
+            background-color: white;
+            border: var(--window-border);
+            color: var(--text-color);
+            text-decoration: none;
+            box-shadow: 1px 1px 0 var(--border-color);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .quick-links-grid a:hover {
+            box-shadow: 0 0 0 var(--border-color);
+            transform: translate(1px, 1px);
+        }
+
+        .quick-links-grid a svg {
+            width: 14px;
+            height: 14px;
+        }
+
+
+        .projects-section {
+            padding: 30px 0;
+            border-bottom: var(--section-separator);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin: 0 0 25px 0;
+            padding: 0 15px;
+        }
+
+        .projects-wrapper {
+            position: relative;
+            padding: 0 15px;
+        }
+
+        .projects-scroll-container {
+            display: flex;
+            overflow-x: scroll;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            gap: 20px;
+            padding-bottom: 15px;
+            padding-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        .projects-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .projects-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--text-color);
+            border-radius: 4px;
+        }
+
+        .projects-scroll-container::-webkit-scrollbar-track {
+            background: #ccc;
+        }
+
+        .projects-scroll-container .window-card {
+            flex-shrink: 0;
+            width: 280px;
+        }
+
+        .scroll-nav {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+            gap: 10px;
+            padding-bottom: 15px;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .scroll-nav button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            background-color: var(--nav-bg);
+            color: var(--text-color);
+            border: var(--window-border);
+            box-shadow: 1px 1px 0 var(--border-color);
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .scroll-nav button:hover:not(:disabled) {
+            background-color: #ddd;
+        }
+
+        .scroll-nav button:active:not(:disabled) {
+            box-shadow: 0 0 0 var(--border-color);
+            transform: translate(1px, 1px);
+        }
+
+        .scroll-nav button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .window-card {
+            background-color: white;
+            border: var(--window-border);
+            box-shadow: 1px 1px 0 var(--border-color);
+        }
+
+        .window-header {
+            display: flex;
+            align-items: center;
+            padding: 6px 10px;
+            background-color: var(--nav-bg);
+            border-bottom: var(--window-border);
+            font-size: 0.8em;
+        }
+
+        .window-header .dots {
+            display: flex;
+            gap: 5px;
+            margin-right: 10px;
+        }
+
+        .window-header .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #d0d0d0;
+            border: var(--window-border);
+            display: block;
+            box-sizing: border-box;
+        }
+
+        .window-card-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-bottom: var(--window-border);
+            display: block;
+        }
+
+        .window-card-content {
+            padding: 15px;
+        }
+
+        .window-card-content h4 {
+            font-size: 1.2em;
+            margin: 0 0 8px 0;
+        }
+
+        .window-card-content p {
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+
+        .window-card-content .view-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            text-decoration: none;
+            border: var(--window-border);
+            box-shadow: 2px 2px 0 var(--border-color);
+            transition: transform 0.1s, box-shadow 0.1s;
+            display: inline-block;
+        }
+
+        .window-card-content .view-button:hover {
+            box-shadow: 1px 1px 0 var(--border-color);
+            transform: translate(1px, 1px);
+        }
+
+        .about-contact-section {
+            display: flex;
+            padding: 30px 15px;
+            gap: 20px;
+            border-bottom: var(--section-separator);
+        }
+
+        .about-contact-content {
+            flex: 1;
+            padding-right: 15px;
+        }
+
+        .about-contact-content p {
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        .contact-card {
+            min-width: 250px;
+            flex-shrink: 0;
+        }
+
+        .contact-card .window-card-content {
+            padding: 15px;
+        }
+
+        .contact-card h4 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .contact-list li {
+            margin-bottom: 8px;
+            font-size: 0.85em;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-list li svg {
+            margin-right: 8px;
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .contact-list li a {
+            color: var(--text-color);
+            text-decoration: underline;
+        }
+
+
+        footer {
+            padding: 20px 15px;
+            font-size: 0.75em;
+            text-align: center;
+            background-color: var(--nav-bg);
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 30px 15px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-illustration {
+                margin-top: 20px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-illustration {
+                width: 200px;
+                height: 160px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .quick-links-section {
+                padding: 20px 15px;
+            }
+
+            .projects-section {
+                padding: 30px 0;
+            }
+
+            .section-title {
+                padding: 0 15px;
+                font-size: 1.3em;
+                margin-bottom: 20px;
+            }
+
+            .projects-wrapper {
+                padding: 0;
+            }
+
+            .projects-scroll-container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .projects-scroll-container .window-card {
+                width: 75vw;
+                max-width: 300px;
+            }
+
+            .scroll-nav {
+                padding: 0 15px 15px 15px;
+            }
+
+            .about-contact-section {
+                padding: 30px 15px;
+                flex-direction: column;
+            }
+
+            .about-contact-content {
+                padding-right: 0;
+            }
+
+            .contact-card {
+                min-width: 100%;
+            }
+        }
+
+        .inline-avatar {
+            width: 100%;
+            height: 10vh;
+            vertical-align: middle;
+            margin: 0 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <div class="logo">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V6.5A2.5 2.5 0 0 0 17.5 4h-11A2.5 2.5 0 0 0 4 6.5v13z">
+                    </path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                Portfolio
+            </div>
+            <nav>
+                <a href="#projects">Projects</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <a href="#">Clone me</a>
+            </nav>
+        </div>
+
+        <div class="hero-section">
+            <div class="hero-content">
+                <!-- <h1>Hello.<br>I'm </br><img src="page_images/my_name.webp" alt="Mac avatar" class="inline-avatar"> </h1> -->
+                <!-- <h1>Hello.<br>I'm </br>Bhavesh </h1> -->
+                <h1>Hello.</h1>
+                <p>I'm a full-stack developer who loves retro design and building tools with clean, efficient code.
+                    Let's make something functional and fun.</p>
+                <div class="hero-buttons">
+                    <a href="#projects">View My Projects</a>
+                    <a href="#contact">Get in Touch</a>
+                </div>
+            </div>
+            <div class="hero-illustration">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                    <polyline points="6 10 9 13 18 6"></polyline>
+                </svg>
+            </div>
+        </div>
+
+        <div class="quick-links-section">
+            <h3>Quick links</h3>
+            <div class="flex-grid quick-links-grid">
+                <a href="#projects">Projects
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a href="#about">About Me
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a href="#contact">Contact
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a href="#">View CV
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="projects-section" id="projects">
+            <h2 class="section-title">Projects</h2>
+
+            <div class="projects-wrapper">
+                <div class="projects-scroll-container" id="projects-scroll-container">
+                    <div class="window-card">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <span>project_01_CMS.js</span>
+                        </div>
+                        <img src="https://placehold.co/400x200/d0d0d0/000000?text=Project+1%0A(CMS)" alt="Project 1 CMS"
+                            class="window-card-image"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x200/d0d0d0/000000?text=Project+1'">
+                        <div class="window-card-content">
+                            <h4>CMS Interface Redesign</h4>
+                            <p>A complete overhaul of an internal content management system using React and modern state
+                                management techniques.</p>
+                            <a href="#" class="view-button">View project</a>
+                        </div>
+                    </div>
+
+                    <div class="window-card">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <span>project_02_API.py</span>
+                        </div>
+                        <img src="https://placehold.co/400x200/c0c0c0/000000?text=Project+2%0A(API+Service)"
+                            alt="Project 2 API Service" class="window-card-image"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x200/c0c0c0/000000?text=Project+2'">
+                        <div class="window-card-content">
+                            <h4>Real-Time Data API</h4>
+                            <p>Developed a high-throughput Python REST API service for aggregating and serving
+                                geospatial data with minimal latency.</p>
+                            <a href="#" class="view-button">View project</a>
+                        </div>
+                    </div>
+
+                    <div class="window-card">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <span>project_03_Game.exe</span>
+                        </div>
+                        <img src="https://placehold.co/400x200/b0b0b0/000000?text=Project+3%0A(Game+Dev)"
+                            alt="Project 3 Game Dev" class="window-card-image"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x200/b0b0b0/000000?text=Project+3'">
+                        <div class="window-card-content">
+                            <h4>Retro Puzzle Game</h4>
+                            <p>Indie game development project using JavaScript canvas, focused on pixel-perfect
+                                collision detection and physics simulation.</p>
+                            <a href="#" class="view-button">View project</a>
+                        </div>
+                    </div>
+
+                    <div class="window-card">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <span>project_04_SaaS.ts</span>
+                        </div>
+                        <img src="https://placehold.co/400x200/a0a0a0/000000?text=Project+4%0A(SaaS+MVP)"
+                            alt="Project 4 SaaS MVP" class="window-card-image"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x200/a0a0a0/000000?text=Project+4'">
+                        <div class="window-card-content">
+                            <h4>SaaS Starter Kit (MVP)</h4>
+                            <p>Built a minimum viable product for a subscription service using Angular, Firebase, and a
+                                Stripe payment integration.</p>
+                            <a href="#" class="view-button">View project</a>
+                        </div>
+                    </div>
+
+                    <div class="window-card">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <span>project_05_CLI.sh</span>
+                        </div>
+                        <img src="https://placehold.co/400x200/909090/000000?text=Project+5%0A(CLI+Tool)"
+                            alt="Project 5 CLI Tool" class="window-card-image"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x200/909090/000000?text=Project+5'">
+                        <div class="window-card-content">
+                            <h4>Automated Deployment CLI</h4>
+                            <p>Command Line Interface tool for automating build and deployment processes across multiple
+                                cloud providers.</p>
+                            <a href="#" class="view-button">View project</a>
+                        </div>
+                    </div>
+
+                    <div class="window-card">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <span>project_06_Vis.json</span>
+                        </div>
+                        <img src="https://placehold.co/400x200/808080/000000?text=Project+6%0A(Data+Viz)"
+                            alt="Project 6 Data Viz" class="window-card-image"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x200/808080/000000?text=Project+6'">
+                        <div class="window-card-content">
+                            <h4>Interactive Data Visualization</h4>
+                            <p>Developed a complex D3.js visualization to display real-time sensor data with filtering
+                                capabilities.</p>
+                            <a href="#" class="view-button">View project</a>
+                        </div>
+                    </div>
+
+                    <div class="window-card">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <span>project_07_Ecomm.php</span>
+                        </div>
+                        <img src="https://placehold.co/400x200/707070/000000?text=Project+7%0A(E-commerce)"
+                            alt="Project 7 E-commerce" class="window-card-image"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x200/707070/000000?text=Project+7'">
+                        <div class="window-card-content">
+                            <h4>Headless E-commerce Frontend</h4>
+                            <p>A fast, mobile-first e-commerce frontend integrated with a third-party headless commerce
+                                API.</p>
+                            <a href="#" class="view-button">View project</a>
+                        </div>
+                    </div>
+
+                    <div class="window-card">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                            </div>
+                            <span>project_08_PWA.jsx</span>
+                        </div>
+                        <img src="https://placehold.co/400x200/606060/000000?text=Project+8%0A(PWA)" alt="Project 8 PWA"
+                            class="window-card-image"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x200/606060/000000?text=Project+8'">
+                        <div class="window-card-content">
+                            <h4>Offline-Enabled PWA</h4>
+                            <p>A Progressive Web App for note-taking, featuring offline capability using Service Workers
+                                and IndexedDB storage.</p>
+                            <a href="#" class="view-button">View project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-nav">
+                <button id="prev-button" disabled>Previous</button>
+                <button id="next-button">Next</button>
+            </div>
+        </div>
+
+        <div class="flex-row about-contact-section" id="about">
+            <div class="about-contact-content">
+                <h2 class="section-title" style="padding: 0;">About Me</h2>
+                <p>Hello! I'm Mac (short for Mackenzie, if you were wondering). I thrive on the intersection of vintage
+                    aesthetics and modern development practices. My philosophy is simple: **user experience is
+                    paramount**, and clean code is the foundation for maintainable, scalable products.</p>
+                <p>I started my journey building simple static sites before diving into frameworks like React and
+                    Angular, specializing in creating robust frontends backed by efficient serverless or microservice
+                    architectures.</p>
+                <p>When I'm not coding, you can find me collecting vintage computer hardware or exploring national
+                    parks. I'm always looking for interesting new challenges and collaborations!</p>
+            </div>
+
+            <div class="window-card contact-card" id="contact">
+                <div class="window-header">
+                    <div class="dots">
+                        <span class="dot" style="background-color: #ff5f56;"></span>
+                        <span class="dot" style="background-color: #ffbd2e;"></span>
+                        <span class="dot" style="background-color: #27c93f;"></span>
+                    </div>
+                    <span>Contact.txt</span>
+                </div>
+                <div class="window-card-content">
+                    <h4>Get In Touch</h4>
+                    <ul class="contact-list">
+                        <li>
+                            <a href="mailto:mac@example.com">mac@example.com</a>
+                        </li>
+                        <li>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                        <li>
+                            <a href="#">/mac-dev</a>
+                        </li>
+                        <li>
+                            <a href="#">github.com/macdev</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made with love &lt;/&gt; in 2025.</p>
+        </footer>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollContainer = document.getElementById('projects-scroll-container');
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+            const scrollStep = 300;
+
+            const updateButtonStates = () => {
+                const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+                const currentScroll = scrollContainer.scrollLeft;
+
+                prevButton.disabled = currentScroll <= 5;
+
+                nextButton.disabled = currentScroll >= maxScroll - 5;
+            };
+
+            const scrollNext = () => {
+                scrollContainer.scrollLeft += scrollStep;
+            };
+
+            const scrollPrev = () => {
+                scrollContainer.scrollLeft -= scrollStep;
+            };
+
+            nextButton.addEventListener('click', scrollNext);
+            prevButton.addEventListener('click', scrollPrev);
+
+            scrollContainer.addEventListener('scroll', updateButtonStates);
+
+            updateButtonStates();
+
+            window.addEventListener('resize', updateButtonStates);
+        });
+    </script>
+</body>
+
+</html>
