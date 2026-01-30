@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://jtkb8d78gww8"]
+
+[resource]
+resource_name = "COMMON_BUMPERS_AO_BUMPER_BLACK_PLASTIC"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.213789, 0.213767, 0.231585, 1)
+metallic = 1.0
+roughness = 0.136364

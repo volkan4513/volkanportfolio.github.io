@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Model Viewer</title>
+  <!-- Use ES Modules for Three.js -->
+  <script type="module">
+    import * as THREE from 'https://cdn.skypack.dev/three@0.128.0';
+    import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/controls/OrbitControls.js';
+    import { RGBELoader } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/loaders/RGBELoader.js';
+
+    // Scene Setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; // Improve HDR rendering
+    renderer.toneMappingExposure = 1; // Adjust exposure
+    document.body.appendChild(renderer.domElement);
+
+    // OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; // Enable damping (inertia)
+    controls.dampingFactor = 0.05; // Set damping factor
+    controls.minDistance = 5; // Set minimum zoom distance
+    controls.maxDistance = 20; // Set maximum zoom distance
+    controls.minPolarAngle = Math.PI / 4; // Lock the lower part (45 degrees up)
+    controls.maxPolarAngle = Math.PI / 2; // Lock the upper part (90 degrees straight view)
+
+    // Add HDRI as environment map
+    const rgbeLoader = new RGBELoader();
+    rgbeLoader.load('models/goegap_road_2k.hdr', (texture) => {
+      texture.mapping = THREE.EquirectangularReflectionMapping; // Use for environment reflection
+      scene.environment = texture; // Set as the environment map
+      scene.background = texture; // Set as the background (optional)
+    });
+
+    // Add a simple light
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight.position.set(5, 5, 5).normalize();
+    scene.add(directionalLight);
+
+    // Load a 3D Model using GLTFLoader
+    const loader = new GLTFLoader();
+    loader.load('models/free_1975_porsche_911_930_turbo.glb', function (gltf) {
+      scene.add(gltf.scene);
+      gltf.scene.scale.set(1.5, 1.5, 1.5); // Scale the model if necessary
+    }, undefined, function (error) {
+      console.error(error);
+    });
+
+    // Camera positioning
+    camera.position.set(5, 5, 5); // Position the camera for a better initial view
+    controls.update(); // Ensure the controls are updated with the new camera position
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Optional: Rotate model (if one is loaded)
+      if (scene.children.length > 0) {
+        const model = scene.children[scene.children.length - 1];
+        model.rotation.y += 0.0005; // Rotate the model slowly
+      }
+
+      controls.update(); // Update controls for damping
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle window resizing
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+  </script>
+</head>
+<body style="margin: 0; overflow: hidden;"> 
+
+</body>
+</html>

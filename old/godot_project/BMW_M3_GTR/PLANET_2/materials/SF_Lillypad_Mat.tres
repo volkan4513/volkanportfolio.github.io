@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://cxtwc5b51x6j0"]
+
+[ext_resource type="Texture2D" uid="uid://bxph7olea4vm0" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_74.png" id="1_nstpi"]
+[ext_resource type="Texture2D" uid="uid://brlhcqshvqqbv" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_75.png" id="2_rbfrg"]
+
+[resource]
+resource_name = "SF_Lillypad_Mat"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_nstpi")
+roughness = 0.821115
+normal_enabled = true
+normal_texture = ExtResource("2_rbfrg")

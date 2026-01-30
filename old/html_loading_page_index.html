@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Loading…</title>
+<style>
+:root{
+  --bg:#111; --screen:#1c1c1c; --accent:#f0f0f0; --bar-dark:#333; --bar-light:#777;
+  font-family:'Segoe UI',sans-serif;
+}
+*,html,body{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--bg);overflow:hidden}
+.overlay{position:fixed;inset:0;display:grid;place-items:center;transition:background 1s;z-index:9999}
+.overlay.bg-fade{background:rgba(17,17,17,0.3)}
+.loader-wrap{position:relative;width:min(400px,90vw);padding:20px;border:2px solid var(--bar-dark);background:var(--screen);display:grid;gap:12px;text-align:center;box-shadow:4px 4px 0 var(--bar-dark);transition:opacity .8s}
+.loader-wrap.fade{opacity:0}
+.brand h1{margin:0;font-size:20px;color:var(--accent);letter-spacing:1px}
+.brand p{margin:0;font-size:12px;color:var(--bar-light)}
+.progress{height:16px;border:2px solid var(--bar-dark);background:var(--bar-light);overflow:hidden;position:relative}
+.bar{height:100%;width:0;background:repeating-linear-gradient(90deg,var(--bar-dark) 0 8px,var(--bar-light) 8px 16px);transition:width .12s steps(4,end)}
+.percent{font-weight:bold;font-size:14px;color:var(--accent)}
+.hint{font-size:12px;color:var(--bar-light)}
+.loader-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.03) 50%,transparent 50%);background-size:100% 2px;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay">
+  <div class="loader-wrap" id="loaderWrap">
+    <div class="brand"><h1>Loading…</h1><p>Patience is a virtue</p></div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="percent" id="percent">0%</div>
+    <div class="hint">Preparing visuals</div>
+  </div>
+</div>
+<iframe id="preload" src="full_screen_4_section_scroll_snap_page_single_file.html" style="display:none"></iframe>
+<script>
+(() => {
+  const bar=document.getElementById('bar'),
+        percent=document.getElementById('percent'),
+        loader=document.getElementById('loaderWrap'),
+        overlay=document.getElementById('overlay');
+  let value=0;
+  
+  const step=()=>{
+    value=Math.min(95,value+Math.random()*15+5);
+    bar.style.width=value+'%';
+    percent.textContent=Math.round(value)+'%';
+    if(value>=95){
+      overlay.classList.add('bg-fade');
+      setTimeout(()=>{
+        bar.style.width='100%';
+        loader.classList.add('fade');
+        overlay.addEventListener('transitionend',()=>window.location.href="full_screen_4_section_scroll_snap_page_single_file.html",{once:true});
+      },500);
+    } else setTimeout(step,150+Math.random()*200);
+  }
+  setTimeout(step,100);
+})();
+</script>
+</body>
+</html>

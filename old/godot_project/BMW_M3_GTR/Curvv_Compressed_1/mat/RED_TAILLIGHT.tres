@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://6fb16ugbu1e2"]
+
+[resource]
+resource_name = "RED_TAILLIGHT"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.906422, 0.0589261, 0, 1)
+roughness = 0.5

@@ -1,0 +1,167 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://bh4w5gmx0fppx"
+path="res://.godot/imported/stylized_3d_floating_island_and_mine_house.glb-f83691098f9aa57752a5a8b982b14199.scn"
+
+[deps]
+
+source_file="res://PLANET_2/stylized_3d_floating_island_and_mine_house.glb"
+dest_files=["res://.godot/imported/stylized_3d_floating_island_and_mine_house.glb-f83691098f9aa57752a5a8b982b14199.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+_subresources={
+"materials": {
+"Black": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/Black.tres"
+},
+"Final_Rocks2_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/Final_Rocks2_Mat.tres"
+},
+"Final_Water.001": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/Final_Water.001.tres"
+},
+"SF_Bridge_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Bridge_Mat.tres"
+},
+"SF_Bridge_Mat.001": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Bridge_Mat.001.tres"
+},
+"SF_Bush_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Bush_Mat.tres"
+},
+"SF_ButterFly_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_ButterFly_Mat.tres"
+},
+"SF_Candle_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Candle_Mat.tres"
+},
+"SF_Chimney_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Chimney_Mat.tres"
+},
+"SF_CutRock_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_CutRock_Mat.tres"
+},
+"SF_Door_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Door_Mat.tres"
+},
+"SF_GrassCards_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_GrassCards_Mat.tres"
+},
+"SF_Grass_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Grass_Mat.tres"
+},
+"SF_HouseJoins_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_HouseJoins_Mat.tres"
+},
+"SF_HouseSupport_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_HouseSupport_Mat.tres"
+},
+"SF_Island_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Island_Mat.tres"
+},
+"SF_LampGlass_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_LampGlass_Mat.tres"
+},
+"SF_Lamp_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Lamp_Mat.tres"
+},
+"SF_Lillypad_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Lillypad_Mat.tres"
+},
+"SF_MineCart_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_MineCart_Mat.tres"
+},
+"SF_PlasterTex_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_PlasterTex_Mat.tres"
+},
+"SF_Rail_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Rail_Mat.tres"
+},
+"SF_Rocks_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Rocks_Mat.tres"
+},
+"SF_Roof_Final": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Roof_Final.tres"
+},
+"SF_Sack_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Sack_Mat.tres"
+},
+"SF_Stalagmites_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Stalagmites_Mat.tres"
+},
+"SF_StoneBrick_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_StoneBrick_Mat.tres"
+},
+"SF_TreeLeaf_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_TreeLeaf_Mat.tres"
+},
+"SF_TreeWood_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_TreeWood_Mat.tres"
+},
+"SF_Water_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Water_Mat.tres"
+},
+"SF_Windows_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_Windows_Mat.tres"
+},
+"SF_WoodTex_Mat": {
+"use_external/enabled": true,
+"use_external/path": "res://PLANET_2/materials/SF_WoodTex_Mat.tres"
+}
+}
+}
+gltf/naming_version=1
+gltf/embedded_image_handling=1

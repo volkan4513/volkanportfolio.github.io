@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://c24ob7wmyfa7j"]
+
+[ext_resource type="Texture2D" uid="uid://bycun4qv48h8u" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_69.png" id="1_m173g"]
+
+[resource]
+resource_name = "Final_Water.001"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_m173g")
+roughness = 0.788526

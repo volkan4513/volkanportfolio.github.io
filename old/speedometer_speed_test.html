@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Speedometer Speed Test</title>
+<style>
+  :root {
+    --accent:#00d4ff;
+    --muted:#9aa6b2;
+    --bg-dark:#071025;
+    --bg-light:#071834;
+  }
+  html, body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+    font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+    color: #e6eef6;
+    overflow: hidden;
+  }
+  .scaler {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  /* === UPDATED: 2x2 Grid Layout === */
+  .wrap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 1200px;
+    height: 700px;
+    display: grid;
+    /* Changed to 2 columns and 2 rows */
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 24px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+    border-radius: 14px;
+    box-shadow: 0 6px 30px rgba(2,6,23,0.6);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  #gauge-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #stats-card {
+    justify-content: center;
+    text-align: center;
+    gap: 24px;
+  }
+  #controls-card {
+    justify-content: center;
+  }
+  
+  /* === REMOVED: #log-card rule === */
+  /* The log card no longer needs to span columns */
+
+  #gauge {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    /* Max-width is now more important to prevent gauge from filling cell */
+    max-width: 320px; 
+    margin: auto;
+  }
+  .big { font-size: 34px; font-weight: 700; }
+  .small { font-size: 13px; color: var(--muted); }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .stat {
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 8px;
+  }
+  .label { font-size: 12px; color: var(--muted); }
+  .value { font-size: 20px; font-weight: 700; }
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  input[type=text] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent;
+    color: inherit;
+    box-sizing: border-box;
+  }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  button {
+    border: 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #002;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, opacity 0.2s;
+  }
+  button:disabled {
+    background: var(--muted);
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  button.secondary {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+  }
+  button.secondary:disabled {
+    background: transparent;
+    color: var(--muted);
+  }
+  .log {
+    font-family: monospace;
+    background: rgba(0,0,0,0.25);
+    padding: 10px;
+    border-radius: 8px;
+    color: #dff;
+    overflow-y: auto;
+    flex-grow: 1;
+    min-height: 50px;
+  }
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    padding-top: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="scaler">
+  <div class="wrap" id="layoutWrap">
+    
+    <div class="card" id="gauge-card">
+      <canvas id="gauge" width="720" height="720"></canvas>
+    </div>
+
+    <div class="card" id="stats-card">
+      <div>
+        <div class="big" id="speedText">0.00 Mbps</div>
+        <div class="small" id="status">Idle</div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="label">Ping</div><div class="value" id="pingVal">— ms</div></div>
+        <div class="stat"><div class="label">Jitter</div><div class="value" id="jitterVal">— ms</div></div>
+        <div class="stat"><div class="label">Avg Download</div><div class="value" id="avgVal">— Mbps</div></div>
+        <div class="stat"><div class="label">Peak</div><div class="value" id="peakVal">— Mbps</div></div>
+      </div>
+    </div>
+
+    <div class="card" id="controls-card">
+      <div>
+        <div class="controls">
+          <label class="small">Test file URL (must support CORS). Leave empty to simulate.</label>
+          <input id="testUrl" type="text" placeholder="https://cachefly.cachefly.net/100mb.test" />
+          <div class="btn-row">
+            <button id="startBtn">Start Test</button>
+            <button class="secondary" id="pingBtn">Measure Ping</button>
+            <button class="secondary" id="simBtn">Run Simulated</button>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <div>Instructions:</div>
+          <ul style="margin:8px 0 0 16px;color:var(--muted)">
+            <li>Use a large CORS-enabled file (5–100+ MB) for accurate testing.</li>
+            <li>Leave the field empty to run a simulation.</li>
+            <li>Ping measures round-trip time to the host.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="log-card">
+      <div class="log" id="log">Ready. Waiting for test...</div>
+      <footer>Speedometer Test — Client-side demo • Approximate results only.</footer>
+    </div>
+    
+  </div>
+</div>
+
+<script>
+// All JavaScript remains unchanged as it was already optimized
+// and independent of the CSS grid layout.
+window.addEventListener('DOMContentLoaded', () => {
+
+  // === OPTIMIZATION: Cache all DOM elements ===
+  const ui = {
+    layoutWrap: document.getElementById('layoutWrap'),
+    gauge: document.getElementById('gauge'),
+    speedText: document.getElementById('speedText'),
+    status: document.getElementById('status'),
+    pingVal: document.getElementById('pingVal'),
+    jitterVal: document.getElementById('jitterVal'),
+    avgVal: document.getElementById('avgVal'),
+    peakVal: document.getElementById('peakVal'),
+    log: document.getElementById('log'),
+    testUrl: document.getElementById('testUrl'),
+    startBtn: document.getElementById('startBtn'),
+    pingBtn: document.getElementById('pingBtn'),
+    simBtn: document.getElementById('simBtn'),
+  };
+
+  // === Canvas & Gauge Globals ===
+  const ctx = ui.gauge.getContext('2d');
+  const W = ui.gauge.width, H = ui.gauge.height;
+  const cx = W / 2, cy = H / 2, radius = Math.min(W, H) * 0.38;
+  let displayedSpeed = 0;
+  let animationFrameId = null;
+
+  /* ===== Dynamic Scaling ===== */
+  function fitToScreen() {
+    const baseWidth = 1200;
+    const baseHeight = 700;
+    const scaleX = window.innerWidth / baseWidth;
+    const scaleY = window.innerHeight / baseHeight;
+    const scale = Math.min(scaleX, scaleY);
+    const scaledW = baseWidth * scale;
+    const scaledH = baseHeight * scale;
+    const left = (window.innerWidth - scaledW) / 2;
+    const top = (window.innerHeight - scaledH) / 2;
+    ui.layoutWrap.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+    ui.layoutWrap.style.transformOrigin = "top left";
+  }
+
+  /* ===== Gauge Drawing ===== */
+  function drawGauge(speedMbps) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // base arc
+    ctx.beginPath();
+    ctx.lineWidth = radius * 0.18;
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.arc(0, 0, radius + 10, Math.PI * 0.75, Math.PI * 0.25, false);
+    ctx.stroke();
+
+    // colored arc
+    const grad = ctx.createLinearGradient(-radius, 0, radius, 0);
+    grad.addColorStop(0, '#ff4d4d');
+    grad.addColorStop(0.5, '#ffd24d');
+    grad.addColorStop(1, '#4affc6');
+    ctx.beginPath();
+    ctx.lineWidth = radius * 0.16;
+    ctx.strokeStyle = grad;
+    const maxMbps = 1000;
+    const clamped = Math.min(speedMbps, maxMbps);
+    const angleTo = Math.PI * 0.75 + (Math.PI * 1.5) * (clamped / maxMbps);
+    ctx.arc(0, 0, radius, Math.PI * 0.75, angleTo, false);
+    ctx.stroke();
+
+    // ticks
+    ctx.lineWidth = 2;
+    for (let i = 0; i <= 10; i++) {
+      const a = Math.PI * 0.75 + (Math.PI * 1.5) * (i / 10);
+      const inner = radius - 26;
+      const outer = radius + 12;
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner);
+      ctx.lineTo(Math.cos(a) * outer, Math.sin(a) * outer);
+      ctx.stroke();
+    }
+
+    // center disk
+    ctx.beginPath();
+    ctx.fillStyle = 'rgba(0,0,0,0.45)';
+    ctx.arc(0, 0, radius * 0.48, 0, Math.PI * 2);
+    ctx.fill();
+
+    // needle
+    const needleAngle = Math.PI * 0.75 + (Math.PI * 1.5) * (clamped / maxMbps);
+    ctx.save();
+    ctx.rotate(needleAngle);
+    ctx.beginPath();
+    ctx.fillStyle = '#00d4ff';
+    ctx.moveTo(-radius * 0.05, -3);
+    ctx.lineTo(radius * 0.9, 0);
+    ctx.lineTo(-radius * 0.05, 3);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // center cap
+    ctx.beginPath();
+    ctx.fillStyle = '#e6f7ff';
+    ctx.arc(0, 0, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function animateTo(target) {
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    const start = displayedSpeed;
+    const dur = 600;
+    const t0 = performance.now();
+    
+    (function frame(now) {
+      const p = Math.min(1, (now - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      displayedSpeed = start + (target - start) * eased;
+      drawGauge(displayedSpeed);
+      ui.speedText.textContent = displayedSpeed.toFixed(2) + ' Mbps';
+      if (p < 1) animationFrameId = requestAnimationFrame(frame);
+    })(t0);
+  }
+
+  /* ===== UI & Logging Helpers ===== */
+  function log(msg) {
+    const time = new Date().toLocaleTimeString();
+    ui.log.textContent = `[${time}] ${msg}\n` + ui.log.textContent;
+  }
+
+  function setUIBusy(isBusy) {
+    ui.startBtn.disabled = isBusy;
+    ui.pingBtn.disabled = isBusy;
+    ui.simBtn.disabled = isBusy;
+    ui.status.textContent = isBusy ? 'Testing...' : 'Idle';
+  }
+
+  function clearResults() {
+    ui.pingVal.textContent = '— ms';
+    ui.jitterVal.textContent = '— ms';
+    ui.avgVal.textContent = '— Mbps';
+    ui.peakVal.textContent = '— Mbps';
+    ui.status.textContent = 'Idle';
+    animateTo(0);
+  }
+
+  /* ===== Test Logic ===== */
+
+  async function runSimulated() {
+    setUIBusy(true);
+    clearResults();
+    log('Starting simulated test...');
+    ui.status.textContent = 'Simulating';
+    const points = [5, 10, 40, 100, 200, 350, 250, 150, 60, 15];
+    let peak = 0, samples = [];
+    
+    try {
+      for (let i = 0; i < points.length; i++) {
+        const s = points[i] + Math.random() * points[i] * 0.1;
+        samples.push(s);
+        if (s > peak) peak = s;
+        animateTo(s);
+        await new Promise(r => setTimeout(r, 400));
+      }
+      const avg = samples.reduce((a, b) => a + b, 0) / samples.length;
+      ui.avgVal.textContent = avg.toFixed(2) + ' Mbps';
+      ui.peakVal.textContent = peak.toFixed(2) + ' Mbps';
+      ui.status.textContent = 'Done (sim)';
+      log('Simulated test finished.');
+    } catch (e) {
+      log('Simulation error: ' + e.message);
+      ui.status.textContent = 'Error';
+    } finally {
+      setUIBusy(false);
+    }
+  }
+
+  async function runRealTest() {
+    const url = ui.testUrl.value;
+    if (!url) {
+      log('No URL provided. Running simulation instead.');
+      await runSimulated();
+      return;
+    }
+
+    setUIBusy(true);
+    clearResults();
+    log(`Starting real test with URL: ${url}`);
+    ui.status.textContent = 'Connecting...';
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+    let receivedLength = 0;
+    let peakSpeed = 0;
+    let t0 = performance.now();
+
+    try {
+      const response = await fetch(url, { signal, cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`Server responded with ${response.status}`);
+      }
+      if (!response.body) {
+        throw new Error('Response has no body');
+      }
+      
+      const reader = response.body.getReader();
+      t0 = performance.now();
+      ui.status.textContent = 'Downloading...';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        receivedLength += value.length;
+        const tNow = performance.now();
+        const durationSeconds = (tNow - t0) / 1000;
+        
+        if (durationSeconds > 0.2) {
+          const speedBps = (receivedLength / durationSeconds);
+          const speedMbps = (speedBps * 8) / 1000000;
+          
+          if (speedMbps > peakSpeed) peakSpeed = speedMbps;
+          animateTo(speedMbps);
+        }
+      }
+
+      const tEnd = performance.now();
+      const durationTotalSeconds = (tEnd - t0) / 1000;
+      const avgSpeedBps = receivedLength / durationTotalSeconds;
+      const avgSpeedMbps = (avgSpeedBps * 8) / 1000000;
+
+      ui.avgVal.textContent = avgSpeedMbps.toFixed(2) + ' Mbps';
+      ui.peakVal.textContent = peakSpeed.toFixed(2) + ' Mbps';
+      ui.status.textContent = 'Done (Real)';
+      log(`Test finished. Avg: ${avgSpeedMbps.toFixed(2)} Mbps, Peak: ${peakSpeed.toFixed(2)} Mbps`);
+      animateTo(avgSpeedMbps);
+
+    } catch (e) {
+      log('Download test error: ' + e.message);
+      if (e.name === 'TypeError') {
+        log('A common cause is a CORS error. Ensure the server allows this origin.');
+      }
+      ui.status.textContent = 'Error';
+      clearResults();
+    } finally {
+      setUIBusy(false);
+    }
+  }
+
+  async function measurePing() {
+    const url = ui.testUrl.value;
+    if (!url) {
+      log('Please enter a test URL to measure ping.');
+      return;
+    }
+
+    let pingUrl;
+    try {
+      const urlObj = new URL(url);
+      pingUrl = urlObj.origin;
+    } catch (e) {
+      log('Invalid URL. Cannot measure ping.');
+      return;
+    }
+
+    setUIBusy(true);
+    clearResults();
+    log(`Measuring ping/jitter against ${pingUrl}...`);
+    ui.status.textContent = 'Pinging...';
+
+    const pings = [];
+    const iterations = 5;
+    
+    try {
+      for (let i = 0; i < iterations; i++) {
+        const t0 = performance.now();
+        await fetch(pingUrl, { method: 'HEAD', cache: 'no-store', mode: 'cors' });
+        const t1 = performance.now();
+        const latency = t1 - t0;
+        pings.push(latency);
+        ui.pingVal.textContent = latency.toFixed(0) + ' ms';
+        await new Promise(r => setTimeout(r, 300));
+      }
+
+      const avgPing = pings.reduce((a, b) => a + b, 0) / pings.length;
+      
+      let jitterSum = 0;
+      for (let i = 0; i < pings.length - 1; i++) {
+        jitterSum += Math.abs(pings[i] - pings[i + 1]);
+      }
+      const avgJitter = jitterSum / (pings.length - 1 || 1);
+
+      ui.pingVal.textContent = avgPing.toFixed(0) + ' ms';
+      ui.jitterVal.textContent = avgJitter.toFixed(2) + ' ms';
+      log(`Ping: ${avgPing.toFixed(0)} ms, Jitter: ${avgJitter.toFixed(2)} ms`);
+      ui.status.textContent = 'Done (Ping)';
+
+    } catch (e) {
+      log('Ping test error: ' + e.message);
+      log('Server might not support HEAD requests or CORS.');
+      ui.status.textContent = 'Error';
+      clearResults();
+    } finally {
+      setUIBusy(false);
+    }
+  }
+
+  /* ===== Initial Setup ===== */
+  ui.startBtn.addEventListener('click', runRealTest);
+  ui.pingBtn.addEventListener('click', measurePing);
+  ui.simBtn.addEventListener('click', runSimulated);
+
+  window.addEventListener('resize', fitToScreen);
+  fitToScreen();
+  drawGauge(0);
+  log('System ready.');
+
+});
+</script>
+</body>
+</html>

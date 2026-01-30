@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bylf1lw1p4no6"]
+
+[ext_resource type="Texture2D" uid="uid://bvt7l1qa5yao7" path="res://DOME/TATA_CURVV_ENV_DAY_DOME_MESH_TATA_CURVV_ENV_DAY_DOME.jpg" id="1_8bi60"]
+
+[resource]
+resource_name = "TATA_CURVV_ENV_DAY_DOME_MAT"
+cull_mode = 2
+shading_mode = 0
+albedo_texture = ExtResource("1_8bi60")

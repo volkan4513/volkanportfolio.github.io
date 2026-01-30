@@ -1,0 +1,16 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://bx0r0535085r5"]
+
+[ext_resource type="Texture2D" uid="uid://dy0kgdcnan8m8" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_70.png" id="1_66ak3"]
+[ext_resource type="Texture2D" uid="uid://b8xbxfgyixl0b" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_7.png" id="2_v7b0q"]
+[ext_resource type="Texture2D" uid="uid://bctcrv2myy7fh" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_71.png" id="3_75fg1"]
+
+[resource]
+resource_name = "Final_Rocks2_Mat"
+cull_mode = 2
+albedo_texture = ExtResource("1_66ak3")
+metallic_texture = ExtResource("2_v7b0q")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_v7b0q")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3_75fg1")

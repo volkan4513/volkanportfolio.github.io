@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bg8qcuo3stgcy"]
+
+[resource]
+resource_name = "CURVV_EX_HINGES_BLACK_METAL_MAT"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.215903, 0.215903, 0.215903, 1)
+metallic = 0.5
+roughness = 0.748767

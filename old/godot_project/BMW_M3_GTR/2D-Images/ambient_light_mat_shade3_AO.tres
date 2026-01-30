@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://drwwrad20xc07"]
+
+[ext_resource type="Shader" path="res://SceneFIles/ambient_AO.gdshader" id="1_u5put"]
+[ext_resource type="Texture2D" uid="uid://cwk5hvewklh1g" path="res://2D-Images/TATA_AMBIENT_LIGHTING_AO2.png" id="2_7g15k"]
+
+[resource]
+render_priority = 1
+shader = ExtResource("1_u5put")
+shader_parameter/source_color_1 = Color(0.933333, 0.6, 0, 1)
+shader_parameter/emission_strength = 1.0
+shader_parameter/source_texture_1 = ExtResource("2_7g15k")

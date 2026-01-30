@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Music Player</title>
+<style>
+body { margin:0; background:transparent }
+.widget{position:fixed;z-index:10000;padding:6px 10px;background:rgba(0,0,0,.15);border:2px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.4);backdrop-filter:blur(6px);color:#fff;font-weight:bold;text-shadow:0 0 6px rgba(255,255,255,.6)}
+.icon-btn{width:40px;height:40px;border:none;border-radius:6px;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.6)}
+.icon-btn svg{width:22px;height:22px}
+.icon-btn:hover{background:rgba(255,255,255,.2)}
+</style>
+</head>
+<body>
+
+<div class="widget" id="musicWidget" 
+  style="bottom:20px;left:calc(50% - 170px);width:340px;text-align:center;font-size:.85rem;z-index:11000;display:flex;flex-direction:column;gap:8px;align-items:center">
+
+  <!-- Thumbnail -->
+  <img id="trackThumb" src="cover.jpg" alt="Cover" 
+       style="width:120px;height:120px;border-radius:12px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,.6)">
+
+  <!-- Title + Artist -->
+  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:0 8px">
+    <div style="text-align:left;overflow:hidden">
+      <div id="trackTitle" style="font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Song Title</div>
+      <div id="trackArtist" style="font-size:.75rem;opacity:.8">Artist</div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <input type="range" id="progress" min="0" max="100" value="0" style="width:100%;cursor:pointer">
+  <div style="display:flex;justify-content:space-between;width:100%;font-size:.7rem;opacity:.8">
+    <span id="currentTime">0:00</span>
+    <span id="duration">0:00</span>
+  </div>
+
+  <!-- Controls -->
+  <div style="display:flex;justify-content:center;gap:14px;align-items:center">
+    <button id="shuffleBtn" class="icon-btn" aria-label="Shuffle">
+      <svg viewBox="0 0 24 24"><path d="M4 4h2.5l6.5 7-6.5 7H4l6.5-7L4 4zm10.5 0H20v2h-5.5l-4 4.5 4 4.5H20v2h-5.5l-5.5-6 5.5-6z" fill="#fff"/></svg>
+    </button>
+    <button id="backBtn" class="icon-btn" aria-label="Back">
+      <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" fill="#fff"/></svg>
+    </button>
+    <button id="playBtn" class="icon-btn" style="width:50px;height:50px;border-radius:50%;background:#fff" aria-label="Play">
+      <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#000"/></svg>
+    </button>
+    <button id="nextBtn" class="icon-btn" aria-label="Next">
+      <svg viewBox="0 0 24 24"><path d="M6 6v12l8.5-6L6 6zm10 0v12h2V6h-2z" fill="#fff"/></svg>
+    </button>
+    <button id="loopBtn" class="icon-btn" aria-label="Loop">
+      <svg viewBox="0 0 24 24"><path d="M17 17h-5v-2h5V7h-2l3-3 3 3h-2v10h-2zM7 7h5v2H7v8h2l-3 3-3-3h2V7h2z" fill="#fff"/></svg>
+    </button>
+  </div>
+
+  <!-- Volume -->
+  <input type="range" id="volume" min="0" max="1" step="0.01" value="1" style="width:100%;cursor:pointer">
+
+  <audio id="player"></audio>
+</div>
+
+<script>
+const player=document.getElementById("player"),
+ playBtn=document.getElementById("playBtn"),
+ playIcon=document.getElementById("playIcon"),
+ progress=document.getElementById("progress"),
+ currentTimeEl=document.getElementById("currentTime"),
+ durationEl=document.getElementById("duration"),
+ volume=document.getElementById("volume"),
+ loopBtn=document.getElementById("loopBtn"),
+ shuffleBtn=document.getElementById("shuffleBtn"),
+ backBtn=document.getElementById("backBtn"),
+ nextBtn=document.getElementById("nextBtn"),
+ trackTitle=document.getElementById("trackTitle"),
+ trackArtist=document.getElementById("trackArtist"),
+ trackThumb=document.getElementById("trackThumb");
+
+let isLoop=false,isShuffle=false,playlist=[
+ {src:"music/kaleidoscope.mp3",title:"Kaleidoscope",artist:"Artist 1",cover:"cover1.jpg"},
+ {src:"music/twinleaf_town.mp3",title:"Twinleaf Town",artist:"Artist 2",cover:"cover2.jpg"},
+ {src:"music/sunstroke_project.mp3",title:"Sunstroke",artist:"Artist 3",cover:"cover3.jpg"}
+];
+let currentIndex=0;
+
+function loadTrack(i){
+ let track=playlist[i];
+ player.src=track.src;
+ trackTitle.textContent=track.title;
+ trackArtist.textContent=track.artist;
+ trackThumb.src=track.cover;
+ player.load();
+}
+loadTrack(currentIndex);
+
+function formatTime(sec){if(isNaN(sec))return"0:00";let m=Math.floor(sec/60),s=Math.floor(sec%60).toString().padStart(2,"0");return `${m}:${s}`}
+
+player.addEventListener("timeupdate",()=>{if(player.duration){progress.value=(player.currentTime/player.duration)*100;currentTimeEl.textContent=formatTime(player.currentTime)}})
+player.addEventListener("loadedmetadata",()=>{durationEl.textContent=formatTime(player.duration)})
+
+playBtn.onclick=()=>{if(player.paused){player.play();playIcon.innerHTML=`<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="#000"/>`}else{player.pause();playIcon.innerHTML=`<path d="M8 5v14l11-7z" fill="#000"/>`}}
+
+progress.oninput=()=>player.currentTime=(progress.value/100)*player.duration;
+volume.oninput=()=>player.volume=volume.value;
+
+loopBtn.onclick=()=>{isLoop=!isLoop;player.loop=isLoop;loopBtn.style.opacity=isLoop?1:0.5}
+shuffleBtn.onclick=()=>{isShuffle=!isShuffle;shuffleBtn.style.opacity=isShuffle?1:0.5}
+
+backBtn.onclick=()=>{currentIndex=(currentIndex-1+playlist.length)%playlist.length;loadTrack(currentIndex);player.play()}
+nextBtn.onclick=()=>{currentIndex=isShuffle?Math.floor(Math.random()*playlist.length):(currentIndex+1)%playlist.length;loadTrack(currentIndex);player.play()}
+player.onended=()=>nextBtn.onclick()
+</script>
+</body>
+</html>

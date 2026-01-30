@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bt0ryhlwgphmr"]
+
+[ext_resource type="Texture2D" uid="uid://b5lab8rocljeu" path="res://Curvv_Compressed_1/TATA_CURV_TOP_VARIANT_21_NEW_atlas_tex1.png" id="1_gy04t"]
+
+[resource]
+resource_name = "atlas_tex1"
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_gy04t")
+metallic_specular = 0.0

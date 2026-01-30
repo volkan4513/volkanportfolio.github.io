@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c5j4yc34fdcws"]
+
+[resource]
+resource_name = "CURVV_RADIATOR"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.073679, 0.073679, 0.073679, 1)
+metallic = 0.477273

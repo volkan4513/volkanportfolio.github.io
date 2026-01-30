@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://rjrxkydslbwd"]
+
+[ext_resource type="Shader" path="res://stars_night_sky.gdshader" id="1_tkeqo"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_tkeqo")
+shader_parameter/inner_color = Color(0.1, 0.4, 0.9, 1)
+shader_parameter/outer_color = Color(0.01, 0.02, 0.08, 1)
+shader_parameter/color_blend = 0.85
+shader_parameter/noise_scale = 6.0
+shader_parameter/noise_strength = 0.5
+shader_parameter/star_density = 300
+shader_parameter/star_size = 0.002
+shader_parameter/flicker_speed = 2.0

@@ -1,0 +1,90 @@
+[gd_scene load_steps=16 format=3 uid="uid://x1og3w1c1q74"]
+
+[ext_resource type="Script" path="res://Scripts/camera_3d4.gd" id="1_fifdy"]
+[ext_resource type="Script" path="res://SOLAR_SYSTEM_01/cosmos_controller/orbit_02.gd" id="2_u5khb"]
+[ext_resource type="Material" uid="uid://8euqqtllq8u2" path="res://SOLAR_SYSTEM_01/cosmos_mat/orbit.tres" id="3_cnms1"]
+[ext_resource type="Material" uid="uid://cas3xgyubwkd0" path="res://SOLAR_SYSTEM_01/cosmos_mat/1.tres" id="4_p78km"]
+[ext_resource type="Material" uid="uid://gmc21t5xai5d" path="res://SOLAR_SYSTEM_01/cosmos_mat/2.tres" id="5_q7yc4"]
+[ext_resource type="Script" path="res://Scripts/HOTSPOT_02.gd" id="6_jdq2p"]
+
+[sub_resource type="Sky" id="Sky_caxb1"]
+
+[sub_resource type="Environment" id="Environment_1hae0"]
+background_mode = 2
+background_energy_multiplier = 5.21
+sky = SubResource("Sky_caxb1")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nvr2w"]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 1.41
+
+[sub_resource type="BoxMesh" id="BoxMesh_ug8ha"]
+material = SubResource("StandardMaterial3D_nvr2w")
+
+[sub_resource type="TorusMesh" id="TorusMesh_fk1ss"]
+material = ExtResource("3_cnms1")
+inner_radius = 0.995
+
+[sub_resource type="SphereMesh" id="SphereMesh_sbni6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x7hbk"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_xwpy6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xpws4"]
+
+[node name="cosmos" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1hae0")
+
+[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("orbit_target")]
+transform = Transform3D(0.719319, -0.357313, 0.595741, 0, 0.857576, 0.514357, -0.69468, -0.369986, 0.616871, 12.0647, 10.4165, 12.4926)
+fov = 45.0
+script = ExtResource("1_fifdy")
+orbit_target = NodePath("../solar_system/orbit")
+distance = 10.0
+max_distance = 20.0
+
+[node name="solar_system" type="Node3D" parent="." node_paths=PackedStringArray("planet", "orbit", "planets")]
+script = ExtResource("2_u5khb")
+planet = NodePath("planet")
+orbit = NodePath("orbit")
+planets = [NodePath("a"), NodePath("b")]
+
+[node name="planet" type="MeshInstance3D" parent="solar_system"]
+transform = Transform3D(0.425, 0, 0, 0, 0.425, 0, 0, 0, 0.425, 0, 0, 0)
+mesh = SubResource("BoxMesh_ug8ha")
+skeleton = NodePath("../../WorldEnvironment")
+
+[node name="orbit" type="MeshInstance3D" parent="solar_system"]
+mesh = SubResource("TorusMesh_fk1ss")
+skeleton = NodePath("")
+
+[node name="a" type="MeshInstance3D" parent="solar_system" node_paths=PackedStringArray("target_object")]
+material_override = ExtResource("4_p78km")
+mesh = SubResource("SphereMesh_sbni6")
+script = ExtResource("6_jdq2p")
+target_object = NodePath(".")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="solar_system/a"]
+
+[node name="Area3D" type="Area3D" parent="solar_system/a/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="solar_system/a/MeshInstance3D/Area3D"]
+shape = SubResource("BoxShape3D_x7hbk")
+
+[node name="b" type="MeshInstance3D" parent="solar_system" node_paths=PackedStringArray("target_object")]
+transform = Transform3D(0.613864, 0, 0, 0, 0.613864, 0, 0, 0, 0.613864, 0, 0, 0)
+material_override = ExtResource("5_q7yc4")
+mesh = SubResource("SphereMesh_xwpy6")
+script = ExtResource("6_jdq2p")
+target_object = NodePath(".")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="solar_system/b"]
+
+[node name="Area3D" type="Area3D" parent="solar_system/b/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="solar_system/b/MeshInstance3D/Area3D"]
+shape = SubResource("BoxShape3D_xpws4")

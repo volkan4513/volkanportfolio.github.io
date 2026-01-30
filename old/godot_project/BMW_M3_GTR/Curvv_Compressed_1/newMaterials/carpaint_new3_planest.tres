@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bj4s4g4ap2ubj"]
+
+[ext_resource type="Shader" path="res://SceneFIles/carpaint_new.gdshader" id="1_pe7wl"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vxstn"]
+noise_type = 3
+frequency = 0.95
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5m3e4"]
+seamless = true
+noise = SubResource("FastNoiseLite_vxstn")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_pe7wl")
+shader_parameter/albedo_color = Color(1, 0, 0.133333, 1)
+shader_parameter/highlight_color = Color(0.996915, 0, 0.0196472, 1)
+shader_parameter/highlight_range = 0.2
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/clearcoat = 1.0
+shader_parameter/clearcoat_roughness = 0.0
+shader_parameter/flake_intensity = 1.0
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_5m3e4")

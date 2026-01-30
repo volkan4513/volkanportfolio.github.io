@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cu10i4q0jxym7"]
+
+[resource]
+resource_name = "CURVV_EX_ORVM_LIGHT_MAT"
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.528359, 0.528359, 0.528359, 0.2)
+metallic = 1.0
+roughness = 0.0

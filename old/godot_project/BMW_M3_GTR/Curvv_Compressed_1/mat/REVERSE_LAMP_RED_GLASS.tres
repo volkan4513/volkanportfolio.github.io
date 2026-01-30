@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://3kfd2w1otu83"]
+
+[resource]
+resource_name = "REVERSE_LAMP_RED_GLASS"
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.649742, 0.0588575, 0.0873305, 0.681263)
+metallic = 1.0
+roughness = 0.359091

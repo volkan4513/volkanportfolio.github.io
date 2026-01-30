@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Page QR & Barcode Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        background: #f5f5f5;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    h2 {
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+
+    input {
+        padding: 1em;
+        width: 90%;
+        max-width: 500px;
+        font-size: 1em;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+    }
+
+    button {
+        padding: 1em 2em;
+        font-size: 1em;
+        cursor: pointer;
+        margin: 10px;
+        text-transform: uppercase;
+    }
+
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #codeContainer {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 90vw;
+        max-height: 90vh;
+        overflow: hidden;
+        flex-direction: column;
+    }
+
+    canvas, svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .checkbox-group {
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        font-size: 0.9em;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Full Page QR & Barcode Generator</h2>
+    <input type="text" id="linkInput" placeholder="Enter any URL or text" />
+    <div class="button-group">
+        <button onclick="generateQRCode()">Generate QR Code</button>
+        <button onclick="generateBarcode()">Generate Barcode</button>
+        <button id="downloadBtn" onclick="downloadCode()" style="display:none;">Download</button>
+    </div>
+    <div class="checkbox-group">
+        <input type="checkbox" id="showText" checked />
+        <label for="showText">Show text below barcode</label>
+    </div>
+    <div id="codeContainer"></div>
+</div>
+
+<!-- QRCode.js Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- JsBarcode Library -->
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+<script>
+let currentCode = null;
+let currentType = null;
+
+function generateQRCode() {
+    const link = document.getElementById('linkInput').value.trim();
+    const container = document.getElementById('codeContainer');
+
+    container.innerHTML = "";
+    document.getElementById("downloadBtn").style.display = "none";
+
+    if (!link) {
+        alert("Please enter a URL or text");
+        return;
+    }
+
+    let size = Math.min(window.innerWidth * 0.8, window.innerHeight * 0.6);
+
+    currentCode = new QRCode(container, {
+        text: link,
+        width: size,
+        height: size,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    currentType = 'qr';
+
+    setTimeout(() => {
+        document.getElementById("downloadBtn").style.display = "inline-block";
+    }, 100);
+}
+
+function generateBarcode() {
+    const link = document.getElementById('linkInput').value.trim();
+    const container = document.getElementById('codeContainer');
+    const showText = document.getElementById('showText').checked;
+
+    container.innerHTML = "";
+    document.getElementById("downloadBtn").style.display = "none";
+
+    if (!link) {
+        alert("Please enter text for barcode");
+        return;
+    }
+
+    // Create an SVG element for JsBarcode
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    container.appendChild(svg);
+
+    let width = Math.min(window.innerWidth * 0.8, 600);
+    let height = 100;
+
+    JsBarcode(svg, link, {
+        format: "CODE128",
+        lineColor: "#000",
+        width: 2,
+        height: height,
+        displayValue: showText,  // Only show text if checkbox is checked
+        margin: 10
+    });
+
+    currentCode = svg;
+    currentType = 'barcode';
+
+    document.getElementById("downloadBtn").style.display = "inline-block";
+}
+
+function downloadCode() {
+    if (!currentCode) return;
+
+    if (currentType === 'qr') {
+        const canvas = document.getElementById('codeContainer').querySelector("canvas");
+        if (!canvas) return;
+
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "qrcode.png";
+        link.click();
+    } else if (currentType === 'barcode') {
+        const svg = currentCode;
+        const serializer = new XMLSerializer();
+        const svgStr = serializer.serializeToString(svg);
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const img = new Image();
+        img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            const link = document.createElement("a");
+            link.href = canvas.toDataURL("image/png");
+            link.download = "barcode.png";
+            link.click();
+        };
+        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgStr)));
+    }
+}
+
+window.addEventListener("resize", () => {
+    const inputValue = document.getElementById("linkInput").value.trim();
+    if (inputValue) {
+        if (currentType === 'qr') generateQRCode();
+        else if (currentType === 'barcode') generateBarcode();
+    }
+});
+</script>
+</body>
+</html>

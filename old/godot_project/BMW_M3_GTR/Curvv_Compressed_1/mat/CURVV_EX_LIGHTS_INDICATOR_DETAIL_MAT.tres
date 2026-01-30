@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://u76la8scj0at"]
+
+[resource]
+resource_name = "CURVV_EX_LIGHTS_INDICATOR_DETAIL_MAT"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.776198, 0.714514, 0.782493, 1)
+metallic = 1.0
+roughness = 0.112404

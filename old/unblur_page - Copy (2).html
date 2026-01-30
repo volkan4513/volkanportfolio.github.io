@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cursor + Flip Clock + Calendar + Date Widget</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100vh;overflow:auto;background:url("noisy3.png") center/cover no-repeat;cursor:none;font-family:"Segoe UI",Roboto,sans-serif}
+
+/* Cursor Rectangle */
+.neg-rect{position:fixed;pointer-events:none;width:70px;height:140px;transform:translate(-50%,-50%);border:2px solid #fff;box-shadow:0 6px 24px rgba(0,0,0,0.45);overflow:hidden;z-index:9999;will-change:transform}
+.neg-rect img{position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;pointer-events:none}
+
+/* Draggable Widget Base */
+.widget{position:fixed;cursor:grab;z-index:10000;padding:6px 10px;background:rgba(0,0,0,0.15);border:2px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.4);backdrop-filter:blur(6px);color:#fff;font-weight:bold;text-shadow:0 0 6px rgba(255,255,255,0.6);border-radius:5px}
+.widget.dragging{cursor:grabbing}
+
+/* Flip Clock */
+.clock{display:flex;gap:6px;font-size:1.2rem}
+.digit{position:relative;width:35px;height:50px;perspective:1000px;background:rgba(0,0,0,0.6);border-radius:5px;text-align:center;line-height:50px;overflow:hidden}
+.digit span{display:block;width:100%;height:100%}
+.digit .front,.digit .back{position:absolute;left:0;right:0;top:0;bottom:0;backface-visibility:hidden;transform-style:preserve-3d}
+.digit .front{transform:rotateX(0deg)}
+.digit .back{transform:rotateX(-180deg)}
+.digit.flip .front{animation:flipFront 0.5s forwards}
+.digit.flip .back{animation:flipBack 0.5s forwards}
+@keyframes flipFront{0%{transform:rotateX(0deg)}100%{transform:rotateX(180deg)}}
+@keyframes flipBack{0%{transform:rotateX(-180deg)}100%{transform:rotateX(0deg)}}
+
+/* Calendar */
+.calendar{font-size:1rem;line-height:1.5;display:flex;flex-direction:column;gap:4px}
+.calendar-header{text-align:center;font-weight:bold}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,30px);gap:2px;text-align:center}
+.calendar-grid div{background:rgba(0,0,0,0.6);border-radius:3px;padding:4px}
+.calendar-grid div.today{background:#00f;color:#fff;font-weight:bold}
+
+/* Date Widget */
+.date-widget{font-size:1rem;line-height:1.5;text-align:center;display:flex;flex-direction:column;gap:4px}
+
+/* Mobile fallback */
+@media (hover:none) and (pointer:coarse){body{cursor:default}}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="neg-rect" id="neg"><img id="overlayImg" src="clear3.png" alt=""></div>
+
+<!-- Flip Clock -->
+<div class="widget" id="clockContainer" style="top:70px;left:5px">
+  <div class="clock" id="clock">
+    <div class="digit" id="h1"><span class="front">0</span><span class="back">0</span></div>
+    <div class="digit" id="h2"><span class="front">0</span><span class="back">0</span></div>
+    <div>:</div>
+    <div class="digit" id="m1"><span class="front">0</span><span class="back">0</span></div>
+    <div class="digit" id="m2"><span class="front">0</span><span class="back">0</span></div>
+    <div>:</div>
+    <div class="digit" id="s1"><span class="front">0</span><span class="back">0</span></div>
+    <div class="digit" id="s2"><span class="front">0</span><span class="back">0</span></div>
+  </div>
+</div>
+
+<!-- Calendar Widget -->
+<div class="widget" id="calendarContainer" style="top:150px;left:5px">
+  <div class="calendar">
+    <div class="calendar-header" id="monthYear"></div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+</div>
+
+<!-- Date Widget -->
+<div class="widget" id="dateContainer" style="top:380px;left:5px">
+  <div class="date-widget" style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;color:#fff;font-family:'Segoe UI',sans-serif">
+    
+    <div style="display:flex;align-items:center;gap:12px">
+      <!-- Big Day -->
+      <div id="dayNumber" style="font-size:2.5rem;font-weight:bold;line-height:1">21</div>
+      <!-- Month and Weekday -->
+      <div style="display:flex;flex-direction:column;justify-content:center;line-height:1.2;font-size:0.9rem">
+        <div id="monthName">Aug</div>
+        <div id="weekday">Wed</div>
+      </div>
+    </div>
+    
+    <!-- Year Progress -->
+    <div style="font-size:0.8rem;line-height:1.2">
+      <span id="daysLeft">132 Days Left This Year</span> | <span id="fractionYear">234/366</span>
+    </div>
+  </div>
+</div>
+
+<!-- Device Type Widget -->
+<div class="widget" id="deviceWidget" style="top:70px;right:5px;width:80px;height:80px;display:flex;align-items:center;justify-content:center;">
+  <img id="deviceIcon" src="" alt="Device Icon" style="width:65px;height:65px;">
+</div>
+
+<script>
+function updateDateWidget(){
+  const now = new Date()
+  const start = new Date(now.getFullYear(),0,1)
+  const end = new Date(now.getFullYear(),11,31)
+  const dayNum = now.getDate()
+  const monthName = now.toLocaleString('default',{month:'short'})
+  const weekday = now.toLocaleString('default',{weekday:'short'})
+  
+  const diff = Math.floor((now-start)/(1000*60*60*24))+1
+  const totalDays = Math.floor((end-start)/(1000*60*60*24))+1
+  const daysLeft = totalDays - diff
+
+  document.getElementById("dayNumber").textContent = dayNum
+  document.getElementById("monthName").textContent = monthName
+  document.getElementById("weekday").textContent = weekday
+  document.getElementById("daysLeft").textContent = `${daysLeft} Days Left This Year`
+  document.getElementById("fractionYear").textContent = `${diff}/${totalDays}`
+}
+updateDateWidget()
+setInterval(updateDateWidget,60000)
+</script>
+
+
+<script>
+// Cursor
+const rect=document.getElementById('neg'),img=document.getElementById('overlayImg');let x=innerWidth/2,y=innerHeight/2,raf=null
+function updatePosition(){rect.style.left=x+'px';rect.style.top=y+'px';const r=rect.getBoundingClientRect();img.style.left=(-x+r.width/2)+'px';img.style.top=(-y+r.height/2)+'px';raf=null}
+function scheduleUpdate(){if(!raf)raf=requestAnimationFrame(updatePosition)}
+addEventListener('mousemove',e=>{x=e.clientX;y=e.clientY;scheduleUpdate()},{passive:true})
+addEventListener('touchmove',e=>{if(e.touches.length>0){x=e.touches[0].clientX;y=e.touches[0].clientY;scheduleUpdate()}},{passive:true})
+addEventListener('touchstart',e=>{if(e.touches.length>0){x=e.touches[0].clientX;y=e.touches[0].clientY;scheduleUpdate()}},{passive:true})
+
+// Flip Clock
+function flipTo(d,newVal){const f=d.querySelector(".front"),b=d.querySelector(".back");if(f.textContent===newVal)return;b.textContent=newVal;d.classList.add("flip");setTimeout(()=>{f.textContent=newVal;d.classList.remove("flip")},500)}
+function updateClock(){const t=new Date().toTimeString().split(" ")[0].replace(/:/g,""),ids=["h1","h2","m1","m2","s1","s2"];[...t].forEach((v,i)=>flipTo(document.getElementById(ids[i]),v))}
+setInterval(updateClock,1e3);updateClock()
+
+// Draggable
+function makeDraggable(el){let dragging=false,offsetX=0,offsetY=0
+function startDrag(e){dragging=true;const r=el.getBoundingClientRect();offsetX=(e.clientX||e.touches[0].clientX)-r.left;offsetY=(e.clientY||e.touches[0].clientY)-r.top;el.classList.add("dragging")}
+function moveDrag(e){if(!dragging)return;el.style.left=(e.clientX||e.touches[0].clientX)-offsetX+"px";el.style.top=(e.clientY||e.touches[0].clientY)-offsetY+"px"}
+function endDrag(){dragging=false;el.classList.remove("dragging")}
+el.addEventListener("mousedown",startDrag)
+el.addEventListener("touchstart",startDrag,{passive:true})
+window.addEventListener("mousemove",moveDrag)
+window.addEventListener("touchmove",moveDrag,{passive:true})
+window.addEventListener("mouseup",endDrag)
+window.addEventListener("touchend",endDrag)}
+makeDraggable(document.getElementById("clockContainer"))
+makeDraggable(document.getElementById("calendarContainer"))
+makeDraggable(document.getElementById("dateContainer"))
+
+// Calendar
+const monthYear=document.getElementById("monthYear"),calendarGrid=document.getElementById("calendarGrid")
+function updateCalendar(){
+  const now=new Date(),month=now.getMonth(),year=now.getFullYear(),days=new Date(year,month+1,0).getDate(),firstDay=new Date(year,month,1).getDay(),today=now.getDate()
+  monthYear.textContent=now.toLocaleString('default',{month:'long'})+' '+year
+  calendarGrid.innerHTML=''
+  for(let i=0;i<firstDay;i++) calendarGrid.innerHTML+='<div></div>'
+  for(let d=1;d<=days;d++) calendarGrid.innerHTML+=`<div class="${d===today?'today':''}">${d}</div>`
+}
+updateCalendar()
+
+// Date Widget
+const fullDate=document.getElementById("fullDate"),dayOfWeek=document.getElementById("dayOfWeek"),yearProgress=document.getElementById("yearProgress")
+function updateDateWidget(){
+  const now = new Date()
+  const start = new Date(now.getFullYear(),0,1)
+  const end = new Date(now.getFullYear(),11,31)
+  const dayNum = now.getDate()
+  const monthName = now.toLocaleString('default',{month:'short'})
+  const weekday = now.toLocaleString('default',{weekday:'short'})
+  
+  const diff = Math.floor((now-start)/(1000*60*60*24))+1
+  const totalDays = Math.floor((end-start)/(1000*60*60*24))+1
+  const daysLeft = totalDays - diff
+
+  document.getElementById("dayNumber").textContent = dayNum
+  document.getElementById("monthName").textContent = monthName
+  document.getElementById("weekday").textContent = weekday
+  document.getElementById("daysLeft").textContent = `${daysLeft} Days Left This Year`
+  document.getElementById("fractionYear").textContent = `${diff}/${totalDays}`
+}
+updateDateWidget()
+setInterval(updateDateWidget,60000)
+
+// Draggable Device Widget
+makeDraggable(document.getElementById("deviceWidget"));
+
+// Device detection
+function updateDeviceWidget() {
+  const widget = document.getElementById("deviceWidget");
+  const deviceIcon = document.getElementById("deviceIcon");
+
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    deviceIcon.src = "mobile_icon.png";
+  } else {
+    deviceIcon.src = "desktop_icon.png";
+  }
+}
+
+updateDeviceWidget();
+</script>
+</body>
+</html>

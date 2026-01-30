@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ch5xhpg4y2tls"]
+
+[resource]
+resource_name = "HEADLIGHT_PATTERNED_GLASS"
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.318174, 0.318174, 0.318174, 0.580189)
+metallic = 0.5
+roughness = 0.748767

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retro Canvas WebGL with Iframe</title>
+<style>
+html, body { margin: 0; overflow: hidden; height: 100%; background: #000; }
+#gui { position: absolute; top: 10px; left: 10px; color: #FF8000; font-family: sans-serif; z-index: 10; }
+#gui input, #gui select { width: 150px; }
+canvas { display: block; }
+#iframe-container { display: none; }
+</style>
+</head>
+<body>
+
+<div id="gui">
+    <table>
+        <tr>
+            <td>Distortion</td>
+            <td><input type="range" id="distortion" min="0" max="100" value="10"/></td>
+        </tr>
+        <tr>
+            <td>Stripes</td>
+            <td><input type="range" id="stripes" min="0" max="100" value="70"/></td>
+        </tr>
+        <tr>
+            <td>RGB Shift</td>
+            <td><input type="range" id="rgbshift" min="0" max="100" value="10"/></td>
+        </tr>
+        <tr>
+            <td>Source Type</td>
+            <td>
+                <select id="sourceType">
+                    <option value="image">Image</option>
+                    <option value="iframe">Iframe</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<canvas id="retro-canvas"></canvas>
+
+<!-- Hidden iframe -->
+<div id="iframe-container">
+    <iframe id="iframeSource" src="https://example.com" width="800" height="600"></iframe>
+</div>
+
+<!-- Vertex Shader -->
+<script id="draw-shader-vs" type="x-shader/x-vertex">
+precision mediump float;
+attribute vec2 inPos;
+varying vec2 vertPos;
+void main() {
+    vertPos = inPos;
+    gl_Position = vec4(inPos, 0.0, 1.0);
+}
+</script>
+
+<!-- Fragment Shader -->
+<script id="draw-shader-fs" type="x-shader/x-fragment">
+precision mediump float;
+varying vec2 vertPos;
+uniform sampler2D u_texture;
+uniform float u_distortion;
+uniform float u_stripe;
+uniform float u_rgbshift;
+void main() {
+    vec2 ndc_pos = vertPos;
+    vec2 testVec = ndc_pos.xy / max(abs(ndc_pos.x), abs(ndc_pos.y));
+    float len = max(1.0, length(testVec));
+    ndc_pos *= mix(1.0, mix(1.0, len, max(abs(ndc_pos.x), abs(ndc_pos.y))), u_distortion);
+    vec2 texCoord = vec2(ndc_pos.s, -ndc_pos.t) * 0.5 + 0.5;
+
+    float stripTile = texCoord.t * mix(10.0, 100.0, u_stripe);
+    float stripFac = 1.0 + 0.25 * u_stripe * (step(0.5, stripTile - float(int(stripTile))) - 0.5);
+
+    float texR = texture2D(u_texture, texCoord.st - vec2(u_rgbshift)).r;
+    float texG = texture2D(u_texture, texCoord.st).g;
+    float texB = texture2D(u_texture, texCoord.st + vec2(u_rgbshift)).b;
+
+    float clip = step(0.0, texCoord.s) * step(texCoord.s, 1.0) * step(0.0, texCoord.t) * step(texCoord.t, 1.0);
+    gl_FragColor = vec4(vec3(texR, texG, texB) * stripFac * clip, 1.0);
+}
+</script>
+
+<script>
+var canvas, gl, progDraw, bufRect, textureObj;
+var hiddenCanvas = document.createElement('canvas');
+var hiddenCtx = hiddenCanvas.getContext('2d');
+
+function updateTextureFromIframe() {
+    var iframe = document.getElementById('iframeSource');
+    hiddenCanvas.width = iframe.width;
+    hiddenCanvas.height = iframe.height;
+    try {
+        hiddenCtx.drawImage(iframe, 0, 0); // works only if same-origin
+        gl.bindTexture(gl.TEXTURE_2D, textureObj);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, hiddenCanvas);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    } catch (e) {
+        console.warn("Cannot use iframe due to cross-origin restrictions.");
+    }
+}
+
+function render() {
+    var distortion = document.getElementById("distortion").value / 100.0;
+    var rgbShift = document.getElementById("rgbshift").value / 1000.0;
+    var stripes = document.getElementById("stripes").value / 100.0;
+    var useIframe = document.getElementById("sourceType").value === "iframe";
+
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.enable(gl.DEPTH_TEST);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, textureObj);
+
+    if(useIframe) updateTextureFromIframe();
+
+    ShProg.Use(progDraw);
+    ShProg.SetI1(progDraw, "u_texture", 0);
+    ShProg.SetF1(progDraw, "u_distortion", distortion);
+    ShProg.SetF1(progDraw, "u_stripe", stripes);
+    ShProg.SetF1(progDraw, "u_rgbshift", rgbShift);
+
+    VertexBuffer.Draw(bufRect);
+    requestAnimationFrame(render);
+}
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+function init() {
+    canvas = document.getElementById("retro-canvas");
+    gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    if (!gl) return alert("WebGL not supported");
+
+    // Load initial image texture
+    textureObj = Texture.LoadTexture2D("https://raw.githubusercontent.com/Rabbid76/graphics-snippets/master/resource/texture/supermario.jpg");
+
+    progDraw = ShProg.Create([
+        { source: "draw-shader-vs", stage: gl.VERTEX_SHADER },
+        { source: "draw-shader-fs", stage: gl.FRAGMENT_SHADER }
+    ]);
+    progDraw.inPos = gl.getAttribLocation(progDraw.progObj, "inPos");
+
+    bufRect = VertexBuffer.Create([
+        { data: [-1,-1, 1,-1, 1,1, -1,1], attrSize: 2, attrLoc: progDraw.inPos }
+    ], [0,1,2, 0,2,3]);
+
+    window.onresize = resize;
+    resize();
+    requestAnimationFrame(render);
+}
+
+// --- Shader, VertexBuffer, Texture Helpers ---
+var ShProg = {
+Create: function(shaderList){
+    var shaderObjs = [];
+    for(var i=0;i<shaderList.length;i++){
+        var shderObj = this.Compile(shaderList[i].source, shaderList[i].stage);
+        if(shderObj) shaderObjs.push(shderObj);
+    }
+    var prog = {};
+    prog.progObj = this.Link(shaderObjs);
+    if(prog.progObj){
+        prog.attrInx = {};
+        var noOfAttributes = gl.getProgramParameter(prog.progObj, gl.ACTIVE_ATTRIBUTES);
+        for(var i_n=0;i_n<noOfAttributes;i_n++){
+            var name = gl.getActiveAttrib(prog.progObj,i_n).name;
+            prog.attrInx[name] = gl.getAttribLocation(prog.progObj,name);
+        }
+        prog.uniLoc = {};
+        var noOfUniforms = gl.getProgramParameter(prog.progObj, gl.ACTIVE_UNIFORMS);
+        for(var i_n=0;i_n<noOfUniforms;i_n++){
+            var name = gl.getActiveUniform(prog.progObj,i_n).name;
+            prog.uniLoc[name] = gl.getUniformLocation(prog.progObj,name);
+        }
+    }
+    return prog;
+},
+Use: function(prog){ gl.useProgram(prog.progObj); },
+SetI1: function(prog,name,val){ if(prog.uniLoc[name]) gl.uniform1i(prog.uniLoc[name],val); },
+SetF1: function(prog,name,val){ if(prog.uniLoc[name]) gl.uniform1f(prog.uniLoc[name],val); },
+Compile: function(source,shaderStage){
+    var shaderScript = document.getElementById(source);
+    if(shaderScript) source = shaderScript.text;
+    var shaderObj = gl.createShader(shaderStage);
+    gl.shaderSource(shaderObj,source);
+    gl.compileShader(shaderObj);
+    if(!gl.getShaderParameter(shaderObj,gl.COMPILE_STATUS)) alert(gl.getShaderInfoLog(shaderObj));
+    return gl.getShaderParameter(shaderObj,gl.COMPILE_STATUS)?shaderObj:null;
+},
+Link: function(shaderObjs){
+    var prog = gl.createProgram();
+    shaderObjs.forEach(sh => gl.attachShader(prog, sh));
+    gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog,gl.LINK_STATUS)) alert(gl.getProgramInfoLog(prog));
+    return gl.getProgramParameter(prog,gl.LINK_STATUS)?prog:null;
+}
+};
+
+var VertexBuffer = {
+Create: function(attribs, indices, type){
+    var buffer={buf:[],attr:[],inx:gl.createBuffer(),inxLen:indices.length,primitive_type:type||gl.TRIANGLES};
+    for(var i=0;i<attribs.length;i++){
+        buffer.buf.push(gl.createBuffer());
+        buffer.attr.push({size:attribs[i].attrSize,loc:attribs[i].attrLoc,no_of:attribs[i].data.length/attribs[i].attrSize});
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer.buf[i]);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(attribs[i].data), gl.STATIC_DRAW);
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER,null);
+    if(buffer.inxLen>0){
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.inx);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,null);
+    }
+    return buffer;
+},
+Draw: function(bufObj){
+    for(var i=0;i<bufObj.buf.length;i++){
+        gl.bindBuffer(gl.ARRAY_BUFFER, bufObj.buf[i]);
+        gl.vertexAttribPointer(bufObj.attr[i].loc, bufObj.attr[i].size, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(bufObj.attr[i].loc);
+    }
+    if(bufObj.inxLen>0){
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, bufObj.inx);
+        gl.drawElements(bufObj.primitive_type, bufObj.inxLen, gl.UNSIGNED_SHORT,0);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,null);
+    }else gl.drawArrays(bufObj.primitive_type,0,bufObj.attr[0].no_of);
+    for(var i=0;i<bufObj.buf.length;i++) gl.disableVertexAttribArray(bufObj.attr[i].loc);
+    gl.bindBuffer(gl.ARRAY_BUFFER,null);
+}
+};
+
+var Texture = {
+LoadTexture2D: function(name){
+    var texture = gl.createTexture();
+    texture.image = new Image();
+    texture.image.crossOrigin = "anonymous";
+    texture.image.onload = function(){
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,texture.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    };
+    texture.image.src = name;
+    return texture;
+}
+};
+
+init();
+</script>
+
+</body>
+</html>

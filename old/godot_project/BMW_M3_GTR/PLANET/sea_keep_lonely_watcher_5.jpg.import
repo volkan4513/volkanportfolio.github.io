@@ -1,0 +1,39 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://dbn43hk2d6ox7"
+path.s3tc="res://.godot/imported/sea_keep_lonely_watcher_5.jpg-377cf6becbc33760c250abf17e7f8b0d.s3tc.ctex"
+path.etc2="res://.godot/imported/sea_keep_lonely_watcher_5.jpg-377cf6becbc33760c250abf17e7f8b0d.etc2.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "0500d790aa8235cb1d1a29a85521be2c"
+}
+
+[deps]
+
+source_file="res://PLANET/sea_keep_lonely_watcher_5.jpg"
+dest_files=["res://.godot/imported/sea_keep_lonely_watcher_5.jpg-377cf6becbc33760c250abf17e7f8b0d.s3tc.ctex", "res://.godot/imported/sea_keep_lonely_watcher_5.jpg-377cf6becbc33760c250abf17e7f8b0d.etc2.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

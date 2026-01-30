@@ -1,0 +1,6 @@
+[gd_resource type="PanoramaSkyMaterial" load_steps=2 format=3 uid="uid://d1fw1ice3ehcr"]
+
+[ext_resource type="Texture2D" uid="uid://c0mln0bebaf8f" path="res://extra/IGNIS_ENV_DAY_DOME.jpg" id="1_1g0ie"]
+
+[resource]
+panorama = ExtResource("1_1g0ie")

@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://ctdgf257bhwbd"]
+
+[ext_resource type="Shader" path="res://custom_shaders/ambient_light_shader.gdshader" id="1_nwqxw"]
+
+[resource]
+render_priority = 1
+shader = ExtResource("1_nwqxw")
+shader_parameter/source_color_1 = Color(0.93, 0.6045, 0, 1)
+shader_parameter/source_color_2 = Color(0, 0, 0, 1)
+shader_parameter/emission_strength = 10.0
+shader_parameter/gradient_scale = 1.225
+shader_parameter/time_speed = 2.0
+shader_parameter/alpha_gradient_scale = 0.29
+shader_parameter/gradient_direction = Vector2(200, 14.175)
+shader_parameter/edge_falloff = 1.875

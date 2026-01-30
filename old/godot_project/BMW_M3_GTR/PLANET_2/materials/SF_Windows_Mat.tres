@@ -1,0 +1,17 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://ctxmbdllxu66a"]
+
+[ext_resource type="Texture2D" uid="uid://b4n8hhidve33g" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_9.png" id="1_mqs1v"]
+[ext_resource type="Texture2D" uid="uid://bn23v0bapvdlp" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_10.png" id="2_15cvp"]
+[ext_resource type="Texture2D" uid="uid://bccup8uf3uywi" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_11.png" id="3_r5x01"]
+
+[resource]
+resource_name = "SF_Windows_Mat"
+cull_mode = 2
+albedo_texture = ExtResource("1_mqs1v")
+metallic = 1.0
+metallic_texture = ExtResource("2_15cvp")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_15cvp")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3_r5x01")

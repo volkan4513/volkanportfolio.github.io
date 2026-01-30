@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://by1ftxajta8mm"]
+
+[resource]
+resource_name = "CURVV_BLACK_SHINY2_MAT"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.313751, 0.313719, 0.313714, 1)
+metallic = 1.0
+roughness = 0.0513167

@@ -1,0 +1,39 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://cff83c5ht36jq"
+path.s3tc="res://.godot/imported/SOLAR_SYSTEM_02_Image_13.png-58221e9ee66cb5d53c1d10a541c83617.s3tc.ctex"
+path.etc2="res://.godot/imported/SOLAR_SYSTEM_02_Image_13.png-58221e9ee66cb5d53c1d10a541c83617.etc2.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "63ee5d1cac20ede763483a42bc6deca3"
+}
+
+[deps]
+
+source_file="res://SOLAR_SYSTEM_02/SOLAR_SYSTEM_02_Image_13.png"
+dest_files=["res://.godot/imported/SOLAR_SYSTEM_02_Image_13.png-58221e9ee66cb5d53c1d10a541c83617.s3tc.ctex", "res://.godot/imported/SOLAR_SYSTEM_02_Image_13.png-58221e9ee66cb5d53c1d10a541c83617.etc2.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

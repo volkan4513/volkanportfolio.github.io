@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://xpnxpmooiysr"]
+
+[resource]
+resource_name = "TATA_CURVV_EX_EV_BADGE_MAT"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.486312, 0.603909, 0.854874, 1)
+roughness = 0.5

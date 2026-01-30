@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://sk2hg8oej3qp"]
+
+[ext_resource type="Shader" path="res://SOLAR_SYSTEM_01/cosmos_scene/planet_shader_01.gdshader" id="1_y7ope"]
+[ext_resource type="Texture2D" uid="uid://mkwfp2u7hyjf" path="res://SOLAR_SYSTEM_03/textures/planets_altas_tex_01.png" id="2_7mdyw"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_y7ope")
+shader_parameter/albedo_color = Color(0.450648, 0.450648, 0.450648, 1)
+shader_parameter/use_albedo_texture = true
+shader_parameter/highlight_color = Color(0.192157, 0.192157, 0.192157, 0.8)
+shader_parameter/highlight_range = 1.0
+shader_parameter/highlight_alpha = 1.0
+shader_parameter/emission_color = Color(0.360499, 0.172839, 9.62615e-08, 1)
+shader_parameter/emission_strength = 0.0
+shader_parameter/metallic = null
+shader_parameter/roughness = 1.0
+shader_parameter/clearcoat = null
+shader_parameter/clearcoat_roughness = null
+shader_parameter/flake_intensity = null
+shader_parameter/albedo_texture = ExtResource("2_7mdyw")

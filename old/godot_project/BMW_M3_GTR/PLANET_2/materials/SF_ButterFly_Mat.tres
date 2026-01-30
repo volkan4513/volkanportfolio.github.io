@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://oiw5nhlgjv33"]
+
+[ext_resource type="Texture2D" uid="uid://biam86dhct0af" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_72.png" id="1_mbnj0"]
+[ext_resource type="Texture2D" uid="uid://dvws0aexot848" path="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_73.png" id="2_6g72g"]
+
+[resource]
+resource_name = "SF_ButterFly_Mat"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_mbnj0")
+roughness = 0.821115
+emission_enabled = true
+emission_energy_multiplier = 3.09025
+emission_texture = ExtResource("2_6g72g")

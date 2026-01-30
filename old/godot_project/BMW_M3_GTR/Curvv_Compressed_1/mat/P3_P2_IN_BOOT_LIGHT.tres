@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bfvm4f02wrb51"]
+
+[resource]
+resource_name = "P3_P2_IN_BOOT_LIGHT"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.906332, 0.906332, 0.906332, 1)
+metallic = 0.5
+roughness = 0.748767

@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://x643gqobil5t"]
+
+[resource]
+resource_name = "WIPERS_AND_LIGHTS_LIGHT_BLACK_PLASTIC"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.160493, 0.160272, 0.146729, 1)
+metallic = 0.495455
+roughness = 0.771494

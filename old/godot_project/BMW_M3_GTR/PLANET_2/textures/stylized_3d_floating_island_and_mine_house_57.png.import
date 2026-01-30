@@ -1,0 +1,39 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://8osigya04lik"
+path.s3tc="res://.godot/imported/stylized_3d_floating_island_and_mine_house_57.png-e9995eaed73a65a7be5372d9236892d7.s3tc.ctex"
+path.etc2="res://.godot/imported/stylized_3d_floating_island_and_mine_house_57.png-e9995eaed73a65a7be5372d9236892d7.etc2.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "d085be880c097646dcfb52d575dab76e"
+}
+
+[deps]
+
+source_file="res://PLANET_2/textures/stylized_3d_floating_island_and_mine_house_57.png"
+dest_files=["res://.godot/imported/stylized_3d_floating_island_and_mine_house_57.png-e9995eaed73a65a7be5372d9236892d7.s3tc.ctex", "res://.godot/imported/stylized_3d_floating_island_and_mine_house_57.png-e9995eaed73a65a7be5372d9236892d7.etc2.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://PLANET_2/stylized_3d_floating_island_and_mine_house_57.png"
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MP3 Metadata Extractor</title>
+<style>
+body{background:#111;color:#eee;font-family:Arial,Helvetica,sans-serif;text-align:center;padding:40px}
+pre{background:#222;padding:15px;border-radius:8px;max-width:700px;margin:20px auto;text-align:left;white-space:pre-wrap;overflow:auto}
+#cover-display{width:150px;height:150px;margin:20px auto;background-size:cover;background-position:center;background-color:#333;box-shadow:0 0 15px rgba(0,0,0,.5);--mask:url('./ps_player_images/cover_image_mask.png');mask-image:var(--mask);mask-size:contain;mask-repeat:no-repeat;mask-position:center;mask-mode:alpha;-webkit-mask-image:var(--mask);-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;-webkit-mask-mode:alpha}
+button{background:#0078ff;border:none;color:#fff;padding:10px 20px;border-radius:6px;cursor:pointer;margin:6px}
+button:hover{background:#005bd1}
+</style>
+</head>
+<body>
+<h2>🎧 MP3 Metadata Extractor</h2>
+<div id="cover-display"></div>
+<pre id="output">Ready.</pre>
+<button id="startBtn">Start Extraction</button>
+<button id="saveBtn" style="display:none">Download JSON</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+<script>
+const out=document.getElementById('output'), start=document.getElementById('startBtn'), save=document.getElementById('saveBtn'), cover=document.getElementById('cover-display');
+const folderURL='/music/';
+function bytesToBase64(bytes){
+  let bin='';
+  for(let i=0;i<bytes.length;i++){bin+=String.fromCharCode(bytes[i]);}
+  return btoa(bin);
+}
+async function listMp3(){
+  try{
+    const r=await fetch(folderURL);
+    const html=await r.text();
+    const doc=new DOMParser().parseFromString(html,'text/html');
+    return Array.from(doc.querySelectorAll('a')).map(a=>a.getAttribute('href')).filter(h=>h&&h.toLowerCase().endsWith('.mp3'));
+  }catch(err){
+    out.textContent='❌ Could not read folder listing. Ensure directory listing is enabled and CORS (if remote) allows requests.';
+    return [];
+  }
+}
+async function extract(){
+  const result=[];
+  out.textContent='⏳ Scanning folder...\n';
+  const files=await listMp3();
+  if(!files.length){out.textContent+='No MP3 files found.';return}
+  out.textContent+=`Found ${files.length} files.\n\n`;cover.style.backgroundImage='none';
+  for(const f of files){
+    out.textContent+=`Reading ${f}...\n`;
+    try{
+      const blob=await fetch(folderURL+f).then(r=>r.blob());
+      await new Promise(resolve=>{
+        jsmediatags.read(blob,{
+          onSuccess:tag=>{
+            const t=tag.tags;
+            let img=null;
+            if(t.picture){ img=`data:${t.picture.format};base64,${bytesToBase64(new Uint8Array(t.picture.data))}`; if(result.length===0) cover.style.backgroundImage=`url('${img}')`; }
+            result.push({filename:f,title:t.title||'Unknown',artist:t.artist||'Unknown',album:t.album||'Unknown',coverArt:img});
+            resolve();
+          },
+          onError:(_e)=>{
+            result.push({filename:f,title:'Unknown',artist:'Unknown',album:'Unknown',coverArt:null});
+            resolve();
+          }
+        });
+      });
+    }catch(e){
+      result.push({filename:f,title:'Unknown',artist:'Unknown',album:'Unknown',coverArt:null});
+    }
+  }
+  out.textContent=JSON.stringify(result,null,2);
+  save.style.display='inline-block';
+  save.onclick=()=>{
+    const b=new Blob([JSON.stringify(result,null,2)],{type:'application/json'});
+    const u=URL.createObjectURL(b);
+    const a=document.createElement('a');a.href=u;a.download='mp3_metadata.json';a.click();URL.revokeObjectURL(u);
+  };
+}
+start.addEventListener('click',extract);
+</script>
+</body>
+</html>
