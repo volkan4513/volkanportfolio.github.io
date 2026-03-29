@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TETSUO | Creative Agency</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* === CSS VARIABLES === */
+        :root {
+            --bg-color: #0b0b0b;
+            --accent-color: #ff5a00;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --font-head: 'Oswald', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --easing: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        /* === RESET & BASE === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* === ADVANCED EFFECTS === */
+        /* Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background-color: var(--accent-color);
+            z-index: 9999;
+        }
+
+        /* Moving Vertical Grid Background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 200vh;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 20vw 100%;
+            z-index: -1;
+            pointer-events: none;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100vh); }
+        }
+
+        /* === NAVIGATION === */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-family: var(--font-head);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s var(--easing);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* === LAYOUT & SECTIONS === */
+        main {
+            padding-top: 100px;
+        }
+
+        .project-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 0 10vw;
+            gap: 5vw;
+        }
+
+        /* Alternating Layout */
+        .project-section:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        /* Scroll Animation States */
+        .project-section {
+            opacity: 0;
+            transform: translateY(100px);
+            transition: opacity 1s var(--easing), transform 1s var(--easing);
+        }
+
+        .project-section.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === TYPOGRAPHY & TEXT === */
+        .project-info {
+            flex: 1;
+            max-width: 500px;
+            z-index: 10;
+        }
+
+        .project-title {
+            font-family: var(--font-head);
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        /* Subtle Glitch on Hover */
+        .project-title:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: var(--accent-color);
+            cursor: default;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        .project-desc {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+            text-transform: uppercase;
+            text-decoration: none;
+            font-family: var(--font-head);
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s var(--easing);
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent-color);
+            transition: left 0.4s var(--easing);
+            z-index: -1;
+        }
+
+        .btn:hover {
+            color: var(--bg-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        /* === INTERACTIVE IMAGE COLLAGE === */
+        .project-visuals {
+            flex: 1;
+            position: relative;
+            height: 70vh;
+            width: 100%;
+            perspective: 1000px;
+        }
+
+        .collage-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+
+        .img-layer {
+            position: absolute;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            transition: transform 0.5s var(--easing), filter 0.5s;
+        }
+
+        .img-main {
+            width: 75%;
+            height: 80%;
+            top: 10%;
+            left: 12.5%;
+            z-index: 2;
+            filter: grayscale(80%) contrast(1.2);
+            mix-blend-mode: luminosity;
+        }
+
+        .img-sub1 {
+            width: 45%;
+            height: 45%;
+            bottom: 5%;
+            left: 0;
+            z-index: 3;
+            border: 5px solid var(--bg-color);
+        }
+
+        .img-sub2 {
+            width: 35%;
+            height: 45%;
+            top: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .accent-block {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: var(--accent-color);
+            bottom: 15%;
+            right: 5%;
+            z-index: 0;
+        }
+
+        .project-visuals:hover .img-main {
+            filter: grayscale(0%) contrast(1);
+            mix-blend-mode: normal;
+        }
+
+        /* === MOBILE RESPONSIVENESS (UPDATED) === */
+        @media (max-width: 968px) {
+            .project-section, 
+            .project-section:nth-child(even) {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding: 12vh 5vw;
+                gap: 3rem;
+            }
+
+            .project-title {
+                font-size: 2.5rem;
+            }
+
+            .project-visuals {
+                height: 55vh; /* Adjusted height for mobile image stack */
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            /* Hide the 3rd layer entirely on mobile */
+            .img-sub2 {
+                display: none; 
+            }
+
+            /* Adjust Main Image for mobile */
+            .img-main {
+                width: 80%;
+                height: 75%;
+                top: 0;
+                left: 10%;
+                filter: grayscale(0%) contrast(1); /* Remove grayscale on mobile for better visibility */
+                mix-blend-mode: normal;
+            }
+
+            /* Adjust Sub Image for mobile */
+            .img-sub1 {
+                width: 55%;
+                height: 45%;
+                bottom: 5%;
+                right: 5%; /* Move to right side */
+                left: auto; /* Clear desktop left alignment */
+                border-width: 3px;
+            }
+
+            /* Adjust accent block behind them */
+            .accent-block {
+                width: 60%;
+                height: 40%;
+                bottom: 15%;
+                right: 0;
+            }
+
+            nav {
+                padding: 1.5rem 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="scroll-progress"></div>
+    <div class="grid-background"></div>
+
+    <nav>
+        <div class="logo">Tetsuo</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Pages</a></li>
+            <li><a href="#">Portfolio</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main id="projects-container"></main>
+
+    <script>
+        const projects = [
+            {
+                title: "A Lost Soul Of An Old Warrior",
+                desc: "Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus.",
+                images: [
+                    "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=600&auto=format&fit=crop", 
+                    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop"   
+                ]
+            },
+            {
+                title: "The Freedom We Strive For",
+                desc: "Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris.",
+                images: [
+                    "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=600&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=600&auto=format&fit=crop"
+                ]
+            },
+            {
+                title: "How Loneliness Affects Senses",
+                desc: "Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non mauris vitae erat consequat auctor eu in elit.",
+                images: [
+                    "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop"
+                ]
+            },
+            {
+                title: "Step In Evolution Total Supremacy",
+                desc: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris in erat justo. Nullam ac urna eu felis dapibus condimentum.",
+                images: [
+                    "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1000&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=600&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=600&auto=format&fit=crop"
+                ]
+            },
+            {
+                title: "Neon Echoes In The Abyss",
+                desc: "Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.",
+                images: [
+                    "https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=1000&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=600&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1515462277126-2dd0c162007a?q=80&w=600&auto=format&fit=crop"
+                ]
+            },
+            {
+                title: "Shattered Reality Protocol",
+                desc: "Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio.",
+                images: [
+                    "https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=1000&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1504333638930-c8787321efa0?q=80&w=600&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?q=80&w=600&auto=format&fit=crop"
+                ]
+            },
+            {
+                title: "The Architecture Of Mind",
+                desc: "Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris.",
+                images: [
+                    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1511884642898-4c92249e20b6?q=80&w=600&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1470075801209-17f9ec0cada6?q=80&w=600&auto=format&fit=crop"
+                ]
+            },
+            {
+                title: "Terminal Velocity Drop",
+                desc: "Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.",
+                images: [
+                    "https://images.unsplash.com/photo-1531297172864-8ecc2e822003?q=80&w=1000&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=600&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop"
+                ]
+            }
+        ];
+
+        const container = document.getElementById('projects-container');
+        
+        projects.forEach((proj, index) => {
+            const section = document.createElement('section');
+            section.className = 'project-section';
+            
+            section.innerHTML = `
+                <div class="project-info">
+                    <h2 class="project-title">${proj.title}</h2>
+                    <p class="project-desc">${proj.desc}</p>
+                    <a href="#" class="btn">View Project</a>
+                </div>
+                <div class="project-visuals">
+                    <div class="collage-container">
+                        <div class="accent-block"></div>
+                        <div class="img-layer img-sub2" style="background-image: url('${proj.images[2]}')"></div>
+                        <div class="img-layer img-main" style="background-image: url('${proj.images[0]}')"></div>
+                        <div class="img-layer img-sub1" style="background-image: url('${proj.images[1]}')"></div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(section);
+        });
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.project-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight;
+            const winHeight = window.innerHeight;
+            const scrollPercent = scrollTop / (docHeight - winHeight);
+            const scrollPercentRounded = Math.round(scrollPercent * 100);
+            
+            document.getElementById('scroll-progress').style.width = scrollPercentRounded + '%';
+        });
+
+        const visualsContainers = document.querySelectorAll('.project-visuals');
+
+        visualsContainers.forEach(container => {
+            const collage = container.querySelector('.collage-container');
+            const mainImg = container.querySelector('.img-main');
+            const sub1 = container.querySelector('.img-sub1');
+            const sub2 = container.querySelector('.img-sub2');
+
+            container.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                collage.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+                mainImg.style.transform = `translateZ(50px) scale(1.05)`;
+                sub1.style.transform = `translateZ(80px) translateX(${rotateY * 1.5}px) translateY(${rotateX * -1.5}px) scale(1.02)`;
+                sub2.style.transform = `translateZ(20px) translateX(${rotateY * -1}px) translateY(${rotateX * 1}px)`;
+            });
+
+            container.addEventListener('mouseleave', () => {
+                collage.style.transform = `rotateX(0) rotateY(0)`;
+                mainImg.style.transform = `translateZ(0) scale(1)`;
+                sub1.style.transform = `translateZ(0) translateX(0) translateY(0) scale(1)`;
+                sub2.style.transform = `translateZ(0) translateX(0) translateY(0) scale(1)`;
+            });
+        });
+    </script>
+</body>
+</html>
