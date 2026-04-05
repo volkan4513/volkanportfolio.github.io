@@ -155,11 +155,11 @@
             animation: fadeIn 0.5s var(--easing) forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
 
+        @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
 
         /* =====================================================
            SECTION 1 — HOME / HERO
@@ -311,10 +311,12 @@
         /* =====================================================
            SECTION 2 — EXPERIENCE & DETAILS
         ===================================================== */
+       
+
         #section-experience {
-            min-height: calc(100vh - 90px);
-            padding: 1.5rem 10vw 6rem;
-        }
+    min-height: auto; /* Was calc(100vh - 90px) */
+    padding: 1.5rem 10vw 3rem; /* Reduced bottom padding from 6rem to 3rem */
+}
 
         .section-heading {
             font-family: var(--font-head);
@@ -678,13 +680,11 @@
         /* =====================================================
            SECTION 4 — CONTACT
         ===================================================== */
-        #section-contact {
-            min-height: calc(100vh - 90px);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            padding: 1.5rem 10vw 4rem;
-        }
+        
+         #section-contact {
+    min-height: auto; /* Was calc(100vh - 90px) */
+    padding: 1.5rem 10vw 2rem; /* Reduced bottom padding from 4rem to 2rem */
+}
 
         .contact-grid {
             display: grid;
@@ -819,37 +819,56 @@
                 gap: 3rem;
             }
 
-            .project-visuals {
-                height: 55vh;
-                width: 100%;
+            .project-section:last-child {
+    min-height: auto;
+    padding-bottom: 5rem; /* Leaves just a nice, normal footer-sized gap at the very end */
+}
+
+            /* --- SINGLE IMAGE MOBILE VIEW --- */
+        .project-visuals {
+            flex: none; /* ADD THIS: Stops the flex container from collapsing */
+            min-height: 40vh; /* ADD THIS: Enforces your vertical height */
+            height: 40vh; 
+            width: 100%;
+            margin-top: 1rem;
+            perspective: none; /* Disable 3D perspective */
+        }
+
+        .collage-container {
+            transform: none !important; /* Force no 3D transforms */
+            transform-style: flat !important; /* ADD THIS: Fixes iOS Safari vanishing bugs */
+        }
+            /* Completely hide the secondary images */
+            .img-sub1, 
+            .img-sub2 { 
+                display: none !important; 
             }
 
-            .img-sub2 { display: none; }
-
+            /* Show only the main image, centered and large */
             .img-main {
-                width: 80%;
-                height: 75%;
-                top: 0;
-                left: 10%;
+                width: 85%;
+                height: 80%;
+                top: 5%;
+                left: 5%;
                 filter: grayscale(0%) contrast(1);
                 mix-blend-mode: normal;
-            }
-
-            .img-sub1 {
-                width: 55%;
-                height: 45%;
-                bottom: 5%;
-                right: 5%;
-                left: auto;
-                border-width: 3px;
+                z-index: 2;
+                transform: none !important; /* Prevent JS from adding inline transforms */
             }
 
             .accent-block {
-                width: 60%;
-                height: 40%;
-                bottom: 15%;
-                right: 0;
-            }
+            width: 85%;      /* Increased from 45% to make it larger */
+            height: 85%;     /* Increased from 45% */
+            top: auto;
+            left: auto;
+            bottom: -2%;     /* Pushed slightly outwards for a better offset look */
+            /* right: -2%;      Pushed slightly outwards */
+            z-index: 3;
+            
+            /* The magic properties for blending: */
+            mix-blend-mode: multiply; 
+            opacity: 0.9; /* Softens the effect slightly */
+        }
 
             .contact-grid {
                 grid-template-columns: 1fr;
@@ -971,7 +990,6 @@
     <div id="scroll-progress"></div>
     <div class="grid-background"></div>
 
-    <!-- === NAVIGATION === -->
     <nav>
         <div class="logo" onclick="showSection('home')" title="Go Home">
             BHAVESH <span>CHALKE</span>
@@ -989,7 +1007,6 @@
         </button>
     </nav>
 
-    <!-- === MOBILE MENU OVERLAY === -->
     <div class="mobile-menu" id="mobile-menu">
         <ul class="mobile-nav-links">
             <li><a href="#" data-section="home" class="active" onclick="showSection('home'); closeMobileMenu(); return false;">Home</a></li>
@@ -1001,9 +1018,6 @@
 
     <main>
 
-        <!-- ================================================
-             SECTION 1 — HOME
-        ================================================ -->
         <section id="section-home" class="page-section active">
             <p class="hero-tag">Portfolio &mdash; 2026</p>
             <h1 class="hero-name">Bhavesh<br><span>Chalke</span></h1>
@@ -1025,16 +1039,12 @@
         </section>
 
 
-        <!-- ================================================
-             SECTION 2 — EXPERIENCE & DETAILS
-        ================================================ -->
         <section id="section-experience" class="page-section">
             <h2 class="section-heading">Experience <span>&amp;</span> Details</h2>
             <div class="section-divider"></div>
 
             <div class="exp-grid">
 
-                <!-- LEFT: Work Experience Timeline -->
                 <div class="exp-left">
                     <p class="exp-col-title">Work Experience</p>
                     <div class="timeline">
@@ -1078,7 +1088,6 @@
                     </div>
                 </div>
 
-                <!-- RIGHT: Education, Skills & Interests -->
                 <div class="exp-right">
 
                     <div>
@@ -1144,9 +1153,6 @@
         </section>
 
 
-        <!-- ================================================
-             SECTION 3 — PROJECTS
-        ================================================ -->
         <section id="section-projects" class="page-section">
             <h2 class="section-heading">Projects</h2>
             <div class="section-divider"></div>
@@ -1154,9 +1160,6 @@
         </section>
 
 
-        <!-- ================================================
-             SECTION 4 — CONTACT
-        ================================================ -->
         <section id="section-contact" class="page-section">
             <h2 class="section-heading">Get In <span>Touch</span></h2>
             <div class="section-divider"></div>
@@ -1428,6 +1431,9 @@
                 const sub2   = vis.querySelector('.img-sub2');
 
                 vis.addEventListener('mousemove', (e) => {
+                    // Disable the JS Parallax Effect entirely on mobile screens!
+                    if (window.innerWidth <= 968) return; 
+
                     const rect = vis.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
@@ -1444,6 +1450,8 @@
                 });
 
                 vis.addEventListener('mouseleave', () => {
+                    if (window.innerWidth <= 968) return; // Ignore on mobile
+
                     collage.style.transform = 'rotateX(0) rotateY(0)';
                     mainImg.style.transform = 'translateZ(0) scale(1)';
                     sub1.style.transform = 'translateZ(0) translateX(0) translateY(0) scale(1)';
